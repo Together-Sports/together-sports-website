@@ -2,14 +2,11 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import logoMain from "@/assets/logo-main.png";
-
 const navItems = [
   { label: "Home", path: "/" },
   { label: "About", path: "/about" },
   { label: "Sports", path: "/sports" },
   { label: "How We Teach", path: "/how-we-teach" },
-  { label: "Impact", path: "/impact" },
   { label: "Blog", path: "/blog" },
   { label: "Get Involved", path: "/get-involved" },
   { label: "Contact", path: "/contact" },
@@ -24,7 +21,7 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
           <Link to="/" className="flex items-center gap-2">
-            <img src={logoMain} alt="Together Sports" className="h-10 md:h-12 w-auto" />
+            <span className="font-heading text-xl md:text-2xl font-black uppercase tracking-wider text-foreground">Together Sports</span>
           </Link>
 
           {/* Desktop nav */}
@@ -40,12 +37,6 @@ const Navbar = () => {
                 {item.label}
               </Link>
             ))}
-            <Link
-              to="/get-involved"
-              className="ml-3 px-5 py-2.5 bg-accent text-accent-foreground font-heading font-bold text-sm uppercase tracking-wider hover:scale-105 hover:rotate-1 transition-all duration-200"
-            >
-              Donate
-            </Link>
           </div>
 
           {/* Mobile toggle */}

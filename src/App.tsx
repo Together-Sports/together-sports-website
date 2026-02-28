@@ -9,7 +9,7 @@ import AboutPage from "./pages/AboutPage";
 import SportsPage from "./pages/SportsPage";
 import SportDetailPage from "./pages/SportDetailPage";
 import HowWeTeachPage from "./pages/HowWeTeachPage";
-import ImpactPage from "./pages/ImpactPage";
+
 import BlogPage from "./pages/BlogPage";
 import GetInvolvedPage from "./pages/GetInvolvedPage";
 import ContactPage from "./pages/ContactPage";
@@ -31,7 +31,7 @@ const App = () => (
             <Route path="/sports" element={<SportsPage />} />
             <Route path="/sports/:sport" element={<SportDetailPage />} />
             <Route path="/how-we-teach" element={<HowWeTeachPage />} />
-            <Route path="/impact" element={<ImpactPage />} />
+            
             <Route path="/blog" element={<BlogPage />} />
             <Route path="/get-involved" element={<GetInvolvedPage />} />
             <Route path="/contact" element={<ContactPage />} />
