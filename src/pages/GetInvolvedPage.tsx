@@ -4,13 +4,13 @@ import ScrollReveal from "@/components/ScrollReveal";
 const GetInvolvedPage = () => {
   return (
     <div className="overflow-hidden">
-      <section className="relative py-24 md:py-32 bg-accent">
+      <section className="relative py-24 md:py-32 bg-primary">
         <div className="absolute inset-0 scratchy-overlay" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <ScrollReveal>
-            <p className="font-body font-bold uppercase tracking-[0.3em] text-accent-foreground/70 text-sm mb-4">Join the Movement</p>
-            <h1 className="font-heading text-6xl md:text-8xl font-black uppercase leading-[0.85] text-accent-foreground">
-              Get <span style={{ WebkitTextStroke: "2px currentColor", color: "transparent" }}>Involved</span>
+            <p className="font-body font-bold uppercase tracking-[0.3em] text-white/70 text-sm mb-4">Join the Movement</p>
+            <h1 className="font-heading text-6xl md:text-8xl font-black uppercase leading-[0.85] text-white">
+              Get <span className="text-stroke-light">Involved</span>
             </h1>
           </ScrollReveal>
         </div>
@@ -30,7 +30,7 @@ const GetInvolvedPage = () => {
                   <span className="text-4xl mb-4 block">{item.icon}</span>
                   <h3 className="font-heading text-3xl font-black uppercase mb-3">{item.title}</h3>
                   <p className="text-muted-foreground leading-relaxed mb-6 flex-1">{item.desc}</p>
-                  <a href="#" className="inline-block px-6 py-3 bg-accent text-accent-foreground font-heading font-bold uppercase tracking-wider text-sm hover:scale-105 hover:rotate-1 transition-all duration-200 self-start">
+                  <a href="#" className="inline-block px-6 py-3 bg-accent text-white font-heading font-bold uppercase tracking-wider text-sm hover:scale-105 hover:rotate-1 transition-all duration-200 self-start">
                     {item.cta} →
                   </a>
                 </div>
@@ -60,7 +60,7 @@ const GetInvolvedPage = () => {
                   </button>
                 ))}
               </div>
-              <button className="w-full mt-4 p-4 bg-accent text-accent-foreground font-heading font-bold text-lg uppercase hover:scale-[1.02] transition-all">
+              <button className="w-full mt-4 p-4 bg-accent text-white font-heading font-bold text-lg uppercase hover:scale-[1.02] transition-all">
                 Donate →
               </button>
             </div>
@@ -80,7 +80,7 @@ const GetInvolvedPage = () => {
                 placeholder="your@email.com"
                 className="flex-1 p-4 bg-card border border-border text-foreground font-body placeholder:text-muted-foreground focus:border-accent focus:outline-none"
               />
-              <button className="px-6 py-4 bg-primary text-primary-foreground font-heading font-bold uppercase tracking-wider hover:scale-105 transition-all">
+              <button className="px-6 py-4 bg-primary text-white font-heading font-bold uppercase tracking-wider hover:scale-105 transition-all">
                 Join
               </button>
             </div>

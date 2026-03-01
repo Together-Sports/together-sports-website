@@ -59,16 +59,16 @@ const BlogPage = () => {
           <ScrollReveal>
             <Link to="#" className="group relative block overflow-hidden h-[400px] md:h-[500px]">
               <img src={featured.image} alt={featured.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-              <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-deep-blue via-deep-blue/50 to-transparent" />
               <div className="absolute bottom-0 left-0 p-8 md:p-12 max-w-2xl">
-                <span className="inline-block px-3 py-1 bg-accent text-accent-foreground font-heading font-bold text-xs uppercase tracking-wider mb-4">
+                <span className="inline-block px-3 py-1 bg-accent text-white font-heading font-bold text-xs uppercase tracking-wider mb-4">
                   Featured
                 </span>
-                <h2 className="font-heading text-3xl md:text-5xl font-black uppercase group-hover:text-accent transition-colors mb-3">
+                <h2 className="font-heading text-3xl md:text-5xl font-black uppercase text-white group-hover:text-accent transition-colors mb-3">
                   {featured.title}
                 </h2>
-                <p className="text-muted-foreground text-lg">{featured.excerpt}</p>
-                <p className="text-muted-foreground/60 text-sm mt-3 font-body">{featured.date}</p>
+                <p className="text-white/70 text-lg">{featured.excerpt}</p>
+                <p className="text-white/40 text-sm mt-3 font-body">{featured.date}</p>
               </div>
             </Link>
           </ScrollReveal>
@@ -84,13 +84,13 @@ const BlogPage = () => {
                 <Link to="#" className={`group block overflow-hidden ${i === 0 ? "md:row-span-2" : ""}`}>
                   <div className={`relative overflow-hidden ${i === 0 ? "h-[300px] md:h-full" : "h-[250px]"}`}>
                     <img src={post.image} alt={post.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-deep-blue via-deep-blue/30 to-transparent" />
                     <div className="absolute bottom-0 left-0 p-6">
-                      <p className="text-muted-foreground/60 text-xs font-body mb-2">{post.date}</p>
-                      <h3 className="font-heading text-xl md:text-2xl font-black uppercase group-hover:text-accent transition-colors">
+                      <p className="text-white/40 text-xs font-body mb-2">{post.date}</p>
+                      <h3 className="font-heading text-xl md:text-2xl font-black uppercase text-white group-hover:text-accent transition-colors">
                         {post.title}
                       </h3>
-                      <p className="text-muted-foreground text-sm mt-1">{post.excerpt}</p>
+                      <p className="text-white/60 text-sm mt-1">{post.excerpt}</p>
                     </div>
                   </div>
                 </Link>

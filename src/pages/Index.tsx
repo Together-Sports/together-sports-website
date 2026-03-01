@@ -22,8 +22,8 @@ const Index = () => {
       <section className="relative h-[100vh] min-h-[600px] flex items-center">
         <div className="absolute inset-0">
           <img src={heroImage} alt="Youth sports action" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-background/70" />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent" />
+          <div className="absolute inset-0 bg-deep-blue/70" />
+          <div className="absolute inset-0 bg-gradient-to-t from-deep-blue via-deep-blue/30 to-transparent" />
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
@@ -35,24 +35,24 @@ const Index = () => {
             <p className="font-body font-bold uppercase tracking-[0.3em] text-accent text-sm md:text-base mb-4">
               Together Sports
             </p>
-            <h1 className="font-heading text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black uppercase leading-[0.85] mb-6">
+            <h1 className="font-heading text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black uppercase leading-[0.85] mb-6 text-white">
               Play Loud.
               <br />
-              <span className="text-stroke">Build Strong.</span>
+              <span className="text-stroke-light">Build Strong.</span>
             </h1>
-            <p className="text-muted-foreground text-lg md:text-xl max-w-lg mb-8 font-body">
+            <p className="text-white/70 text-lg md:text-xl max-w-lg mb-8 font-body">
               Empowering youth through sports, mentorship, and community — one game at a time.
             </p>
             <div className="flex flex-wrap gap-4">
               <Link
                 to="/sports"
-                className="inline-block px-8 py-4 bg-primary text-primary-foreground font-heading font-bold text-lg uppercase tracking-wider hover:scale-105 hover:-rotate-1 transition-all duration-200"
+                className="inline-block px-8 py-4 bg-primary text-white font-heading font-bold text-lg uppercase tracking-wider hover:scale-105 hover:-rotate-1 transition-all duration-200"
               >
                 Our Sports
               </Link>
               <Link
                 to="/get-involved"
-                className="inline-block px-8 py-4 bg-accent text-accent-foreground font-heading font-bold text-lg uppercase tracking-wider hover:scale-105 hover:rotate-1 transition-all duration-200"
+                className="inline-block px-8 py-4 bg-accent text-white font-heading font-bold text-lg uppercase tracking-wider hover:scale-105 hover:rotate-1 transition-all duration-200"
               >
                 Donate Now
               </Link>
@@ -60,7 +60,7 @@ const Index = () => {
           </motion.div>
 
           {/* Background text */}
-          <div className="absolute -bottom-4 right-0 font-heading text-[12vw] font-black uppercase text-foreground/[0.03] leading-none select-none pointer-events-none hidden md:block">
+          <div className="absolute -bottom-4 right-0 font-heading text-[12vw] font-black uppercase text-white/[0.05] leading-none select-none pointer-events-none hidden md:block">
             TOGETHER
           </div>
         </div>
@@ -93,9 +93,9 @@ const Index = () => {
                     alt={sport.name}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-deep-blue via-deep-blue/40 to-transparent" />
                   <div className="absolute bottom-0 left-0 p-6 md:p-8">
-                    <h3 className="font-heading text-4xl md:text-5xl font-black uppercase group-hover:text-accent transition-colors duration-300">
+                    <h3 className="font-heading text-4xl md:text-5xl font-black uppercase text-white group-hover:text-accent transition-colors duration-300">
                       {sport.name}
                     </h3>
                     <span className="inline-block mt-2 text-sm font-body font-semibold uppercase tracking-wider text-accent opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
@@ -123,7 +123,7 @@ const Index = () => {
                   />
                 </div>
                 <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-accent scrapbook-rotate-2 flex items-center justify-center">
-                  <span className="font-heading text-accent-foreground font-black text-xl uppercase text-center leading-tight">
+                  <span className="font-heading text-white font-black text-xl uppercase text-center leading-tight">
                     Second<br />Serve
                   </span>
                 </div>
@@ -141,7 +141,7 @@ const Index = () => {
               </p>
               <Link
                 to="/sports/tennis"
-                className="inline-block px-8 py-4 bg-primary text-primary-foreground font-heading font-bold text-lg uppercase tracking-wider hover:scale-105 hover:-rotate-1 transition-all duration-200"
+                className="inline-block px-8 py-4 bg-primary text-white font-heading font-bold text-lg uppercase tracking-wider hover:scale-105 hover:-rotate-1 transition-all duration-200"
               >
                 Learn More
               </Link>
@@ -151,24 +151,24 @@ const Index = () => {
       </section>
 
       {/* DONATE CTA */}
-      <section className="py-20 md:py-28 bg-accent relative overflow-hidden">
+      <section className="py-20 md:py-28 bg-primary relative overflow-hidden">
         <div className="absolute inset-0 scratchy-overlay" />
-        <div className="absolute -top-10 -left-10 w-40 h-40 bg-background/10 rounded-full scrapbook-rotate-2" />
-        <div className="absolute -bottom-20 -right-20 w-60 h-60 bg-background/10 scrapbook-rotate-1" />
+        <div className="absolute -top-10 -left-10 w-40 h-40 bg-white/10 rounded-full scrapbook-rotate-2" />
+        <div className="absolute -bottom-20 -right-20 w-60 h-60 bg-white/10 scrapbook-rotate-1" />
         
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <ScrollReveal direction="scale">
-            <h2 className="font-heading text-5xl md:text-7xl font-black uppercase text-accent-foreground leading-[0.85] mb-6">
+            <h2 className="font-heading text-5xl md:text-7xl font-black uppercase text-white leading-[0.85] mb-6">
               Change the Game.
               <br />
-              <span className="text-background/80">Donate Today.</span>
+              <span className="text-white/60">Donate Today.</span>
             </h2>
-            <p className="text-accent-foreground/80 text-lg mb-8 max-w-lg mx-auto font-body">
+            <p className="text-white/70 text-lg mb-8 max-w-lg mx-auto font-body">
               Your contribution puts a racket, a ball, or a dream in a kid's hands. Every dollar counts.
             </p>
             <Link
               to="/get-involved"
-              className="inline-block px-10 py-5 bg-background text-foreground font-heading font-bold text-xl uppercase tracking-wider hover:scale-105 hover:rotate-1 transition-all duration-200"
+              className="inline-block px-10 py-5 bg-accent text-white font-heading font-bold text-xl uppercase tracking-wider hover:scale-105 hover:rotate-1 transition-all duration-200"
             >
               Give Now →
             </Link>

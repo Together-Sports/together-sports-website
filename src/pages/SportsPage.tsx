@@ -44,13 +44,13 @@ const SportsPage = () => {
                   alt={sport.name}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-r from-background/80 via-background/40 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-r from-deep-blue/80 via-deep-blue/40 to-transparent" />
                 <div className="absolute bottom-0 left-0 p-8 md:p-12">
-                  <h2 className="font-heading text-5xl md:text-7xl font-black uppercase group-hover:text-accent transition-colors duration-300 mb-2">
+                  <h2 className="font-heading text-5xl md:text-7xl font-black uppercase text-white group-hover:text-accent transition-colors duration-300 mb-2">
                     {sport.name}
                   </h2>
-                  <p className="text-muted-foreground text-lg max-w-md">{sport.desc}</p>
-                  <span className="inline-block mt-4 px-6 py-3 bg-accent text-accent-foreground font-heading font-bold uppercase tracking-wider text-sm opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-4 group-hover:translate-y-0">
+                  <p className="text-white/70 text-lg max-w-md">{sport.desc}</p>
+                  <span className="inline-block mt-4 px-6 py-3 bg-accent text-white font-heading font-bold uppercase tracking-wider text-sm opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-4 group-hover:translate-y-0">
                     Explore Program →
                   </span>
                 </div>

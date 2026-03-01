@@ -28,7 +28,7 @@ const AdminPage = () => {
               </div>
               <p className="text-muted-foreground text-sm">Manage your Together Sports content</p>
             </div>
-            <Link to="/" className="px-4 py-2 bg-primary text-primary-foreground font-heading font-bold uppercase text-sm tracking-wider hover:scale-105 transition-all">
+            <Link to="/" className="px-4 py-2 bg-primary text-white font-heading font-bold uppercase text-sm tracking-wider hover:scale-105 transition-all">
               View Site →
             </Link>
           </div>
@@ -43,7 +43,7 @@ const AdminPage = () => {
               onClick={() => setActiveTab(tab.id)}
               className={`flex items-center gap-2 px-4 py-3 font-heading font-bold uppercase text-sm tracking-wider transition-all ${
                 activeTab === tab.id
-                  ? "bg-accent text-accent-foreground"
+                  ? "bg-accent text-white"
                   : "bg-card text-muted-foreground hover:text-foreground border border-border"
               }`}
             >
@@ -58,7 +58,7 @@ const AdminPage = () => {
           <div className="space-y-4">
             <div className="flex items-center justify-between mb-6">
               <h2 className="font-heading text-2xl font-black uppercase">Blog Posts</h2>
-              <button className="px-4 py-2 bg-accent text-accent-foreground font-heading font-bold uppercase text-sm hover:scale-105 transition-all">
+              <button className="px-4 py-2 bg-accent text-white font-heading font-bold uppercase text-sm hover:scale-105 transition-all">
                 + New Post
               </button>
             </div>
@@ -82,7 +82,7 @@ const AdminPage = () => {
           <div>
             <div className="flex items-center justify-between mb-6">
               <h2 className="font-heading text-2xl font-black uppercase">Homepage Media</h2>
-              <button className="px-4 py-2 bg-accent text-accent-foreground font-heading font-bold uppercase text-sm hover:scale-105 transition-all">
+              <button className="px-4 py-2 bg-accent text-white font-heading font-bold uppercase text-sm hover:scale-105 transition-all">
                 + Upload
               </button>
             </div>
@@ -124,7 +124,7 @@ const AdminPage = () => {
           <div>
             <div className="flex items-center justify-between mb-6">
               <h2 className="font-heading text-2xl font-black uppercase">Events</h2>
-              <button className="px-4 py-2 bg-accent text-accent-foreground font-heading font-bold uppercase text-sm hover:scale-105 transition-all">
+              <button className="px-4 py-2 bg-accent text-white font-heading font-bold uppercase text-sm hover:scale-105 transition-all">
                 + New Event
               </button>
             </div>
@@ -149,7 +149,7 @@ const AdminPage = () => {
                 <span className="font-heading font-bold text-lg">{sport}</span>
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input type="checkbox" defaultChecked={i === 0} className="sr-only peer" />
-                  <div className="w-11 h-6 bg-border rounded-full peer-checked:bg-accent transition-colors relative after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:w-5 after:h-5 after:bg-foreground after:rounded-full after:transition-all peer-checked:after:translate-x-5"></div>
+                  <div className="w-11 h-6 bg-border rounded-full peer-checked:bg-accent transition-colors relative after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:w-5 after:h-5 after:bg-white after:rounded-full after:transition-all peer-checked:after:translate-x-5"></div>
                 </label>
               </div>
             ))}

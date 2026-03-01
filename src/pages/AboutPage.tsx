@@ -87,7 +87,7 @@ const AboutPage = () => {
               </p>
               <Link
                 to="/contact"
-                className="inline-block px-8 py-4 bg-accent text-accent-foreground font-heading font-bold text-lg uppercase tracking-wider hover:scale-105 hover:rotate-1 transition-all duration-200"
+                className="inline-block px-8 py-4 bg-accent text-white font-heading font-bold text-lg uppercase tracking-wider hover:scale-105 hover:rotate-1 transition-all duration-200"
               >
                 Meet the Team
               </Link>

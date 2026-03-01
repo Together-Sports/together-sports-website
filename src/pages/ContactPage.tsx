@@ -37,7 +37,7 @@ const ContactPage = () => {
                   <option>Media</option>
                 </select>
                 <textarea rows={5} placeholder="Your message..." className="w-full p-4 bg-card border border-border text-foreground font-body placeholder:text-muted-foreground focus:border-accent focus:outline-none resize-none" />
-                <button type="submit" className="px-8 py-4 bg-accent text-accent-foreground font-heading font-bold text-lg uppercase tracking-wider hover:scale-105 hover:rotate-1 transition-all duration-200">
+                <button type="submit" className="px-8 py-4 bg-accent text-white font-heading font-bold text-lg uppercase tracking-wider hover:scale-105 hover:rotate-1 transition-all duration-200">
                   Send It →
                 </button>
               </form>

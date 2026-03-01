@@ -57,11 +57,11 @@ const SportDetailPage = () => {
       {/* Hero */}
       <section className="relative h-[60vh] min-h-[400px] flex items-end">
         <img src={data.image} alt={data.name} className="absolute inset-0 w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-deep-blue via-deep-blue/50 to-transparent" />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 w-full">
           <p className="font-body font-bold uppercase tracking-[0.3em] text-accent text-sm mb-3">Together Sports</p>
-          <h1 className="font-heading text-6xl md:text-8xl font-black uppercase">{data.name}</h1>
-          <p className="text-xl text-muted-foreground mt-2">{data.tagline}</p>
+          <h1 className="font-heading text-6xl md:text-8xl font-black uppercase text-white">{data.name}</h1>
+          <p className="text-xl text-white/70 mt-2">{data.tagline}</p>
         </div>
       </section>
 
@@ -125,10 +125,10 @@ const SportDetailPage = () => {
               Sign up through USTA or contact us directly to join the program.
             </p>
             <div className="flex flex-wrap gap-4 justify-center">
-              <a href="#" className="inline-block px-8 py-4 bg-primary text-primary-foreground font-heading font-bold uppercase tracking-wider hover:scale-105 transition-all duration-200">
+              <a href="#" className="inline-block px-8 py-4 bg-primary text-white font-heading font-bold uppercase tracking-wider hover:scale-105 transition-all duration-200">
                 USTA Registration →
               </a>
-              <Link to="/contact" className="inline-block px-8 py-4 bg-accent text-accent-foreground font-heading font-bold uppercase tracking-wider hover:scale-105 transition-all duration-200">
+              <Link to="/contact" className="inline-block px-8 py-4 bg-accent text-white font-heading font-bold uppercase tracking-wider hover:scale-105 transition-all duration-200">
                 Contact Us
               </Link>
             </div>
@@ -155,7 +155,7 @@ const SportDetailPage = () => {
                   Second Serve is our signature program providing free tennis equipment, coaching, and mentorship
                   to underserved youth. We believe every kid deserves a second chance — on and off the court.
                 </p>
-                <Link to="/get-involved" className="inline-block px-8 py-4 bg-accent text-accent-foreground font-heading font-bold uppercase tracking-wider hover:scale-105 hover:rotate-1 transition-all duration-200">
+                <Link to="/get-involved" className="inline-block px-8 py-4 bg-accent text-white font-heading font-bold uppercase tracking-wider hover:scale-105 hover:rotate-1 transition-all duration-200">
                   Support Second Serve
                 </Link>
               </ScrollReveal>
