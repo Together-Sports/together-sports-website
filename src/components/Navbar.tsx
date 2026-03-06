@@ -10,6 +10,7 @@ const navItems = [
   { label: "How We Teach", path: "/how-we-teach" },
   { label: "Blog", path: "/blog" },
   { label: "Get Involved", path: "/get-involved" },
+  { label: "Partners", path: "/partners" },
   { label: "Contact", path: "/contact" },
 ];
 

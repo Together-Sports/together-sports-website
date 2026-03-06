@@ -13,6 +13,7 @@ import HowWeTeachPage from "./pages/HowWeTeachPage";
 import BlogPage from "./pages/BlogPage";
 import GetInvolvedPage from "./pages/GetInvolvedPage";
 import ContactPage from "./pages/ContactPage";
+import PartnersPage from "./pages/PartnersPage";
 import AdminPage from "./pages/AdminPage";
 import NotFound from "./pages/NotFound";
 
@@ -35,6 +36,7 @@ const App = () => (
             <Route path="/blog" element={<BlogPage />} />
             <Route path="/get-involved" element={<GetInvolvedPage />} />
             <Route path="/contact" element={<ContactPage />} />
+            <Route path="/partners" element={<PartnersPage />} />
           </Route>
           <Route path="/admin" element={<AdminPage />} />
           <Route path="*" element={<NotFound />} />
