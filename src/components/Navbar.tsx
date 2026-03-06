@@ -6,7 +6,6 @@ import { motion, AnimatePresence } from "framer-motion";
 const navItems = [
   { label: "Home", path: "/" },
   { label: "About", path: "/about" },
-  { label: "Sports", path: "/sports" },
   { label: "How We Teach", path: "/how-we-teach" },
   { label: "Blog", path: "/blog" },
   { label: "Get Involved", path: "/get-involved" },
@@ -21,20 +20,18 @@ const Navbar = () => {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-primary border-b border-primary/80">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 md:h-20">
+        <div className="flex items-center justify-between gap-6 h-16 md:h-20">
           <Link to="/" className="flex items-center gap-2">
             <span className="font-heading text-xl md:text-2xl font-black uppercase tracking-wider text-white">Together Sports</span>
           </Link>
 
           {/* Desktop nav */}
-          <div className="hidden lg:flex items-center gap-1">
+          <div className="hidden lg:flex flex-1 items-center justify-end gap-1 min-w-0">
             {navItems.map((item) => (
               <Link
                 key={item.path}
                 to={item.path}
-                className={`px-3 py-2 text-sm font-body font-semibold uppercase tracking-wider transition-colors duration-200 hover:text-accent ${
-                  location.pathname === item.path ? "text-accent" : "text-white/80"
-                }`}
+                className="px-3 py-2 text-sm font-body font-semibold uppercase tracking-wider text-white transition-colors duration-200 hover:text-[#84a6ff]"
               >
                 {item.label}
               </Link>
@@ -66,9 +63,7 @@ const Navbar = () => {
                   key={item.path}
                   to={item.path}
                   onClick={() => setIsOpen(false)}
-                  className={`block px-4 py-3 font-heading font-bold text-lg uppercase tracking-wider transition-colors ${
-                    location.pathname === item.path ? "text-accent" : "text-white/80"
-                  }`}
+                  className="block px-4 py-3 font-heading font-bold text-lg uppercase tracking-wider text-white transition-colors hover:text-[#84a6ff]"
                 >
                   {item.label}
                 </Link>

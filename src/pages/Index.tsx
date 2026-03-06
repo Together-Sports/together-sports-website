@@ -44,12 +44,12 @@ const Index = () => {
               Empowering youth through sports, mentorship, and community — one game at a time.
             </p>
             <div className="flex flex-wrap gap-4">
-              <Link
-                to="/sports"
+              <a
+                href="#sports"
                 className="inline-block px-8 py-4 bg-primary text-white font-heading font-bold text-lg uppercase tracking-wider hover:scale-105 hover:-rotate-1 transition-all duration-200"
               >
                 Our Sports
-              </Link>
+              </a>
               <Link
                 to="/get-involved"
                 className="inline-block px-8 py-4 bg-accent text-white font-heading font-bold text-lg uppercase tracking-wider hover:scale-105 hover:rotate-1 transition-all duration-200"
@@ -59,15 +59,11 @@ const Index = () => {
             </div>
           </motion.div>
 
-          {/* Background text */}
-          <div className="absolute -bottom-4 right-0 font-heading text-[12vw] font-black uppercase text-white/[0.05] leading-none select-none pointer-events-none hidden md:block">
-            TOGETHER
-          </div>
         </div>
       </section>
 
       {/* FEATURED SPORTS */}
-      <section className="py-20 md:py-32 bg-card scratchy-overlay relative">
+      <section id="sports" className="py-20 md:py-32 bg-card scratchy-overlay relative">
         <div className="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-background to-transparent" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <ScrollReveal>

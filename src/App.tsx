@@ -6,11 +6,11 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
 import Index from "./pages/Index";
 import AboutPage from "./pages/AboutPage";
-import SportsPage from "./pages/SportsPage";
 import SportDetailPage from "./pages/SportDetailPage";
 import HowWeTeachPage from "./pages/HowWeTeachPage";
 
 import BlogPage from "./pages/BlogPage";
+import BlogPostPage from "./pages/BlogPostPage";
 import GetInvolvedPage from "./pages/GetInvolvedPage";
 import ContactPage from "./pages/ContactPage";
 import PartnersPage from "./pages/PartnersPage";
@@ -29,11 +29,11 @@ const App = () => (
           <Route element={<Layout />}>
             <Route path="/" element={<Index />} />
             <Route path="/about" element={<AboutPage />} />
-            <Route path="/sports" element={<SportsPage />} />
             <Route path="/sports/:sport" element={<SportDetailPage />} />
             <Route path="/how-we-teach" element={<HowWeTeachPage />} />
             
             <Route path="/blog" element={<BlogPage />} />
+            <Route path="/blog/:slug" element={<BlogPostPage />} />
             <Route path="/get-involved" element={<GetInvolvedPage />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/partners" element={<PartnersPage />} />
