@@ -1,5 +1,5 @@
 import ScrollReveal from "@/components/ScrollReveal";
-import { Mail, MapPin, Phone } from "lucide-react";
+import contactImage from "@/assets/contact-community.jpg";
 
 const ContactPage = () => {
   return (
@@ -44,28 +44,16 @@ const ContactPage = () => {
             </ScrollReveal>
 
             <ScrollReveal direction="right">
-              <div className="space-y-8 lg:pt-16">
-                {[
-                  { icon: Mail, label: "Email", value: "hello@togethersports.org" },
-                  { icon: Phone, label: "Phone", value: "(555) 123-4567" },
-                  { icon: MapPin, label: "Location", value: "Serving communities nationwide" },
-                ].map((item) => (
-                  <div key={item.label} className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-accent/20 flex items-center justify-center flex-shrink-0">
-                      <item.icon className="text-accent" size={20} />
-                    </div>
-                    <div>
-                      <p className="font-heading font-bold uppercase text-sm text-muted-foreground mb-1">{item.label}</p>
-                      <p className="text-foreground font-body text-lg">{item.value}</p>
-                    </div>
-                  </div>
-                ))}
-
-                <div className="p-6 bg-card border border-border mt-8">
-                  <h3 className="font-heading text-xl font-black uppercase mb-2">Follow Us</h3>
-                  <p className="text-muted-foreground text-sm">
-                    Stay connected on social media for the latest updates, events, and stories from the field.
-                  </p>
+              <div className="relative h-full min-h-[400px]">
+                <img
+                  src={contactImage}
+                  alt="Youth tennis coaching session"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute -bottom-4 -left-4 w-28 h-28 bg-accent scrapbook-rotate-2 flex items-center justify-center">
+                  <span className="font-heading text-white font-black text-sm uppercase text-center leading-tight">
+                    Let's<br />Connect
+                  </span>
                 </div>
               </div>
             </ScrollReveal>
