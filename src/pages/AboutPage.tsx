@@ -16,7 +16,7 @@ const AboutPage = () => {
             transition={{ duration: 0.6, ease: "easeOut" }}
             className="max-w-3xl mx-auto text-center"
           >
-            <h1 className="font-heading text-5xl md:text-7xl font-black uppercase leading-[0.95] mb-4 text-foreground">
+            <h1 className="font-heading text-5xl md:text-7xl font-black uppercase leading-[0.95] mb-4 text-white">
               <span className="whitespace-nowrap">Meet The </span>
               <span className="whitespace-nowrap">Team</span>
             </h1>
