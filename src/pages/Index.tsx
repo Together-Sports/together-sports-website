@@ -104,9 +104,6 @@ const Index = () => {
               transition={{ duration: 0.7, ease: "easeOut" }}
               className="max-w-2xl"
             >
-              <p className="font-body font-bold uppercase tracking-[0.3em] text-primary text-sm md:text-base mb-4">
-                Together Sports
-              </p>
               <h1 className="font-heading text-6xl sm:text-7xl md:text-8xl lg:text-[6.4rem] xl:text-[7rem] font-black uppercase leading-[0.94] mb-8 text-foreground">
                 <span className="block whitespace-nowrap">Play Loud.</span>
                 <span className="block whitespace-nowrap text-[#4f74d6]">Build Strong.</span>
