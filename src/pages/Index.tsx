@@ -326,7 +326,7 @@ const Index = () => {
             {featuredTestimonials.map((testimonial, i) => (
               <ScrollReveal key={testimonial.id} delay={i * 0.15}>
                 <div
-                  className={`relative bg-white p-8 md:p-10 border-2 border-white hover:border-white transition-colors duration-300 ${
+                  className={`relative bg-white p-8 md:p-10 border-2 border-black transition-colors duration-300 ${
                     i === 1 ? "md:-translate-y-6 scrapbook-rotate-2" : i === 2 ? "scrapbook-rotate-3" : "scrapbook-rotate-1"
                   }`}
                 >
@@ -337,7 +337,7 @@ const Index = () => {
                     &ldquo;{testimonial.quote || ""}&rdquo;
                   </p>
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-1 bg-sport-tennis" />
+                    <div className={`w-10 h-1 ${i === 0 ? 'bg-[#ab9bfa]' : i === 1 ? 'bg-[#f6a15c]' : 'bg-[#84a6ff]'}`} />
                     <span className="font-heading font-bold uppercase text-sm tracking-wider text-foreground">
                       {testimonial.name}
                     </span>
