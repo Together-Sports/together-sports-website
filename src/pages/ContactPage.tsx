@@ -17,7 +17,7 @@ const ContactPage = () => {
               <span className="whitespace-nowrap">Contact </span>
               <span className="whitespace-nowrap">Us</span>
             </h1>
-            <p className="text-foreground text-lg md:text-xl max-w-2xl mx-auto font-body">
+            <p className="text-white font-bold text-lg md:text-xl max-w-2xl mx-auto font-body">
               Questions, partnerships, volunteering, or support requests, reach out and we will point you in the right direction.
             </p>
           </motion.div>
