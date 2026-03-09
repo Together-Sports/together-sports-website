@@ -20,7 +20,7 @@ const AboutPage = () => {
               <span className="whitespace-nowrap">Meet The </span>
               <span className="whitespace-nowrap">Team</span>
             </h1>
-            <p className="text-foreground text-lg md:text-xl max-w-2xl mx-auto font-body">
+            <p className="text-white font-bold text-lg md:text-xl max-w-2xl mx-auto font-body">
               The people behind Together Sports are coaches, mentors, athletes, and community builders creating spaces where young people can grow through sport.
             </p>
           </motion.div>

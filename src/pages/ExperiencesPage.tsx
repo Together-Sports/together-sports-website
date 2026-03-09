@@ -89,7 +89,7 @@ const ExperiencesPage = () => {
               <span className="whitespace-nowrap">Our </span>
               <span className="whitespace-nowrap">Experiences</span>
             </h1>
-            <p className="text-foreground text-lg md:text-xl max-w-2xl mx-auto font-body">
+            <p className="text-white font-bold text-lg md:text-xl max-w-2xl mx-auto font-body">
               Hear from the athletes, families, and coaches who make Together Sports what it is. These are their words, their moments, and their stories.
             </p>
           </motion.div>

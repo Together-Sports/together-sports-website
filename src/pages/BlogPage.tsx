@@ -27,7 +27,7 @@ const BlogPage = () => {
               <span className="whitespace-nowrap">The </span>
               <span className="whitespace-nowrap">Blog</span>
             </h1>
-            <p className="text-foreground text-lg md:text-xl max-w-2xl mx-auto font-body">
+            <p className="text-white font-bold text-lg md:text-xl max-w-2xl mx-auto font-body">
               Synced from Together Sports on Substack, rendered here as native website posts.
             </p>
           </motion.div>
