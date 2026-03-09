@@ -326,7 +326,7 @@ const Index = () => {
             {featuredTestimonials.map((testimonial, i) => (
               <ScrollReveal key={testimonial.id} delay={i * 0.15}>
                 <div
-                  className={`relative bg-white p-8 md:p-10 border-2 border-white hover:border-white transition-colors duration-300 ${
+                  className={`relative bg-white p-8 md:p-10 border-2 border-black transition-colors duration-300 ${
                     i === 1 ? "md:-translate-y-6 scrapbook-rotate-2" : i === 2 ? "scrapbook-rotate-3" : "scrapbook-rotate-1"
                   }`}
                 >
@@ -337,7 +337,7 @@ const Index = () => {
                     &ldquo;{testimonial.quote || ""}&rdquo;
                   </p>
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-1 bg-sport-tennis" />
+                    <div className={`w-10 h-1 ${i === 0 ? 'bg-[#ab9bfa]' : i === 1 ? 'bg-[#f6a15c]' : 'bg-[#84a6ff]'}`} />
                     <span className="font-heading font-bold uppercase text-sm tracking-wider text-foreground">
                       {testimonial.name}
                     </span>
@@ -354,7 +354,6 @@ const Index = () => {
       <section className="py-20 md:py-32 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <ScrollReveal>
-            <p className="font-body font-bold uppercase tracking-[0.3em] text-accent text-sm mb-4">Where We Are</p>
             <h2 className="font-heading text-5xl md:text-7xl font-black uppercase mb-4 whitespace-nowrap">
               Our <span className="brush-underline">Location</span>
             </h2>
@@ -407,9 +406,9 @@ const Index = () => {
             <h2 className="font-heading text-5xl md:text-7xl font-black uppercase text-white leading-[0.85] mb-6">
               Change the Game.
               <br />
-              <span className="text-white/60">Donate Today.</span>
+              <span className="text-white">Donate Today.</span>
             </h2>
-            <p className="text-white/70 text-lg mb-8 max-w-lg mx-auto font-body">
+            <p className="text-white font-bold text-lg mb-8 max-w-lg mx-auto font-body">
               Your contribution puts a racket, a ball, or a dream in a kid&apos;s hands. Every dollar counts.
             </p>
             <Link
