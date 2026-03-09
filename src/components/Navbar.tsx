@@ -7,6 +7,7 @@ import headerLogo from "@/assets/headerlogo.svg";
 const navItems = [
   { label: "Home", path: "/" },
   { label: "Team", path: "/team" },
+  { label: "Experiences", path: "/experiences" },
   { label: "Blog", path: "/blog" },
   { label: "Get Involved", path: "/get-involved" },
   { label: "Partners", path: "/partners" },
