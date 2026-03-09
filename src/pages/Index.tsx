@@ -311,16 +311,13 @@ const Index = () => {
       </section>
 
       {/* TESTIMONIALS */}
-      <section className="py-20 md:py-32 bg-[hsl(130,40%,92%)] scratchy-overlay relative">
+      <section className="py-20 md:py-32 bg-[#87cb4a] scratchy-overlay relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <ScrollReveal>
-            <p className="font-body font-bold uppercase tracking-[0.3em] text-sport-tennis text-sm mb-4 text-center">
-              Real Stories
-            </p>
-            <h2 className="font-heading text-5xl md:text-7xl font-black uppercase mb-4 text-foreground text-center">
-              Together Tennis
+            <h2 className="font-heading text-5xl md:text-7xl font-black uppercase mb-4 text-white text-center">
+              Testimonials
             </h2>
-            <p className="text-muted-foreground text-lg mb-16 max-w-lg mx-auto text-center">
+            <p className="text-white font-bold text-lg mb-16 max-w-lg mx-auto text-center">
               The little stories that show the big picture: connection, encouragement, and growth.
             </p>
           </ScrollReveal>
@@ -329,11 +326,11 @@ const Index = () => {
             {featuredTestimonials.map((testimonial, i) => (
               <ScrollReveal key={testimonial.id} delay={i * 0.15}>
                 <div
-                  className={`relative bg-background p-8 md:p-10 border-2 border-border hover:border-sport-tennis transition-colors duration-300 ${
+                  className={`relative bg-white p-8 md:p-10 border-2 border-white hover:border-white transition-colors duration-300 ${
                     i === 1 ? "md:-translate-y-6 scrapbook-rotate-2" : i === 2 ? "scrapbook-rotate-3" : "scrapbook-rotate-1"
                   }`}
                 >
-                  <span className="absolute -top-5 left-6 font-heading text-8xl text-sport-tennis/30 leading-none select-none pointer-events-none">
+                  <span className="absolute -top-5 left-6 font-heading text-8xl leading-none select-none pointer-events-none text-white" style={{ WebkitTextStroke: '2px #000' }}>
                     &ldquo;
                   </span>
                   <p className="text-foreground text-base md:text-lg leading-relaxed mb-6 relative z-10 italic">
