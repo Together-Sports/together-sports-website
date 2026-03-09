@@ -30,11 +30,8 @@ const AboutPage = () => {
         </div>
       </section>
 
-      <section className="py-20 md:py-28">
+      <section className="py-12 md:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <ScrollReveal>
-            <div className="mb-14 md:mb-16" />
-          </ScrollReveal>
 
           <div className="space-y-16 md:space-y-20">
             {teamSections.map((section, sectionIndex) => (
