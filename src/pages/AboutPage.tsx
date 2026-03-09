@@ -16,7 +16,7 @@ const AboutPage = () => {
             transition={{ duration: 0.6, ease: "easeOut" }}
             className="max-w-3xl mx-auto text-center"
           >
-            <p className="font-body font-bold uppercase tracking-[0.3em] text-white text-sm md:text-base mb-3">
+            <p className="font-body font-bold uppercase tracking-[0.3em] text-[#285400] text-sm md:text-base mb-3">
               Our Team
             </p>
             <h1 className="font-heading text-5xl md:text-7xl font-black uppercase leading-[0.95] mb-4 text-foreground">
