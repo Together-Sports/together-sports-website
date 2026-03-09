@@ -350,20 +350,6 @@ const Index = () => {
             ))}
           </div>
 
-          <ScrollReveal>
-            <div className="mt-16 flex flex-wrap justify-center gap-x-8 gap-y-3 text-muted-foreground text-base md:text-lg">
-              {[
-                "The first time a ball clears the net",
-                "The confidence that builds with each swing",
-                "The laughter after a missed shot",
-              ].map((moment) => (
-                <span key={moment} className="flex items-center gap-2">
-                  <span className="w-2 h-2 bg-sport-tennis rounded-full inline-block shrink-0" />
-                  {moment}
-                </span>
-              ))}
-            </div>
-          </ScrollReveal>
         </div>
       </section>
 
