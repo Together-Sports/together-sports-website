@@ -311,7 +311,7 @@ const Index = () => {
       </section>
 
       {/* TESTIMONIALS */}
-      <section className="py-20 md:py-32 bg-[hsl(130,25%,93%)] scratchy-overlay relative">
+      <section className="py-20 md:py-32 bg-[hsl(130,40%,92%)] scratchy-overlay relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <ScrollReveal>
             <p className="font-body font-bold uppercase tracking-[0.3em] text-sport-tennis text-sm mb-4 text-center">
@@ -320,7 +320,7 @@ const Index = () => {
             <h2 className="font-heading text-5xl md:text-7xl font-black uppercase mb-4 text-foreground text-center">
               Together Tennis
             </h2>
-            <p className="text-muted-foreground font-bold text-lg mb-16 max-w-lg mx-auto text-center">
+            <p className="text-muted-foreground text-lg mb-16 max-w-lg mx-auto text-center">
               The little stories that show the big picture: connection, encouragement, and growth.
             </p>
           </ScrollReveal>
