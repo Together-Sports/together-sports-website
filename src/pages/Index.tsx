@@ -361,7 +361,7 @@ const Index = () => {
             <h2 className="font-heading text-5xl md:text-7xl font-black uppercase mb-4 whitespace-nowrap">
               Our <span className="brush-underline">Location</span>
             </h2>
-            <p className="text-muted-foreground font-bold text-lg mb-12">
+            <p className="text-muted-foreground text-lg mb-12">
               Based in New York City, serving communities across the five boroughs.
             </p>
           </ScrollReveal>
