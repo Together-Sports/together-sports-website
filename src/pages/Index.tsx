@@ -18,83 +18,83 @@ import golfSpin from "@/assets/GOLFSPIN.svg";
 import { useEditableContent } from "@/lib/editable-content";
 
 const sports = [
-  { name: "Together Tennis", image: togetherTennis, path: "/sports/tennis" },
-  { name: "Together Basketball", image: togetherBasketball, path: "/sports/basketball" },
-  { name: "Together Football", image: togetherFootball, path: "/sports/football" },
-  { name: "Together Golf", image: togetherGolf, path: "/sports/golf" },
-];
+{ name: "Together Tennis", image: togetherTennis, path: "/sports/tennis" },
+{ name: "Together Basketball", image: togetherBasketball, path: "/sports/basketball" },
+{ name: "Together Football", image: togetherFootball, path: "/sports/football" },
+{ name: "Together Golf", image: togetherGolf, path: "/sports/golf" }];
+
 
 const heroSpins = [
-  {
-    image: spinBall,
-    className:
-      "absolute bottom-10 left-12 z-0 w-44 sm:bottom-12 sm:left-16 sm:w-52 md:bottom-10 md:left-24 md:w-60 lg:bottom-12 lg:left-16 lg:w-[17rem]",
-    rotate: -360,
-    duration: 24,
-    delay: 0,
-    scaleX: 1,
-  },
-  {
-    image: golfSpin,
-    className:
-      "absolute right-10 top-24 z-0 w-24 sm:right-14 sm:top-28 sm:w-28 md:right-20 md:top-24 md:w-36 lg:right-28 lg:top-32 lg:w-40",
-    rotate: 360,
-    duration: 18,
-    delay: 1.5,
-    scaleX: 1,
-  },
-  {
-    image: basketSpin,
-    className:
-      "absolute left-[-8rem] top-10 z-0 w-60 sm:left-[-9rem] sm:top-14 sm:w-72 md:left-[-10rem] md:top-16 md:w-80 lg:left-[-11rem] lg:top-18 lg:w-[26rem]",
-    rotate: 360,
-    duration: 28,
-    delay: 3,
-    scaleX: 1,
-  },
-  {
-    image: footballSpin,
-    className:
-      "absolute bottom-8 right-4 z-0 w-56 sm:bottom-10 sm:right-6 sm:w-64 md:bottom-10 md:right-8 md:w-72 lg:bottom-12 lg:right-10 lg:w-[20rem]",
-    rotate: 0,
-    duration: 0,
-    delay: 0,
-    scaleX: -1,
-  },
-];
+{
+  image: spinBall,
+  className:
+  "absolute bottom-10 left-12 z-0 w-44 sm:bottom-12 sm:left-16 sm:w-52 md:bottom-10 md:left-24 md:w-60 lg:bottom-12 lg:left-16 lg:w-[17rem]",
+  rotate: -360,
+  duration: 24,
+  delay: 0,
+  scaleX: 1
+},
+{
+  image: golfSpin,
+  className:
+  "absolute right-10 top-24 z-0 w-24 sm:right-14 sm:top-28 sm:w-28 md:right-20 md:top-24 md:w-36 lg:right-28 lg:top-32 lg:w-40",
+  rotate: 360,
+  duration: 18,
+  delay: 1.5,
+  scaleX: 1
+},
+{
+  image: basketSpin,
+  className:
+  "absolute left-[-8rem] top-10 z-0 w-60 sm:left-[-9rem] sm:top-14 sm:w-72 md:left-[-10rem] md:top-16 md:w-80 lg:left-[-11rem] lg:top-18 lg:w-[26rem]",
+  rotate: 360,
+  duration: 28,
+  delay: 3,
+  scaleX: 1
+},
+{
+  image: footballSpin,
+  className:
+  "absolute bottom-8 right-4 z-0 w-56 sm:bottom-10 sm:right-6 sm:w-64 md:bottom-10 md:right-8 md:w-72 lg:bottom-12 lg:right-10 lg:w-[20rem]",
+  rotate: 0,
+  duration: 0,
+  delay: 0,
+  scaleX: -1
+}];
+
 
 const Index = () => {
   const { experiences } = useEditableContent();
-  const featuredTestimonials = experiences
-    .filter((item) => item.type === "quote" || item.type === "parent")
-    .slice(0, 3);
+  const featuredTestimonials = experiences.
+  filter((item) => item.type === "quote" || item.type === "parent").
+  slice(0, 3);
 
   return (
     <div className="overflow-hidden">
       {/* HERO */}
       <section className="relative overflow-hidden bg-gradient-to-br from-[#84a6ff]/18 via-background to-[#4f74d6]/12">
-        {heroSpins.map((item) => (
-          <motion.div
-            key={item.image}
-            className={item.className}
-            whileHover={{ scale: 1.08, y: -6 }}
-            transition={{ scale: { duration: 0.2, ease: "easeOut" }, y: { duration: 0.2, ease: "easeOut" } }}
-          >
+        {heroSpins.map((item) =>
+        <motion.div
+          key={item.image}
+          className={item.className}
+          whileHover={{ scale: 1.08, y: -6 }}
+          transition={{ scale: { duration: 0.2, ease: "easeOut" }, y: { duration: 0.2, ease: "easeOut" } }}>
+          
             <motion.img
-              src={item.image}
-              alt=""
-              aria-hidden="true"
-              className="block w-full h-auto"
-              initial={item.duration > 0 ? { rotate: 0, scaleX: item.scaleX } : { scaleX: item.scaleX }}
-              animate={item.duration > 0 ? { rotate: item.rotate, scaleX: item.scaleX } : { scaleX: item.scaleX }}
-              transition={
-                item.duration > 0
-                  ? { rotate: { duration: item.duration, delay: item.delay, ease: "linear", repeat: Infinity } }
-                  : undefined
-              }
-            />
+            src={item.image}
+            alt=""
+            aria-hidden="true"
+            className="block w-full h-auto"
+            initial={item.duration > 0 ? { rotate: 0, scaleX: item.scaleX } : { scaleX: item.scaleX }}
+            animate={item.duration > 0 ? { rotate: item.rotate, scaleX: item.scaleX } : { scaleX: item.scaleX }}
+            transition={
+            item.duration > 0 ?
+            { rotate: { duration: item.duration, delay: item.delay, ease: "linear", repeat: Infinity } } :
+            undefined
+            } />
+          
           </motion.div>
-        ))}
+        )}
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-28 md:py-32 lg:py-36">
           <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(300px,0.8fr)] gap-14 lg:gap-28 items-center">
@@ -102,10 +102,13 @@ const Index = () => {
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease: "easeOut" }}
-              className="max-w-2xl"
-            >
+              className="max-w-2xl">
+              
+              <p className="font-body font-bold uppercase tracking-[0.3em] text-primary text-sm md:text-base mb-4">
+                Together Sports
+              </p>
               <h1 className="font-heading text-6xl sm:text-7xl md:text-8xl lg:text-[6.4rem] xl:text-[7rem] font-black uppercase leading-[0.94] mb-8 text-foreground">
-                <span className="block whitespace-nowrap">Play Loud.</span>
+                <span className="block whitespace-nowrap">Together Sports, Empowering youth through sports, mentorship, and community one game at a time.</span>
                 <span className="block whitespace-nowrap text-[#4f74d6]">Build Strong.</span>
               </h1>
               <p className="text-foreground/70 text-lg md:text-xl max-w-xl mb-8 font-body">
@@ -114,14 +117,14 @@ const Index = () => {
               <div className="flex flex-wrap gap-4">
                 <a
                   href="#sports"
-                  className="inline-block px-8 py-4 bg-primary text-white font-heading font-bold text-lg uppercase tracking-wider hover:scale-105 hover:-rotate-1 transition-all duration-200"
-                >
+                  className="inline-block px-8 py-4 bg-primary text-white font-heading font-bold text-lg uppercase tracking-wider hover:scale-105 hover:-rotate-1 transition-all duration-200">
+                  
                   Our Sports
                 </a>
                 <Link
                   to="/get-involved"
-                  className="inline-block px-8 py-4 bg-accent text-white font-heading font-bold text-lg uppercase tracking-wider hover:scale-105 hover:rotate-1 transition-all duration-200"
-                >
+                  className="inline-block px-8 py-4 bg-accent text-white font-heading font-bold text-lg uppercase tracking-wider hover:scale-105 hover:rotate-1 transition-all duration-200">
+                  
                   Donate Now
                 </Link>
               </div>
@@ -131,28 +134,28 @@ const Index = () => {
               initial={{ opacity: 0, y: 50, rotate: -2 }}
               animate={{ opacity: 1, y: 0, rotate: 0 }}
               transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
-              className="relative h-[500px] sm:h-[600px] md:h-[680px] w-full max-w-[680px] mx-auto -translate-y-6 sm:-translate-y-8 md:-translate-y-12 lg:mx-0 lg:ml-20 lg:-translate-y-20"
-            >
+              className="relative h-[500px] sm:h-[600px] md:h-[680px] w-full max-w-[680px] mx-auto -translate-y-6 sm:-translate-y-8 md:-translate-y-12 lg:mx-0 lg:ml-20 lg:-translate-y-20">
+              
               <div className="absolute left-10 -top-6 w-[68%] h-[40%] overflow-hidden border-[10px] border-white bg-white scrapbook-rotate-2 z-10">
                 <img
                   src={image0903}
                   alt="Together Sports action moment"
-                  className="block w-full h-full object-cover"
-                />
+                  className="block w-full h-full object-cover" />
+                
               </div>
               <div className="absolute right-2 top-[22%] w-[82%] h-[46%] overflow-hidden border-[12px] border-white bg-white scrapbook-rotate-1 z-10">
                 <img
                   src={heroImage}
                   alt="Together Sports community moment"
-                  className="block w-full h-full object-cover"
-                />
+                  className="block w-full h-full object-cover" />
+                
               </div>
               <div className="absolute left-[-2%] bottom-[2%] w-[74%] h-[42%] overflow-hidden border-[10px] border-white bg-white scrapbook-rotate-2 z-20">
                 <img
                   src={image3782}
                   alt="Together Sports team moment"
-                  className="block w-full h-full object-cover"
-                />
+                  className="block w-full h-full object-cover" />
+                
               </div>
             </motion.div>
           </div>
@@ -201,29 +204,29 @@ const Index = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-8">
               {[
-                {
-                  title: "Access",
-                  desc: "Every kid plays, regardless of background or income.",
-                  bg: "bg-[#f6a15c]",
-                  hoverBorder: "hover:border-[#8d5120]",
-                },
-                {
-                  title: "Growth",
-                  desc: "Sports build character, discipline, and confidence.",
-                  bg: "bg-[#87cb4a]",
-                  hoverBorder: "hover:border-[#285400]",
-                },
-                {
-                  title: "Community",
-                  desc: "We rise together — athletes, mentors, families.",
-                  bg: "bg-[#ab9bfa]",
-                  hoverBorder: "hover:border-[#5646a8]",
-                },
-              ].map((value, index) => (
-                <ScrollReveal key={value.title} delay={index * 0.12}>
+              {
+                title: "Access",
+                desc: "Every kid plays, regardless of background or income.",
+                bg: "bg-[#f6a15c]",
+                hoverBorder: "hover:border-[#8d5120]"
+              },
+              {
+                title: "Growth",
+                desc: "Sports build character, discipline, and confidence.",
+                bg: "bg-[#87cb4a]",
+                hoverBorder: "hover:border-[#285400]"
+              },
+              {
+                title: "Community",
+                desc: "We rise together — athletes, mentors, families.",
+                bg: "bg-[#ab9bfa]",
+                hoverBorder: "hover:border-[#5646a8]"
+              }].
+              map((value, index) =>
+              <ScrollReveal key={value.title} delay={index * 0.12}>
                   <div
-                    className={`group border-2 border-transparent p-8 md:p-10 transition-colors duration-300 ${value.bg} ${value.hoverBorder}`}
-                  >
+                  className={`group border-2 border-transparent p-8 md:p-10 transition-colors duration-300 ${value.bg} ${value.hoverBorder}`}>
+                  
                     <h4 className="font-heading text-3xl md:text-4xl font-black uppercase mb-4 text-white transition-colors duration-300">
                       {value.title}
                     </h4>
@@ -232,7 +235,7 @@ const Index = () => {
                     </p>
                   </div>
                 </ScrollReveal>
-              ))}
+              )}
             </div>
           </div>
         </div>
@@ -251,17 +254,17 @@ const Index = () => {
           </ScrollReveal>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
-            {sports.map((sport, i) => (
-              <ScrollReveal key={sport.name} delay={i * 0.1} direction={i % 2 === 0 ? "left" : "right"}>
+            {sports.map((sport, i) =>
+            <ScrollReveal key={sport.name} delay={i * 0.1} direction={i % 2 === 0 ? "left" : "right"}>
                 <Link to={sport.path} className="group flex items-center justify-center py-4 md:py-6">
                   <img
-                    src={sport.image}
-                    alt={sport.name}
-                    className="w-full max-w-[18rem] md:max-w-[22rem] h-auto object-contain transition-transform duration-300 group-hover:scale-[1.04]"
-                  />
+                  src={sport.image}
+                  alt={sport.name}
+                  className="w-full max-w-[18rem] md:max-w-[22rem] h-auto object-contain transition-transform duration-300 group-hover:scale-[1.04]" />
+                
                 </Link>
               </ScrollReveal>
-            ))}
+            )}
           </div>
         </div>
       </section>
@@ -276,15 +279,15 @@ const Index = () => {
                   <img
                     src={secondServe}
                     alt="Second Serve service"
-                    className="w-full h-[400px] md:h-[500px] object-cover"
-                  />
+                    className="w-full h-[400px] md:h-[500px] object-cover" />
+                  
                 </div>
                 <div className="absolute -bottom-4 -right-4 w-32 h-32 border-[8px] border-accent bg-white p-3 scrapbook-rotate-2 flex items-center justify-center">
                   <img
                     src={partnerOne}
                     alt="Second Serve partner logo"
-                    className="w-full h-full object-contain"
-                  />
+                    className="w-full h-full object-contain" />
+                  
                 </div>
               </div>
             </ScrollReveal>
@@ -301,8 +304,8 @@ const Index = () => {
               </p>
               <Link
                 to="/sports/tennis"
-                className="inline-block px-8 py-4 bg-primary text-white font-heading font-bold text-lg uppercase tracking-wider hover:scale-105 hover:-rotate-1 transition-all duration-200"
-              >
+                className="inline-block px-8 py-4 bg-primary text-white font-heading font-bold text-lg uppercase tracking-wider hover:scale-105 hover:-rotate-1 transition-all duration-200">
+                
                 Learn More
               </Link>
             </ScrollReveal>
@@ -326,13 +329,13 @@ const Index = () => {
           </ScrollReveal>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-            {featuredTestimonials.map((testimonial, i) => (
-              <ScrollReveal key={testimonial.id} delay={i * 0.15}>
+            {featuredTestimonials.map((testimonial, i) =>
+            <ScrollReveal key={testimonial.id} delay={i * 0.15}>
                 <div
-                  className={`relative bg-background p-8 md:p-10 border-2 border-border hover:border-sport-tennis transition-colors duration-300 ${
-                    i === 1 ? "md:-translate-y-6 scrapbook-rotate-2" : i === 2 ? "scrapbook-rotate-3" : "scrapbook-rotate-1"
-                  }`}
-                >
+                className={`relative bg-background p-8 md:p-10 border-2 border-border hover:border-sport-tennis transition-colors duration-300 ${
+                i === 1 ? "md:-translate-y-6 scrapbook-rotate-2" : i === 2 ? "scrapbook-rotate-3" : "scrapbook-rotate-1"}`
+                }>
+                
                   <span className="absolute -top-5 left-6 font-heading text-8xl text-sport-tennis/30 leading-none select-none pointer-events-none">
                     &ldquo;
                   </span>
@@ -347,21 +350,21 @@ const Index = () => {
                   </div>
                 </div>
               </ScrollReveal>
-            ))}
+            )}
           </div>
 
           <ScrollReveal>
             <div className="mt-16 flex flex-wrap justify-center gap-x-8 gap-y-3 text-muted-foreground text-base md:text-lg">
               {[
-                "The first time a ball clears the net",
-                "The confidence that builds with each swing",
-                "The laughter after a missed shot",
-              ].map((moment) => (
-                <span key={moment} className="flex items-center gap-2">
+              "The first time a ball clears the net",
+              "The confidence that builds with each swing",
+              "The laughter after a missed shot"].
+              map((moment) =>
+              <span key={moment} className="flex items-center gap-2">
                   <span className="w-2 h-2 bg-sport-tennis rounded-full inline-block shrink-0" />
                   {moment}
                 </span>
-              ))}
+              )}
             </div>
           </ScrollReveal>
         </div>
@@ -383,8 +386,8 @@ const Index = () => {
           <ScrollReveal>
             <div
               className="relative w-full h-[400px] md:h-[500px] border-2 border-border overflow-hidden"
-              onWheel={(e) => e.preventDefault()}
-            >
+              onWheel={(e) => e.preventDefault()}>
+              
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d193595.25280949658!2d-74.11976389828046!3d40.69766374859258!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY!5e0!3m2!1sen!2sus!4v1700000000000!5m2!1e0!2e0"
                 width="100%"
@@ -393,8 +396,8 @@ const Index = () => {
                 allowFullScreen={false}
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                title="Together Sports NYC Location"
-              />
+                title="Together Sports NYC Location" />
+              
               <div
                 className="absolute inset-0"
                 style={{ background: "transparent", cursor: "default" }}
@@ -408,8 +411,8 @@ const Index = () => {
                       (e.currentTarget as HTMLDivElement).style.pointerEvents = "auto";
                     }, 100);
                   }
-                }}
-              />
+                }} />
+              
             </div>
           </ScrollReveal>
         </div>
@@ -431,15 +434,15 @@ const Index = () => {
             </p>
             <Link
               to="/get-involved"
-              className="inline-block px-10 py-5 bg-accent text-white font-heading font-bold text-xl uppercase tracking-wider hover:scale-105 hover:rotate-1 transition-all duration-200"
-            >
+              className="inline-block px-10 py-5 bg-accent text-white font-heading font-bold text-xl uppercase tracking-wider hover:scale-105 hover:rotate-1 transition-all duration-200">
+              
               Give Now →
             </Link>
           </ScrollReveal>
         </div>
       </section>
-    </div>
-  );
+    </div>);
+
 };
 
 export default Index;
