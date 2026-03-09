@@ -77,16 +77,24 @@ const ExperiencesPage = () => {
 
   return (
     <div className="overflow-hidden">
-      <PageHero
-        eyebrow="Real Stories"
-        title={
-          <>
-            <span className="whitespace-nowrap">Our </span>
-            <span className="whitespace-nowrap text-[#4f74d6]">Experiences</span>
-          </>
-        }
-        description="Hear from the athletes, families, and coaches who make Together Sports what it is. These are their words, their moments, and their stories."
-      />
+      <section className="relative overflow-hidden bg-[#87cb4a]">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-20 md:pt-28 md:pb-24">
+          <motion.div
+            initial={{ opacity: 0, y: 28 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="max-w-3xl mx-auto text-center"
+          >
+            <h1 className="font-heading text-5xl md:text-7xl font-black uppercase leading-[0.95] mb-4 text-foreground">
+              <span className="whitespace-nowrap">Our </span>
+              <span className="whitespace-nowrap">Experiences</span>
+            </h1>
+            <p className="text-foreground text-lg md:text-xl max-w-2xl mx-auto font-body">
+              Hear from the athletes, families, and coaches who make Together Sports what it is. These are their words, their moments, and their stories.
+            </p>
+          </motion.div>
+        </div>
+      </section>
 
       <section className="py-20 md:py-28">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

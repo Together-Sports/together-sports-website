@@ -15,16 +15,24 @@ const BlogPage = () => {
 
   return (
     <div className="overflow-hidden">
-      <PageHero
-        eyebrow="Stories"
-        title={
-          <>
-            <span className="whitespace-nowrap">The </span>
-            <span className="whitespace-nowrap text-[#4f74d6]">Blog</span>
-          </>
-        }
-        description="Synced from Together Sports on Substack, rendered here as native website posts."
-      />
+      <section className="relative overflow-hidden bg-[#87cb4a]">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-20 md:pt-28 md:pb-24">
+          <motion.div
+            initial={{ opacity: 0, y: 28 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="max-w-3xl mx-auto text-center"
+          >
+            <h1 className="font-heading text-5xl md:text-7xl font-black uppercase leading-[0.95] mb-4 text-foreground">
+              <span className="whitespace-nowrap">The </span>
+              <span className="whitespace-nowrap">Blog</span>
+            </h1>
+            <p className="text-foreground text-lg md:text-xl max-w-2xl mx-auto font-body">
+              Synced from Together Sports on Substack, rendered here as native website posts.
+            </p>
+          </motion.div>
+        </div>
+      </section>
 
       {featured ? (
         <>
