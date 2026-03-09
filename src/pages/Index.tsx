@@ -108,7 +108,7 @@ const Index = () => {
                 <span className="block whitespace-nowrap">Play Loud.</span>
                 <span className="block whitespace-nowrap text-[#4f74d6]">Build Strong.</span>
               </h1>
-              <p className="text-foreground/70 font-bold text-lg md:text-xl max-w-xl mb-8 font-body">
+              <p className="text-foreground/70 text-lg md:text-xl max-w-xl mb-8 font-body">
                 Together Sports is empowering youth through sports, mentorship, and community — one game at a time.
               </p>
               <div className="flex flex-wrap gap-4">
