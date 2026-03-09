@@ -245,7 +245,7 @@ const Index = () => {
             <h2 className="font-heading text-5xl md:text-7xl font-black uppercase mb-4 text-center">
               Our Sports
             </h2>
-            <p className="text-muted-foreground font-bold text-lg md:text-xl mb-12 max-w-2xl mx-auto text-center">
+            <p className="text-muted-foreground text-lg md:text-xl mb-12 max-w-2xl mx-auto text-center">
               Four sports. One mission. Building the next generation of leaders.
             </p>
           </ScrollReveal>
