@@ -77,7 +77,7 @@ const ExperiencesPage = () => {
 
   return (
     <div className="overflow-hidden">
-      <section className="relative overflow-hidden bg-[#87cb4a]">
+      <section className="relative overflow-hidden bg-[#84a6ff]">
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-20 md:pt-28 md:pb-24">
           <motion.div
             initial={{ opacity: 0, y: 28 }}
