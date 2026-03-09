@@ -245,7 +245,7 @@ const Index = () => {
             <h2 className="font-heading text-5xl md:text-7xl font-black uppercase mb-4 text-center">
               Our Sports
             </h2>
-            <p className="text-muted-foreground text-lg md:text-xl mb-12 max-w-2xl mx-auto text-center">
+            <p className="text-muted-foreground font-bold text-lg md:text-xl mb-12 max-w-2xl mx-auto text-center">
               Four sports. One mission. Building the next generation of leaders.
             </p>
           </ScrollReveal>
@@ -311,16 +311,16 @@ const Index = () => {
       </section>
 
       {/* TESTIMONIALS */}
-      <section className="py-20 md:py-32 bg-card scratchy-overlay relative">
+      <section className="py-20 md:py-32 bg-[hsl(130,25%,93%)] scratchy-overlay relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <ScrollReveal>
-            <p className="font-body font-bold uppercase tracking-[0.3em] text-sport-tennis text-sm mb-4">
+            <p className="font-body font-bold uppercase tracking-[0.3em] text-sport-tennis text-sm mb-4 text-center">
               Real Stories
             </p>
-            <h2 className="font-heading text-5xl md:text-7xl font-black uppercase mb-4 text-foreground">
-              Together <span className="brush-underline">Tennis</span>
+            <h2 className="font-heading text-5xl md:text-7xl font-black uppercase mb-4 text-foreground text-center">
+              Together Tennis
             </h2>
-            <p className="text-muted-foreground text-lg mb-16 max-w-lg">
+            <p className="text-muted-foreground font-bold text-lg mb-16 max-w-lg mx-auto text-center">
               The little stories that show the big picture: connection, encouragement, and growth.
             </p>
           </ScrollReveal>
@@ -350,20 +350,6 @@ const Index = () => {
             ))}
           </div>
 
-          <ScrollReveal>
-            <div className="mt-16 flex flex-wrap justify-center gap-x-8 gap-y-3 text-muted-foreground text-base md:text-lg">
-              {[
-                "The first time a ball clears the net",
-                "The confidence that builds with each swing",
-                "The laughter after a missed shot",
-              ].map((moment) => (
-                <span key={moment} className="flex items-center gap-2">
-                  <span className="w-2 h-2 bg-sport-tennis rounded-full inline-block shrink-0" />
-                  {moment}
-                </span>
-              ))}
-            </div>
-          </ScrollReveal>
         </div>
       </section>
 
@@ -372,10 +358,10 @@ const Index = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <ScrollReveal>
             <p className="font-body font-bold uppercase tracking-[0.3em] text-accent text-sm mb-4">Where We Are</p>
-            <h2 className="font-heading text-5xl md:text-7xl font-black uppercase mb-4">
-              Our <span className="text-stroke">Location</span>
+            <h2 className="font-heading text-5xl md:text-7xl font-black uppercase mb-4 whitespace-nowrap">
+              Our <span className="brush-underline">Location</span>
             </h2>
-            <p className="text-muted-foreground text-lg mb-12 max-w-md">
+            <p className="text-muted-foreground font-bold text-lg mb-12">
               Based in New York City, serving communities across the five boroughs.
             </p>
           </ScrollReveal>
