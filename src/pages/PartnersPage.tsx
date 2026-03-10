@@ -99,21 +99,21 @@ const PartnersPage = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-10 items-center">
             <ScrollReveal direction="left">
               <h2 className="font-heading text-4xl md:text-6xl font-black uppercase mb-6">
-                Become A{" "}
+                Get{" "}
                 <span className="relative inline-block">
-                  <span className="relative z-10">Partner</span>
+                  <span className="relative z-10">Involved</span>
                   <span aria-hidden className="absolute inset-x-0 -bottom-1 h-2 rounded-sm -skew-x-12 bg-[#f6a15c]" />
                 </span>
               </h2>
               <p className="text-lg leading-relaxed mb-6 text-[#8496c6]">
-                Interested in partnering with Together Sports? We'd love to hear from you.
-                Together we can create opportunities for youth to connect, grow, and thrive.
+                Interested in supporting Together Sports? Head to our Get Involved page to explore
+                ways to partner, volunteer, and help us create more opportunities for youth.
               </p>
               <Link
-                to="/contact"
+                to="/get-involved"
                 className="inline-block px-8 py-4 bg-accent text-white font-heading font-bold text-lg uppercase tracking-wider hover:scale-105 hover:rotate-1 transition-all duration-200"
               >
-                Get in Touch →
+                Get Involved
               </Link>
             </ScrollReveal>
             <ScrollReveal direction="right">

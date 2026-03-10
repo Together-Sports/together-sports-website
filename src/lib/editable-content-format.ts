@@ -10,12 +10,25 @@ export type TennisLessonVideo = {
   youtubeUrl: string;
 };
 
+export type ImpactMetric = {
+  id: string;
+  title: string;
+  value: string;
+  color: string;
+};
+
+export type ImpactMetricsSection = {
+  isVisible: boolean;
+  items: ImpactMetric[];
+};
+
 export type EditableContentState = {
   blogPosts: BlogPost[];
   experiences: Experience[];
   partners: Partner[];
   teamSections: TeamSection[];
   tennisLessonVideos: TennisLessonVideo[];
+  impactMetricsSection: ImpactMetricsSection;
 };
 
 export type PortableEditableContentState = EditableContentState;
@@ -89,6 +102,12 @@ export const serializeEditableContentState = (
   tennisLessonVideos: content.tennisLessonVideos.map((item) => ({
     ...item,
   })),
+  impactMetricsSection: {
+    isVisible: Boolean(content.impactMetricsSection?.isVisible),
+    items: Array.isArray(content.impactMetricsSection?.items)
+      ? content.impactMetricsSection.items.map((item) => ({ ...item }))
+      : [],
+  },
 });
 
 export const hydrateEditableContentState = (
@@ -114,6 +133,16 @@ export const hydrateEditableContentState = (
     })),
   })),
   tennisLessonVideos: Array.isArray(content.tennisLessonVideos) ? content.tennisLessonVideos.map((item) => ({ ...item })) : [],
+  impactMetricsSection:
+    content.impactMetricsSection && Array.isArray(content.impactMetricsSection.items)
+      ? {
+          isVisible: Boolean(content.impactMetricsSection.isVisible),
+          items: content.impactMetricsSection.items.map((item) => ({ ...item })),
+        }
+      : {
+          isVisible: false,
+          items: [],
+        },
 });
 
 const hasContentShape = (value: unknown): value is PortableEditableContentState =>
@@ -129,6 +158,10 @@ export const parseEditableContentImport = (input: unknown): EditableContentState
       ...input,
       blogPosts: defaultBlogPosts,
       tennisLessonVideos: [],
+      impactMetricsSection: {
+        isVisible: false,
+        items: [],
+      },
     });
   }
 
@@ -138,7 +171,7 @@ export const parseEditableContentImport = (input: unknown): EditableContentState
     typeof input.exportedAt === "string" &&
     hasContentShape(input.content)
   ) {
-      return hydrateEditableContentState(input.content);
+    return hydrateEditableContentState(input.content);
   }
 
   if (
@@ -151,6 +184,10 @@ export const parseEditableContentImport = (input: unknown): EditableContentState
       ...input.content,
       blogPosts: defaultBlogPosts,
       tennisLessonVideos: [],
+      impactMetricsSection: {
+        isVisible: false,
+        items: [],
+      },
     });
   }
 

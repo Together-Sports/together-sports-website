@@ -188,7 +188,36 @@ const editableContentSeed: PortableEditableContentState = {
       ]
     }
   ],
-  "tennisLessonVideos": []
+  "tennisLessonVideos": [],
+  "impactMetricsSection": {
+    "isVisible": true,
+    "items": [
+      {
+        "id": "metric-equipment",
+        "title": "Equipment Donated",
+        "value": "250+",
+        "color": "#ab9bfa"
+      },
+      {
+        "id": "metric-communities",
+        "title": "Communities Reached",
+        "value": "12",
+        "color": "#f6a15c"
+      },
+      {
+        "id": "metric-youth",
+        "title": "Youth Served Annually",
+        "value": "400+",
+        "color": "#87cb4a"
+      },
+      {
+        "id": "metric-free",
+        "title": "Free To Participate",
+        "value": "100%",
+        "color": "#84a6ff"
+      }
+    ]
+  }
 };
 
 export default editableContentSeed;

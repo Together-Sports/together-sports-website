@@ -26,17 +26,10 @@ const socialPlatformOptions: { value: TeamSocialPlatform; label: string }[] = [
   { value: "linkedin", label: "LinkedIn" },
   { value: "tiktok", label: "TikTok" },
 ];
+const impactMetricColors = ["#ab9bfa", "#f6a15c", "#87cb4a", "#84a6ff"];
+const TEAM_DESCRIPTION_MAX_CHARS = 360;
 
-const limitWords = (value: string, maxWords: number) => {
-  const words = value.trim().split(/\s+/).filter(Boolean);
-  if (words.length <= maxWords) {
-    return value;
-  }
-
-  return words.slice(0, maxWords).join(" ");
-};
-
-const countWords = (value: string) => value.trim().split(/\s+/).filter(Boolean).length;
+const limitCharacters = (value: string, maxCharacters: number) => value.slice(0, maxCharacters);
 
 const EditorCard = ({ children }: { children: ReactNode }) => (
   <div className="border border-border bg-card p-6 md:p-8 space-y-5">{children}</div>
@@ -264,11 +257,13 @@ const AdminPage = () => {
     partners,
     teamSections,
     tennisLessonVideos,
+    impactMetricsSection,
     setBlogPosts,
     setExperiences,
     setPartners,
     setTeamSections,
     setTennisLessonVideos,
+    setImpactMetricsSection,
     resetAll,
     saveContent,
     refreshContent,
@@ -327,6 +322,10 @@ const AdminPage = () => {
   };
 
   const handleSave = async () => {
+    if (!window.confirm("Save these changes live? This will update the deployed site content after save.")) {
+      return;
+    }
+
     try {
       await saveContent();
       setStatusMessage("Live content saved to Supabase.");
@@ -410,6 +409,13 @@ const AdminPage = () => {
     setTennisLessonVideos((current) => current.map((item) => (item.id === id ? next : item)));
   };
 
+  const updateImpactMetric = (id: string, field: "title" | "value", value: string) => {
+    setImpactMetricsSection((current) => ({
+      ...current,
+      items: current.items.map((item) => (item.id === id ? { ...item, [field]: value } : item)),
+    }));
+  };
+
   const hasInvalidTennisLessonVideos = tennisLessonVideos.some(
     (item) => item.youtubeUrl.trim() && !normalizeYouTubeEmbedUrl(item.youtubeUrl),
   );
@@ -482,16 +488,7 @@ const AdminPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <p className="font-body font-bold uppercase tracking-[0.3em] text-primary text-sm mb-3">
-                {isSupabaseConfigured ? "Live Supabase Editor" : "Local Edit Mode"}
-              </p>
-              <h1 className="font-heading text-4xl md:text-6xl font-black uppercase mb-4">Website Playground</h1>
-              <p className="text-muted-foreground max-w-3xl">
-                Edit testimonials, partner logos and links, team categories, and staff cards without touching code.
-                {isSupabaseConfigured
-                  ? " Save when you want those changes live on the deployed site."
-                  : " Supabase is not configured, so this session is using draft-only local data."}
-              </p>
+              <h1 className="font-heading text-4xl md:text-6xl font-black uppercase">Edit Mode</h1>
             </div>
 
             <div className="flex flex-wrap gap-3">
@@ -592,9 +589,17 @@ const AdminPage = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-12">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="h-auto flex-wrap justify-start gap-2 bg-transparent p-0 mb-8">
+            <TabsTrigger value="home" className="px-4 py-3 data-[state=active]:bg-primary data-[state=active]:text-white">
+              <FileText size={16} className="mr-2" />
+              Home
+            </TabsTrigger>
             <TabsTrigger value="testimonials" className="px-4 py-3 data-[state=active]:bg-primary data-[state=active]:text-white">
               <FileText size={16} className="mr-2" />
               Testimonials
+            </TabsTrigger>
+            <TabsTrigger value="sports" className="px-4 py-3 data-[state=active]:bg-primary data-[state=active]:text-white">
+              <Images size={16} className="mr-2" />
+              Sports
             </TabsTrigger>
             <TabsTrigger value="blog" className="px-4 py-3 data-[state=active]:bg-primary data-[state=active]:text-white">
               <Newspaper size={16} className="mr-2" />
@@ -609,6 +614,109 @@ const AdminPage = () => {
               Team
             </TabsTrigger>
           </TabsList>
+
+          <TabsContent value="home">
+            <EditorCard>
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <p className="font-heading text-2xl font-black uppercase">Impact Metrics</p>
+                  <p className="text-muted-foreground text-sm">Controls the home-page metrics block under the hero.</p>
+                </div>
+                <label className="flex min-h-[54px] items-center gap-3 border border-border bg-white px-4 py-3">
+                  <input
+                    type="checkbox"
+                    checked={impactMetricsSection.isVisible}
+                    onChange={(event) =>
+                      setImpactMetricsSection((current) => ({
+                        ...current,
+                        isVisible: event.target.checked,
+                      }))
+                    }
+                    className="h-4 w-4 accent-[hsl(var(--primary))]"
+                  />
+                  <span className="text-sm text-foreground">
+                    {impactMetricsSection.isVisible ? "Section is visible on the live site." : "Section is hidden on the live site."}
+                  </span>
+                </label>
+              </div>
+
+              <div className="flex flex-wrap gap-3">
+                <button
+                  type="button"
+                  onClick={() =>
+                    setImpactMetricsSection((current) => ({
+                      ...current,
+                      items:
+                        current.items.length >= 6
+                          ? current.items
+                          : [
+                              ...current.items,
+                              {
+                                id: createId("metric"),
+                                title: "New Metric",
+                                value: "0",
+                                color: impactMetricColors[current.items.length % impactMetricColors.length],
+                              },
+                            ],
+                    }))
+                  }
+                  disabled={impactMetricsSection.items.length >= 6}
+                  className="px-4 py-3 bg-primary text-white font-heading font-bold uppercase text-sm tracking-wider disabled:opacity-60"
+                >
+                  + Add Metric
+                </button>
+                <p className="self-center text-sm text-muted-foreground">
+                  Keep between 4 and 6 metrics.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                {impactMetricsSection.items.map((item) => (
+                  <div key={item.id} className="border border-border bg-white p-5 space-y-4">
+                    <div className="flex items-center justify-between gap-3">
+                      <div
+                        className="inline-flex rounded-sm px-3 py-2 font-heading text-sm font-black uppercase"
+                        style={{ color: item.color, backgroundColor: `${item.color}1A` }}
+                      >
+                        {item.color}
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setImpactMetricsSection((current) => ({
+                            ...current,
+                            items: current.items.filter((entry) => entry.id !== item.id),
+                          }))
+                        }
+                        disabled={impactMetricsSection.items.length <= 4}
+                        className="px-4 py-2 border border-border bg-card text-foreground font-heading font-bold uppercase text-xs tracking-wider disabled:opacity-60"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                    <div className="space-y-2">
+                      <p className={labelClass}>Metric Title</p>
+                      <input
+                        className={inputClass}
+                        value={item.title}
+                        onChange={(event) => updateImpactMetric(item.id, "title", event.target.value)}
+                        placeholder="Metric title"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <p className={labelClass}>Metric Value</p>
+                      <input
+                        className={inputClass}
+                        value={item.value}
+                        onChange={(event) => updateImpactMetric(item.id, "value", event.target.value)}
+                        placeholder="250+"
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </EditorCard>
+          </TabsContent>
 
           <TabsContent value="testimonials">
             <ScrollReveal>
@@ -664,8 +772,46 @@ const AdminPage = () => {
               </div>
             </ScrollReveal>
 
-            <div className="mb-8">
-              <EditorCard>
+            <div className="space-y-6">
+              {experiences.map((item) => (
+                <EditorCard key={item.id}>
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                      <p className="font-heading text-2xl font-black uppercase">
+                        {item.type === "quote" && "Athlete Quote"}
+                        {item.type === "parent" && "Parent Quote"}
+                        {item.type === "photo" && "Photo Item"}
+                        {item.type === "video" && "Video Item"}
+                      </p>
+                      <p className="text-muted-foreground text-sm">{item.id}</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setExperiences((current) => current.filter((entry) => entry.id !== item.id))}
+                      className="px-4 py-2 border border-border bg-white text-foreground font-heading font-bold uppercase text-xs tracking-wider"
+                    >
+                      Remove
+                    </button>
+                  </div>
+
+                  <TestimonialFields item={item} onChange={(next) => updateExperience(item.id, next)} onUpload={uploadImage} />
+                </EditorCard>
+              ))}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="sports">
+            <EditorCard>
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <p className="font-heading text-2xl font-black uppercase">Sports Content</p>
+                  <p className="text-muted-foreground text-sm">
+                    Use this section for editable sport-page content. Tennis lesson videos live here now, and the other sports can be added here later.
+                  </p>
+                </div>
+              </div>
+
+              <div className="border border-border bg-white p-5 md:p-6 space-y-5">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div>
                     <p className="font-heading text-2xl font-black uppercase">Tennis How Lessons Work</p>
@@ -763,35 +909,8 @@ const AdminPage = () => {
                     );
                   })}
                 </div>
-              </EditorCard>
-            </div>
-
-            <div className="space-y-6">
-              {experiences.map((item) => (
-                <EditorCard key={item.id}>
-                  <div className="flex flex-wrap items-center justify-between gap-3">
-                    <div>
-                      <p className="font-heading text-2xl font-black uppercase">
-                        {item.type === "quote" && "Athlete Quote"}
-                        {item.type === "parent" && "Parent Quote"}
-                        {item.type === "photo" && "Photo Item"}
-                        {item.type === "video" && "Video Item"}
-                      </p>
-                      <p className="text-muted-foreground text-sm">{item.id}</p>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => setExperiences((current) => current.filter((entry) => entry.id !== item.id))}
-                      className="px-4 py-2 border border-border bg-white text-foreground font-heading font-bold uppercase text-xs tracking-wider"
-                    >
-                      Remove
-                    </button>
-                  </div>
-
-                  <TestimonialFields item={item} onChange={(next) => updateExperience(item.id, next)} onUpload={uploadImage} />
-                </EditorCard>
-              ))}
-            </div>
+              </div>
+            </EditorCard>
           </TabsContent>
 
           <TabsContent value="blog">
@@ -1022,16 +1141,17 @@ const AdminPage = () => {
                             <textarea
                               className={textareaClass}
                               value={person.description || ""}
+                              maxLength={TEAM_DESCRIPTION_MAX_CHARS}
                               onChange={(event) =>
                                 updatePerson(section.id, person.id, {
                                   ...person,
-                                  description: limitWords(event.target.value, 40),
+                                  description: limitCharacters(event.target.value, TEAM_DESCRIPTION_MAX_CHARS),
                                 })
                               }
                               placeholder="Optional short description"
                             />
                             <p className="text-xs text-muted-foreground">
-                              {countWords(person.description || "")}/40 words
+                              {(person.description || "").length}/{TEAM_DESCRIPTION_MAX_CHARS} characters
                             </p>
                           </div>
                           <div className="md:col-span-2">

@@ -88,7 +88,7 @@ const sportsCtaSpins = [
 ];
 
 const Index = () => {
-  const { experiences } = useEditableContent();
+  const { experiences, impactMetricsSection } = useEditableContent();
   const featuredTestimonials = experiences
     .filter((item) => item.type === "quote" || item.type === "parent")
     .slice(0, 3);
@@ -357,6 +357,33 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      {impactMetricsSection.isVisible && impactMetricsSection.items.length > 0 ? (
+        <section className="py-10 md:py-12 bg-white relative">
+          <div className="w-full px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col items-center gap-5 md:flex-row md:flex-nowrap md:justify-center md:items-stretch md:gap-6">
+              {impactMetricsSection.items.map((item, index) => (
+                <ScrollReveal key={item.id} delay={index * 0.08}>
+                  <div
+                    className="flex h-full min-h-[220px] w-full max-w-[360px] flex-col justify-between bg-white border-4 px-6 py-7 text-center md:min-h-[240px] md:w-[220px] md:max-w-none md:px-6 md:py-8 lg:w-[240px] lg:px-6 xl:w-[260px] xl:px-7"
+                    style={{ borderColor: item.color }}
+                  >
+                    <p
+                      className="font-heading text-xl md:text-2xl font-black uppercase leading-tight"
+                      style={{ color: item.color }}
+                    >
+                      {item.title}
+                    </p>
+                    <p className="font-heading text-5xl md:text-6xl font-black uppercase text-foreground leading-none">
+                      {item.value}
+                    </p>
+                  </div>
+                </ScrollReveal>
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
 
       {/* SECOND SERVE */}
       <section className="pt-20 pb-16 md:pt-20 md:pb-20 relative overflow-hidden">

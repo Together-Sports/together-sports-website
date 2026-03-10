@@ -1,8 +1,11 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import ScrollReveal from "@/components/ScrollReveal";
 import contactLogo from "@/assets/SPORTSTOGETHERHANDLOGO.png";
 
 const ContactPage = () => {
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
   return (
     <div className="overflow-hidden">
       <section className="relative overflow-hidden bg-[#f6a15c]">
@@ -38,7 +41,13 @@ const ContactPage = () => {
                 <h2 className="font-heading text-3xl font-black uppercase mb-8 md:mb-6">
                   Send Us a <span className="text-[#f6a15c]">Message</span>
                 </h2>
-                <form className="space-y-4 flex-1" onSubmit={(e) => e.preventDefault()}>
+                <form
+                  className="space-y-4 flex-1"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    setIsSubmitted(true);
+                  }}
+                >
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <input
                       type="text"
@@ -57,7 +66,7 @@ const ContactPage = () => {
                     className="w-full p-4 bg-card border border-border text-foreground font-body placeholder:text-muted-foreground focus:border-[#f6a15c] focus:outline-none"
                   />
                   <select className="w-full p-4 bg-card border border-border text-foreground font-body focus:border-[#f6a15c] focus:outline-none">
-                    <option>What's this about?</option>
+                    <option>What&apos;s this about?</option>
                     <option>General Inquiry</option>
                     <option>Volunteer</option>
                     <option>Partnerships</option>
@@ -75,6 +84,11 @@ const ContactPage = () => {
                   >
                     Send It →
                   </button>
+                  {isSubmitted ? (
+                    <p className="text-[#f6a15c] font-body font-bold text-base">
+                      Your message has been sent.
+                    </p>
+                  ) : null}
                 </form>
               </div>
             </ScrollReveal>

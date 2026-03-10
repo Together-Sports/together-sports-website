@@ -21,6 +21,7 @@ import {
   parseEditableContentImport,
   type EditableContentExportFile,
   type EditableContentState,
+  type ImpactMetricsSection,
   type TennisLessonVideo,
 } from "@/lib/editable-content-format";
 import {
@@ -36,9 +37,11 @@ type EditableContentContextValue = EditableContentState & {
   setPartners: Dispatch<SetStateAction<Partner[]>>;
   setTeamSections: Dispatch<SetStateAction<TeamSection[]>>;
   setTennisLessonVideos: Dispatch<SetStateAction<TennisLessonVideo[]>>;
+  setImpactMetricsSection: Dispatch<SetStateAction<ImpactMetricsSection>>;
   resetAll: () => void;
   saveContent: () => Promise<void>;
   refreshContent: () => Promise<void>;
+  savePreviewDraft: () => void;
   uploadImage: (file: File) => Promise<string>;
   exportContent: () => EditableContentExportFile;
   importContent: (input: unknown) => void;
@@ -55,6 +58,7 @@ type EditableContentContextValue = EditableContentState & {
 
 const createDefaultContent = (): EditableContentState => hydrateEditableContentState(editableContentSeed);
 const createSerializedSnapshot = (content: EditableContentState) => JSON.stringify(serializeEditableContentState(content));
+const PREVIEW_DRAFT_STORAGE_KEY = "together-sports-preview-draft";
 const readFileAsDataUrl = (file: File) =>
   new Promise<string>((resolve, reject) => {
     const reader = new FileReader();
@@ -73,6 +77,7 @@ export const EditableContentProvider = ({ children }: { children: ReactNode }) =
   const [partners, setPartners] = useState<Partner[]>(() => defaultContent.partners);
   const [teamSections, setTeamSections] = useState<TeamSection[]>(() => defaultContent.teamSections);
   const [tennisLessonVideos, setTennisLessonVideos] = useState<TennisLessonVideo[]>(() => defaultContent.tennisLessonVideos);
+  const [impactMetricsSection, setImpactMetricsSection] = useState<ImpactMetricsSection>(() => defaultContent.impactMetricsSection);
   const [lastSavedSnapshot, setLastSavedSnapshot] = useState(defaultSnapshot);
   const [isLoadingContent, setIsLoadingContent] = useState(isSupabaseConfigured);
   const [isSaving, setIsSaving] = useState(false);
@@ -85,6 +90,24 @@ export const EditableContentProvider = ({ children }: { children: ReactNode }) =
     setPartners(next.partners);
     setTeamSections(next.teamSections);
     setTennisLessonVideos(next.tennisLessonVideos);
+    setImpactMetricsSection(next.impactMetricsSection);
+  };
+
+  const savePreviewDraft = () => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const previewContent = serializeEditableContentState({
+      blogPosts,
+      experiences,
+      partners,
+      teamSections,
+      tennisLessonVideos,
+      impactMetricsSection,
+    });
+
+    window.localStorage.setItem(PREVIEW_DRAFT_STORAGE_KEY, JSON.stringify(previewContent));
   };
 
   const readLiveContent = async () => {
@@ -106,7 +129,21 @@ export const EditableContentProvider = ({ children }: { children: ReactNode }) =
       throw error;
     }
 
-    const nextContent = data?.content ? parseEditableContentImport(data.content) : defaultContent;
+    let nextContent = data?.content ? parseEditableContentImport(data.content) : defaultContent;
+
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const previewDraft = window.localStorage.getItem(PREVIEW_DRAFT_STORAGE_KEY);
+
+      if (params.get("preview") === "1" && previewDraft) {
+        try {
+          nextContent = parseEditableContentImport(JSON.parse(previewDraft));
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    }
+
     applyContent(nextContent);
     setLastSavedSnapshot(createSerializedSnapshot(nextContent));
     setIsLoadingContent(false);
@@ -176,8 +213,8 @@ export const EditableContentProvider = ({ children }: { children: ReactNode }) =
   }, []);
 
   const currentSnapshot = useMemo(
-    () => createSerializedSnapshot({ blogPosts, experiences, partners, teamSections, tennisLessonVideos }),
-    [blogPosts, experiences, partners, teamSections, tennisLessonVideos],
+    () => createSerializedSnapshot({ blogPosts, experiences, partners, teamSections, tennisLessonVideos, impactMetricsSection }),
+    [blogPosts, experiences, partners, teamSections, tennisLessonVideos, impactMetricsSection],
   );
   const hasUnsavedChanges = currentSnapshot !== lastSavedSnapshot;
 
@@ -189,10 +226,12 @@ export const EditableContentProvider = ({ children }: { children: ReactNode }) =
       partners,
       teamSections,
       tennisLessonVideos,
+      impactMetricsSection,
       setExperiences,
       setPartners,
       setTeamSections,
       setTennisLessonVideos,
+      setImpactMetricsSection,
       resetAll: () => {
         const defaults = createDefaultContent();
         applyContent(defaults);
@@ -216,6 +255,7 @@ export const EditableContentProvider = ({ children }: { children: ReactNode }) =
             partners,
             teamSections,
             tennisLessonVideos,
+            impactMetricsSection,
           });
           const { error } = await supabase.from("site_content").upsert(
             {
@@ -238,6 +278,7 @@ export const EditableContentProvider = ({ children }: { children: ReactNode }) =
       refreshContent: async () => {
         await readLiveContent();
       },
+      savePreviewDraft,
       uploadImage: async (file) => {
         if (!supabase) {
           return readFileAsDataUrl(file);
@@ -268,7 +309,7 @@ export const EditableContentProvider = ({ children }: { children: ReactNode }) =
         return publicUrlData.publicUrl;
       },
       exportContent: () =>
-        createEditableContentExport({ blogPosts, experiences, partners, teamSections, tennisLessonVideos }),
+        createEditableContentExport({ blogPosts, experiences, partners, teamSections, tennisLessonVideos, impactMetricsSection }),
       importContent: (input) => {
         const next = parseEditableContentImport(input);
         applyContent(next);
@@ -312,12 +353,14 @@ export const EditableContentProvider = ({ children }: { children: ReactNode }) =
       partners,
       teamSections,
       tennisLessonVideos,
+      impactMetricsSection,
       currentSnapshot,
       hasUnsavedChanges,
       isLoadingContent,
       isSaving,
       user,
       authLoading,
+      savePreviewDraft,
     ],
   );
 
