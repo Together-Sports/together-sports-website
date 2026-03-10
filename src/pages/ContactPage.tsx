@@ -1,10 +1,70 @@
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
+import { toast } from "@/components/ui/sonner";
 import ScrollReveal from "@/components/ScrollReveal";
 import contactLogo from "@/assets/SPORTSTOGETHERHANDLOGO.png";
+import {
+  CONTACT_MESSAGE_MAX_CHARS,
+  contactFormSchema,
+  contactTopicOptions,
+  type ContactFormValues,
+} from "@/lib/contact-form";
+
+const fieldClass =
+  "w-full p-4 bg-card border border-border text-foreground font-body placeholder:text-muted-foreground focus:border-[#f6a15c] focus:outline-none";
 
 const ContactPage = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    watch,
+    formState: { errors, isSubmitting },
+  } = useForm<ContactFormValues>({
+    resolver: zodResolver(contactFormSchema),
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      topic: "General Inquiry",
+      message: "",
+      website: "",
+    },
+  });
+
+  const messageLength = watch("message")?.length ?? 0;
+
+  const onSubmit = async (values: ContactFormValues) => {
+    setIsSubmitted(false);
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+
+      const data = (await response.json().catch(() => null)) as { error?: string } | null;
+
+      if (!response.ok) {
+        const message = data?.error || "Unable to send your message right now.";
+        toast.error(message);
+        return;
+      }
+
+      setIsSubmitted(true);
+      reset();
+      toast.success("Your message has been sent.");
+    } catch {
+      toast.error("Unable to send your message right now.");
+    }
+  };
 
   return (
     <div className="overflow-hidden">
@@ -41,53 +101,63 @@ const ContactPage = () => {
                 <h2 className="font-heading text-3xl font-black uppercase mb-8 md:mb-6">
                   Send Us a <span className="text-[#f6a15c]">Message</span>
                 </h2>
-                <form
-                  className="space-y-4 flex-1"
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    setIsSubmitted(true);
-                  }}
-                >
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <input
-                      type="text"
-                      placeholder="First Name"
-                      className="p-4 bg-card border border-border text-foreground font-body placeholder:text-muted-foreground focus:border-[#f6a15c] focus:outline-none"
-                    />
-                    <input
-                      type="text"
-                      placeholder="Last Name"
-                      className="p-4 bg-card border border-border text-foreground font-body placeholder:text-muted-foreground focus:border-[#f6a15c] focus:outline-none"
-                    />
+                <form className="space-y-4 flex-1" onSubmit={handleSubmit(onSubmit)} noValidate>
+                  <div className="hidden" aria-hidden="true">
+                    <label htmlFor="website">Website</label>
+                    <input id="website" type="text" tabIndex={-1} autoComplete="off" {...register("website")} />
                   </div>
-                  <input
-                    type="email"
-                    placeholder="Email"
-                    className="w-full p-4 bg-card border border-border text-foreground font-body placeholder:text-muted-foreground focus:border-[#f6a15c] focus:outline-none"
-                  />
-                  <select className="w-full p-4 bg-card border border-border text-foreground font-body focus:border-[#f6a15c] focus:outline-none">
-                    <option>What&apos;s this about?</option>
-                    <option>General Inquiry</option>
-                    <option>Volunteer</option>
-                    <option>Partnerships</option>
-                    <option>Donations</option>
-                    <option>Media</option>
-                  </select>
-                  <textarea
-                    rows={5}
-                    placeholder="Your message..."
-                    className="w-full p-4 bg-card border border-border text-foreground font-body placeholder:text-muted-foreground focus:border-[#f6a15c] focus:outline-none resize-none"
-                  />
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <input type="text" placeholder="First Name" className={fieldClass} {...register("firstName")} />
+                      {errors.firstName ? <p className="text-sm text-[#8d5120]">{errors.firstName.message}</p> : null}
+                    </div>
+                    <div className="space-y-2">
+                      <input type="text" placeholder="Last Name" className={fieldClass} {...register("lastName")} />
+                      {errors.lastName ? <p className="text-sm text-[#8d5120]">{errors.lastName.message}</p> : null}
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <input type="email" placeholder="Email" className={fieldClass} {...register("email")} />
+                    {errors.email ? <p className="text-sm text-[#8d5120]">{errors.email.message}</p> : null}
+                  </div>
+
+                  <div className="space-y-2">
+                    <select className={fieldClass} {...register("topic")}>
+                      {contactTopicOptions.map((topic) => (
+                        <option key={topic} value={topic}>
+                          {topic}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.topic ? <p className="text-sm text-[#8d5120]">{errors.topic.message}</p> : null}
+                  </div>
+
+                  <div className="space-y-2">
+                    <textarea
+                      rows={5}
+                      placeholder="Your message..."
+                      className={`${fieldClass} resize-none`}
+                      maxLength={CONTACT_MESSAGE_MAX_CHARS}
+                      {...register("message")}
+                    />
+                    <div className="flex items-center justify-between gap-4 text-sm">
+                      <span className="text-muted-foreground">{messageLength}/{CONTACT_MESSAGE_MAX_CHARS}</span>
+                      {errors.message ? <span className="text-[#8d5120]">{errors.message.message}</span> : null}
+                    </div>
+                  </div>
+
                   <button
                     type="submit"
-                    className="px-8 py-4 bg-[#f6a15c] text-white font-heading font-bold text-lg uppercase tracking-wider hover:scale-105 hover:rotate-1 transition-all duration-200"
+                    disabled={isSubmitting}
+                    className="px-8 py-4 bg-[#f6a15c] text-white font-heading font-bold text-lg uppercase tracking-wider hover:scale-105 hover:rotate-1 transition-all duration-200 disabled:opacity-60"
                   >
-                    Send It →
+                    {isSubmitting ? "Sending..." : "Send It →"}
                   </button>
+
                   {isSubmitted ? (
-                    <p className="text-[#f6a15c] font-body font-bold text-base">
-                      Your message has been sent.
-                    </p>
+                    <p className="text-[#f6a15c] font-body font-bold text-base">Your message has been sent.</p>
                   ) : null}
                 </form>
               </div>
