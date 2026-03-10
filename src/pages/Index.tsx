@@ -414,7 +414,7 @@ const Index = () => {
                 Every Kid Deserves a Second Serve
               </h2>
               <p className="text-muted-foreground text-lg mb-6 leading-relaxed">
-                Second Serve is a service from our partner Second Serve, and it also inspires a Together Tennis
+                Second Serve is a service from our partner Rally Forward NYC, and it also inspires a Together Tennis
                 initiative where we collect quality used equipment that would otherwise be thrown away and donate it
                 back into the community.
               </p>

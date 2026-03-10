@@ -3,6 +3,7 @@
 interface ImportMetaEnv {
   readonly VITE_SUPABASE_URL?: string;
   readonly VITE_SUPABASE_PUBLISHABLE_DEFAULT_KEY?: string;
+  readonly VITE_SUPABASE_ADMIN_EMAILS?: string;
 }
 
 interface ImportMeta {

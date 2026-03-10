@@ -487,7 +487,7 @@ const SportDetailPage = () => {
                   Second Serve
                 </h2>
                 <p className="mb-6 text-lg leading-relaxed text-muted-foreground">
-                  Second Serve is a service from our partner Second Serve. Alongside that partnership, Together Tennis
+                  Second Serve is a service from our partner Rally Forward NYC. Alongside that partnership, Together Tennis
                   is building its own Second Serve effort focused on collecting quality used tennis equipment that
                   people would otherwise throw away and donating it back into the community.
                 </p>

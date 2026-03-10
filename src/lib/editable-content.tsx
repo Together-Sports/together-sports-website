@@ -26,6 +26,7 @@ import {
 } from "@/lib/editable-content-format";
 import {
   isSupabaseConfigured,
+  isAllowedAdminEmail,
   supabase,
   SUPABASE_SITE_CONTENT_ID,
   SUPABASE_SITE_MEDIA_BUCKET,
@@ -169,7 +170,13 @@ export const EditableContentProvider = ({ children }: { children: ReactNode }) =
           console.error(error);
         }
 
-        setUser(data.session?.user ?? null);
+        const nextUser = data.session?.user ?? null;
+        if (nextUser?.email && !isAllowedAdminEmail(nextUser.email)) {
+          supabase.auth.signOut().catch(console.error);
+          setUser(null);
+        } else {
+          setUser(nextUser);
+        }
         setAuthLoading(false);
       })
       .catch((error) => {
@@ -184,7 +191,13 @@ export const EditableContentProvider = ({ children }: { children: ReactNode }) =
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
+      const nextUser = session?.user ?? null;
+      if (nextUser?.email && !isAllowedAdminEmail(nextUser.email)) {
+        supabase.auth.signOut().catch(console.error);
+        setUser(null);
+      } else {
+        setUser(nextUser);
+      }
       setAuthLoading(false);
     });
 
@@ -318,7 +331,7 @@ export const EditableContentProvider = ({ children }: { children: ReactNode }) =
       isLoadingContent,
       isSaving,
       isSupabaseConfigured,
-      isAuthenticated: Boolean(user),
+      isAuthenticated: Boolean(user?.email && isAllowedAdminEmail(user.email)),
       authLoading,
       userEmail: user?.email ?? null,
       signInWithMagicLink: async (email) => {
@@ -326,10 +339,14 @@ export const EditableContentProvider = ({ children }: { children: ReactNode }) =
           throw new Error("Supabase is not configured.");
         }
 
+        if (!isAllowedAdminEmail(email)) {
+          throw new Error("That email is not allowed to access the admin.");
+        }
+
         const emailRedirectTo = typeof window !== "undefined" ? `${window.location.origin}/admin` : undefined;
         const { error } = await supabase.auth.signInWithOtp({
           email,
-          options: { emailRedirectTo },
+          options: { emailRedirectTo, shouldCreateUser: false },
         });
 
         if (error) {

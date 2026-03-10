@@ -86,9 +86,9 @@ const editableContentSeed: PortableEditableContentState = {
   "partners": [
     {
       "id": "partner-1",
-      "name": "Second Serve",
+      "name": "Rally Forward NYC",
       "logo": "media:partner-1",
-      "href": "https://www.secondserve.org/"
+      "href": "https://www.instagram.com/rallyforwardnyc/"
     },
     {
       "id": "partner-2",

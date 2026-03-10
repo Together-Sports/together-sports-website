@@ -11,7 +11,7 @@ export type Partner = {
 };
 
 const partners: Partner[] = [
-  { id: "partner-1", name: "Second Serve", logo: partner1, href: "https://www.secondserve.org/" },
+  { id: "partner-1", name: "Rally Forward NYC", logo: partner1, href: "https://www.instagram.com/rallyforwardnyc/" },
   { id: "partner-2", name: "Next Steps", logo: partner2, href: "https://www.nextstepsjournal.org" },
   { id: "partner-3", name: "STEMise", logo: partner3, href: "https://www.stemise.org" },
   { id: "partner-4", name: "Ball Back Project", logo: partner4, href: "https://www.instagram.com/ballbackproject/" },
