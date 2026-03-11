@@ -163,7 +163,8 @@ const Seo = () => {
     const origin = window.location.origin;
     const currentUrl = `${origin}${pathname}${search}`;
     const imageUrl = new URL("/EMBEDPIC.png", origin).toString();
-    const logoUrl = new URL("/favicon.png", origin).toString();
+    const logoUrl = new URL("/headerlogo.svg", origin).toString();
+    const appleTouchUrl = new URL("/apple-touch-icon.png?v=5", origin).toString();
     const meta = getMetaForPath(pathname, blogPosts);
 
     document.title = meta.title;
@@ -184,9 +185,9 @@ const Seo = () => {
     setMetaContent("twitter:description", meta.description);
     setMetaContent("twitter:image", imageUrl);
     setLinkHref("canonical", currentUrl);
-    setLinkHref("icon", new URL("/favicon.svg?v=3", origin).toString());
-    setLinkHref("shortcut icon", new URL("/favicon.ico?v=3", origin).toString());
-    setLinkHref("apple-touch-icon", imageUrl);
+    setLinkHref("icon", new URL("/favicon.ico?v=5", origin).toString());
+    setLinkHref("shortcut icon", new URL("/favicon.ico?v=5", origin).toString());
+    setLinkHref("apple-touch-icon", appleTouchUrl);
 
     const organizationSchema = {
       "@context": "https://schema.org",
