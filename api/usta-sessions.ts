@@ -1,3 +1,5 @@
+import { formatUstaSession, type UstaSearchItem } from "../src/lib/usta-sessions";
+
 const USTA_FILTERS_URL =
   "https://playtennis.usta.com/togethertennis/Coaching/GetSearchFilters?subCategory=GroupCoaching";
 const USTA_SEARCH_URL =
@@ -15,43 +17,7 @@ type UstaFiltersResponse = {
 };
 
 type UstaSearchResult = {
-  item: {
-    id: string;
-    name: string;
-    nextDateTime?: string;
-    endTime?: string;
-    location?: { name?: string };
-    leader?: { givenName?: string; familyName?: string };
-    levels?: Array<{ name: string }>;
-  };
-};
-
-const tennisDateFormatter = new Intl.DateTimeFormat("en-US", {
-  month: "short",
-  day: "numeric",
-  year: "numeric",
-});
-
-const tennisSessionFormatter = new Intl.DateTimeFormat("en-US", {
-  weekday: "long",
-  month: "long",
-  day: "numeric",
-});
-
-const tennisTimeFormatter = new Intl.DateTimeFormat("en-US", {
-  hour: "numeric",
-  minute: "2-digit",
-});
-
-const formatClockTime = (time24?: string) => {
-  if (!time24) {
-    return "TBA";
-  }
-
-  const [hours, minutes] = time24.split(":").map(Number);
-  const date = new Date();
-  date.setHours(hours, minutes, 0, 0);
-  return tennisTimeFormatter.format(date);
+  item: UstaSearchItem;
 };
 
 const parseFiltersResponse = async (response: Response): Promise<UstaFiltersResponse> => {
@@ -95,26 +61,7 @@ export async function GET() {
     }
 
     const searchData = await searchResponse.json();
-    const sessions = ((searchData.searchResults ?? []) as UstaSearchResult[]).map((result) => {
-      const item = result.item;
-      const nextSessionDate = item.nextDateTime ? new Date(item.nextDateTime) : null;
-      const coachName = [item.leader?.givenName, item.leader?.familyName].filter(Boolean).join(" ");
-      const levels = (item.levels ?? []).map((level) => level.name).filter(Boolean);
-
-      return {
-        id: item.id,
-        name: item.name,
-        locationName: item.location?.name ?? "TBA",
-        coachName: coachName || "TBA",
-        levelLabel: levels.length > 0 ? levels.join(", ") : "All levels",
-        nextSessionLabel: nextSessionDate ? tennisSessionFormatter.format(nextSessionDate) : "TBA",
-        dateLabel: nextSessionDate ? tennisDateFormatter.format(nextSessionDate) : "TBA",
-        timeLabel: nextSessionDate
-          ? `${tennisTimeFormatter.format(nextSessionDate)} - ${formatClockTime(item.endTime)}`
-          : "TBA",
-        link: `https://playtennis.usta.com/togethertennis/Coaching/Session/${item.id}`,
-      };
-    });
+    const sessions = ((searchData.searchResults ?? []) as UstaSearchResult[]).map((result) => formatUstaSession(result.item));
 
     return Response.json(sessions, {
       headers: {

@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import ScrollReveal from "@/components/ScrollReveal";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { useEditableContent } from "@/lib/editable-content";
+import { formatUstaSession, type TennisSession, type UstaSearchItem } from "@/lib/usta-sessions";
 import { normalizeYouTubeEmbedUrl } from "@/lib/youtube";
 import tennisAction from "@/assets/tennis-action.jpg";
 import basketballAction from "@/assets/basketball-action.jpg";
@@ -105,46 +107,6 @@ const sportTheme: Record<
   },
 };
 
-type TennisSession = {
-  id: string;
-  name: string;
-  locationName: string;
-  coachName: string;
-  levelLabel: string;
-  nextSessionLabel: string;
-  dateLabel: string;
-  timeLabel: string;
-  link: string;
-};
-
-const tennisDateFormatter = new Intl.DateTimeFormat("en-US", {
-  month: "short",
-  day: "numeric",
-  year: "numeric",
-});
-
-const tennisSessionFormatter = new Intl.DateTimeFormat("en-US", {
-  weekday: "long",
-  month: "long",
-  day: "numeric",
-});
-
-const tennisTimeFormatter = new Intl.DateTimeFormat("en-US", {
-  hour: "numeric",
-  minute: "2-digit",
-});
-
-const formatClockTime = (time24?: string) => {
-  if (!time24) {
-    return "TBA";
-  }
-
-  const [hours, minutes] = time24.split(":").map(Number);
-  const date = new Date();
-  date.setHours(hours, minutes, 0, 0);
-  return tennisTimeFormatter.format(date);
-};
-
 const fetchUstaSessionsDirect = async (signal: AbortSignal): Promise<TennisSession[]> => {
   const filtersResponse = await fetch(
     "https://playtennis.usta.com/togethertennis/Coaching/GetSearchFilters?subCategory=GroupCoaching",
@@ -185,24 +147,7 @@ const fetchUstaSessionsDirect = async (signal: AbortSignal): Promise<TennisSessi
   }
 
   const searchData = await searchResponse.json();
-  return (searchData.searchResults ?? []).map((result: any) => {
-    const item = result.item;
-    const nextSessionDate = new Date(item.nextDateTime);
-    const coachName = [item.leader?.givenName, item.leader?.familyName].filter(Boolean).join(" ");
-    const levels = (item.levels ?? []).map((level: { name: string }) => level.name).filter(Boolean);
-
-    return {
-      id: item.id,
-      name: item.name,
-      locationName: item.location?.name ?? "TBA",
-      coachName: coachName || "TBA",
-      levelLabel: levels.length > 0 ? levels.join(", ") : "All levels",
-      nextSessionLabel: tennisSessionFormatter.format(nextSessionDate),
-      dateLabel: tennisDateFormatter.format(nextSessionDate),
-      timeLabel: `${tennisTimeFormatter.format(nextSessionDate)} - ${formatClockTime(item.endTime)}`,
-      link: `https://playtennis.usta.com/togethertennis/Coaching/Session/${item.id}`,
-    } satisfies TennisSession;
-  });
+  return (searchData.searchResults ?? []).map((result: { item: UstaSearchItem }) => formatUstaSession(result.item));
 };
 
 const SportDetailPage = () => {
@@ -212,18 +157,6 @@ const SportDetailPage = () => {
   const [tennisSessions, setTennisSessions] = useState<TennisSession[]>([]);
   const [sessionsLoading, setSessionsLoading] = useState(false);
   const [sessionsError, setSessionsError] = useState<string | null>(null);
-
-  if (!data) {
-    return (
-      <div className="py-32 text-center">
-        <h1 className="font-heading text-4xl font-black uppercase">Sport not found</h1>
-        <Link to="/" className="mt-4 inline-block text-accent">
-          Back to Home
-        </Link>
-      </div>
-    );
-  }
-
   const isTennis = sport === "tennis";
   const theme = sportTheme[sport || "tennis"] ?? sportTheme.tennis;
   const aboutAccentClass = isTennis ? "brush-underline" : theme.accentText;
@@ -286,6 +219,17 @@ const SportDetailPage = () => {
       abortController.abort();
     };
   }, [isTennis]);
+
+  if (!data) {
+    return (
+      <div className="py-32 text-center">
+        <h1 className="font-heading text-4xl font-black uppercase">Sport not found</h1>
+        <Link to="/" className="mt-4 inline-block text-accent">
+          Back to Home
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="overflow-hidden">
@@ -378,52 +322,66 @@ const SportDetailPage = () => {
                     </a>
                   </div>
                 ) : (
-                  <div className="grid gap-4">
-                    {tennisSessions.map((session) => (
-                      <a
-                        key={session.id}
-                        href={session.link}
-                        className="block border-2 border-border bg-card p-6 transition-colors duration-200 hover:border-accent"
-                      >
-                        <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
-                          <div>
-                            <h3 className="mb-2 font-heading text-3xl font-black uppercase text-foreground md:text-4xl">
-                              {session.name}
-                            </h3>
-                            <p className="text-lg text-foreground md:text-xl">{session.nextSessionLabel}</p>
-                          </div>
+                  <div className="relative mx-auto w-full max-w-3xl overflow-hidden border-2 border-border bg-card">
+                    <div className="flex items-center justify-between border-b border-border px-5 py-4">
+                      <p className="font-body text-xs font-bold uppercase tracking-[0.24em] text-muted-foreground">
+                        Upcoming Classes
+                      </p>
+                      <p className="font-body text-xs font-bold uppercase tracking-[0.16em] text-accent">
+                        Scroll For More
+                      </p>
+                    </div>
+                    <ScrollArea className="h-[30rem] sm:h-[34rem] md:h-[40rem]">
+                      <div className="space-y-4 p-4 pr-6">
+                        {tennisSessions.map((session) => (
+                          <a
+                            key={session.id}
+                            href={session.link}
+                            className="block border-2 border-border bg-background p-6 transition-colors duration-200 hover:border-accent"
+                          >
+                            <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
+                              <div>
+                                <h3 className="mb-2 font-heading text-3xl font-black uppercase text-foreground md:text-4xl">
+                                  {session.name}
+                                </h3>
+                                <p className="text-lg text-foreground md:text-xl">{session.nextSessionLabel}</p>
+                              </div>
 
-                          <div className="grid grid-cols-1 gap-x-8 gap-y-4 text-foreground sm:grid-cols-2">
-                            <div>
-                              <p className="mb-1 font-body text-xs font-bold uppercase tracking-[0.16em]">Location</p>
-                              <p className="text-lg">{session.locationName}</p>
+                              <div className="grid grid-cols-1 gap-x-8 gap-y-4 text-foreground sm:grid-cols-2">
+                                <div>
+                                  <p className="mb-1 font-body text-xs font-bold uppercase tracking-[0.16em]">Location</p>
+                                  <p className="text-lg">{session.locationName}</p>
+                                </div>
+                                <div>
+                                  <p className="mb-1 font-body text-xs font-bold uppercase tracking-[0.16em]">Coach</p>
+                                  <p className="text-lg">{session.coachName}</p>
+                                </div>
+                                <div>
+                                  <p className="mb-1 font-body text-xs font-bold uppercase tracking-[0.16em]">Level</p>
+                                  <p className="text-lg">{session.levelLabel}</p>
+                                </div>
+                                <div>
+                                  <p className="mb-1 font-body text-xs font-bold uppercase tracking-[0.16em]">
+                                    Next Session
+                                  </p>
+                                  <p className="text-lg">{session.nextSessionLabel}</p>
+                                </div>
+                                <div>
+                                  <p className="mb-1 font-body text-xs font-bold uppercase tracking-[0.16em]">Date</p>
+                                  <p className="text-lg">{session.dateLabel}</p>
+                                </div>
+                                <div>
+                                  <p className="mb-1 font-body text-xs font-bold uppercase tracking-[0.16em]">Time</p>
+                                  <p className="text-lg">{session.timeLabel}</p>
+                                </div>
+                              </div>
                             </div>
-                            <div>
-                              <p className="mb-1 font-body text-xs font-bold uppercase tracking-[0.16em]">Coach</p>
-                              <p className="text-lg">{session.coachName}</p>
-                            </div>
-                            <div>
-                              <p className="mb-1 font-body text-xs font-bold uppercase tracking-[0.16em]">Level</p>
-                              <p className="text-lg">{session.levelLabel}</p>
-                            </div>
-                            <div>
-                              <p className="mb-1 font-body text-xs font-bold uppercase tracking-[0.16em]">
-                                Next Session
-                              </p>
-                              <p className="text-lg">{session.nextSessionLabel}</p>
-                            </div>
-                            <div>
-                              <p className="mb-1 font-body text-xs font-bold uppercase tracking-[0.16em]">Date</p>
-                              <p className="text-lg">{session.dateLabel}</p>
-                            </div>
-                            <div>
-                              <p className="mb-1 font-body text-xs font-bold uppercase tracking-[0.16em]">Time</p>
-                              <p className="text-lg">{session.timeLabel}</p>
-                            </div>
-                          </div>
-                        </div>
-                      </a>
-                    ))}
+                          </a>
+                        ))}
+                      </div>
+                    </ScrollArea>
+                    <div className="pointer-events-none absolute inset-x-0 top-[3.625rem] h-10 bg-gradient-to-b from-card to-transparent" />
+                    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-card to-transparent" />
                   </div>
                 )}
               </ScrollReveal>
