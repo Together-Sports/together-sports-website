@@ -74,6 +74,37 @@ const mergeLiveBlogPosts = (savedPosts: BlogPost[], livePosts: BlogPost[]) =>
     };
   });
 
+const withLiveBlogPosts = async (content: EditableContentState) => {
+  if (typeof window === "undefined") {
+    return content;
+  }
+
+  const params = new URLSearchParams(window.location.search);
+  if (params.get("preview") === "1") {
+    return content;
+  }
+
+  try {
+    const response = await fetch("/api/blog-posts");
+    if (!response.ok) {
+      return content;
+    }
+
+    const payload = (await response.json()) as { posts?: BlogPost[] };
+    if (!Array.isArray(payload.posts) || payload.posts.length === 0) {
+      return content;
+    }
+
+    return {
+      ...content,
+      blogPosts: mergeLiveBlogPosts(content.blogPosts, payload.posts),
+    };
+  } catch (error) {
+    console.error(error);
+    return content;
+  }
+};
+
 const readFileAsDataUrl = (file: File) =>
   new Promise<string>((resolve, reject) => {
     const reader = new FileReader();
@@ -196,8 +227,9 @@ export const EditableContentProvider = ({ children }: { children: ReactNode }) =
 
   const readLiveContent = async () => {
     if (!supabase) {
-      applyContent(defaultContent);
-      setLastSavedSnapshot(defaultSnapshot);
+      const nextContent = await withLiveBlogPosts(defaultContent);
+      applyContent(nextContent);
+      setLastSavedSnapshot(createSerializedSnapshot(nextContent));
       setIsLoadingContent(false);
       return;
     }
@@ -228,26 +260,7 @@ export const EditableContentProvider = ({ children }: { children: ReactNode }) =
       }
     }
 
-    if (typeof window !== "undefined") {
-      const params = new URLSearchParams(window.location.search);
-
-      if (params.get("preview") !== "1") {
-        try {
-          const response = await fetch("/api/blog-posts");
-          if (response.ok) {
-            const payload = (await response.json()) as { posts?: BlogPost[] };
-            if (Array.isArray(payload.posts) && payload.posts.length > 0) {
-              nextContent = {
-                ...nextContent,
-                blogPosts: mergeLiveBlogPosts(nextContent.blogPosts, payload.posts),
-              };
-            }
-          }
-        } catch (error) {
-          console.error(error);
-        }
-      }
-    }
+    nextContent = await withLiveBlogPosts(nextContent);
 
     applyContent(nextContent);
     setLastSavedSnapshot(createSerializedSnapshot(nextContent));
