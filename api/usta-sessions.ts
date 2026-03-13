@@ -1,4 +1,4 @@
-import { formatUstaSession, type UstaSearchItem } from "../src/lib/usta-sessions";
+import { formatUstaSession, type UstaSearchItem } from "../src/lib/usta-sessions.js";
 
 const USTA_FILTERS_URL =
   "https://playtennis.usta.com/togethertennis/Coaching/GetSearchFilters?subCategory=GroupCoaching";
