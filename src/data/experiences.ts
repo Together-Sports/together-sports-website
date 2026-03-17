@@ -1,7 +1,7 @@
 import heroImage from "@/assets/hero-sports.jpg";
 import image0903 from "@/assets/IMG_0903.jpg";
 import image3782 from "@/assets/IMG_3782.jpg";
-import 4EB9 from "@assests/4EB9.jpg";
+import julian from "@assests/julian.jpg";
 
 export type ExperienceType = "quote" | "parent" | "photo" | "video";
 
