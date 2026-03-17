@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import ScrollReveal from "@/components/ScrollReveal";
-import { useEditableContent } from "@/lib/editable-content";
+import experiences from "@/data/experiences"; // 
 import type { Experience } from "@/data/experiences";
 
 const sportAccent: Record<string, string> = {
@@ -83,7 +83,6 @@ const VideoCard = ({ item, index }: { item: Experience; index: number }) => (
 );
 
 const ExperiencesPage = () => {
-import experiences from "@/data/experiences";
   const quotes = experiences.filter((e) => e.type === "quote");
   const parentQuotes = experiences.filter((e) => e.type === "parent");
   const photos = experiences.filter((e) => e.type === "photo" && e.image);
