@@ -91,6 +91,11 @@ const TeamCard = ({
         <p className="font-body font-bold uppercase tracking-[0.22em] text-sm mb-3" style={{ color }}>
           {person.role}
         </p>
+        {person.location ? (
+          <p className="font-body text-sm uppercase tracking-[0.18em] text-muted-foreground mb-4 break-words [overflow-wrap:anywhere]">
+            {person.location}
+          </p>
+        ) : null}
         <div
           ref={cardRef}
           className="relative"

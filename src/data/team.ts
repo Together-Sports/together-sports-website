@@ -7,6 +7,7 @@ export type TeamPerson = {
   id: string;
   name: string;
   role: string;
+  location?: string;
   image: string;
   alt: string;
   description?: string;

@@ -1240,6 +1240,15 @@ const AdminPage = () => {
                               placeholder="Role"
                             />
                           </div>
+                          <div className="space-y-2">
+                            <p className={labelClass}>Location</p>
+                            <input
+                              className={inputClass}
+                              value={person.location || ""}
+                              onChange={(event) => updatePerson(section.id, person.id, { ...person, location: event.target.value })}
+                              placeholder="Brooklyn, NY"
+                            />
+                          </div>
                           <div className="space-y-2 md:col-span-2">
                             <p className={labelClass}>Description</p>
                             <textarea
@@ -1352,6 +1361,7 @@ const AdminPage = () => {
                               id: createId("person"),
                               name: "New Name",
                               role: "New Role",
+                                  location: "",
                               image: "",
                               alt: "Team member",
                               description: "",
