@@ -1,6 +1,17 @@
 import { useRef, useState, type ChangeEvent, type ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { Download, FileText, Images, LoaderCircle, LogOut, Newspaper, RefreshCcw, Save, Upload, Users } from "lucide-react";
+import {
+  Download,
+  FileText,
+  Images,
+  LoaderCircle,
+  LogOut,
+  Newspaper,
+  RefreshCcw,
+  Save,
+  Upload,
+  Users
+} from "lucide-react";
 import { toast } from "@/components/ui/sonner";
 import ScrollReveal from "@/components/ScrollReveal";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -9,14 +20,18 @@ import { mediaLibrary } from "@/data/mediaLibrary";
 import type { Experience, ExperienceType } from "@/data/experiences";
 import type { Partner } from "@/data/partners";
 import type { TeamPerson, TeamSection, TeamSocialPlatform } from "@/data/team";
-import type { OtherLocation, TennisLessonVideo } from "@/lib/editable-content-format";
+import type {
+  OtherLocation,
+  TennisLessonVideo
+} from "@/lib/editable-content-format";
 import { useEditableContent } from "@/lib/editable-content";
 import { normalizeYouTubeEmbedUrl } from "@/lib/youtube";
 
 const inputClass =
   "w-full border border-border bg-white px-4 py-3 text-foreground font-body focus:border-accent focus:outline-none";
 const textareaClass = `${inputClass} min-h-[120px] resize-y`;
-const labelClass = "font-body font-bold uppercase tracking-[0.16em] text-xs text-muted-foreground";
+const labelClass =
+  "font-body font-bold uppercase tracking-[0.16em] text-xs text-muted-foreground";
 
 const createId = (prefix: string) =>
   `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
@@ -24,22 +39,25 @@ const createId = (prefix: string) =>
 const socialPlatformOptions: { value: TeamSocialPlatform; label: string }[] = [
   { value: "instagram", label: "Instagram" },
   { value: "linkedin", label: "LinkedIn" },
-  { value: "tiktok", label: "TikTok" },
+  { value: "tiktok", label: "TikTok" }
 ];
 const impactMetricColors = ["#ab9bfa", "#f6a15c", "#87cb4a", "#84a6ff"];
 const TEAM_DESCRIPTION_MAX_CHARS = 360;
 
-const limitCharacters = (value: string, maxCharacters: number) => value.slice(0, maxCharacters);
+const limitCharacters = (value: string, maxCharacters: number) =>
+  value.slice(0, maxCharacters);
 
 const EditorCard = ({ children }: { children: ReactNode }) => (
-  <div className="border border-border bg-card p-6 md:p-8 space-y-5">{children}</div>
+  <div className="border border-border bg-card p-6 md:p-8 space-y-5">
+    {children}
+  </div>
 );
 
 const ImageField = ({
   label,
   value,
   onChange,
-  onUpload,
+  onUpload
 }: {
   label: string;
   value: string;
@@ -62,7 +80,9 @@ const ImageField = ({
       onChange(nextValue);
       toast.success(`${file.name} uploaded.`);
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Unable to upload that image.");
+      toast.error(
+        error instanceof Error ? error.message : "Unable to upload that image."
+      );
     } finally {
       setIsUploading(false);
       event.target.value = "";
@@ -76,7 +96,9 @@ const ImageField = ({
         {value ? (
           <img src={value} alt={label} className="w-full h-full object-cover" />
         ) : (
-          <span className="text-muted-foreground text-sm">No image selected</span>
+          <span className="text-muted-foreground text-sm">
+            No image selected
+          </span>
         )}
       </div>
       <select
@@ -104,9 +126,17 @@ const ImageField = ({
       />
       <label className="block">
         <span className="sr-only">Upload image file</span>
-        <input type="file" accept="image/*" onChange={handleFileSelect} className={inputClass} disabled={isUploading} />
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleFileSelect}
+          className={inputClass}
+          disabled={isUploading}
+        />
       </label>
-      {isUploading ? <p className="text-sm text-muted-foreground">Uploading image...</p> : null}
+      {isUploading ? (
+        <p className="text-sm text-muted-foreground">Uploading image...</p>
+      ) : null}
     </div>
   );
 };
@@ -114,7 +144,7 @@ const ImageField = ({
 const TestimonialFields = ({
   item,
   onChange,
-  onUpload,
+  onUpload
 }: {
   item: Experience;
   onChange: (next: Experience) => void;
@@ -129,7 +159,9 @@ const TestimonialFields = ({
         <select
           className={inputClass}
           value={type}
-          onChange={(event) => onChange({ ...item, type: event.target.value as ExperienceType })}
+          onChange={(event) =>
+            onChange({ ...item, type: event.target.value as ExperienceType })
+          }
         >
           <option value="quote">Athlete Quote</option>
           <option value="parent">Parent Quote</option>
@@ -138,26 +170,30 @@ const TestimonialFields = ({
         </select>
       </div>
 
-      {(type === "quote" || type === "parent") ? (
+      {type === "quote" || type === "parent" ? (
         <div className="space-y-2">
           <p className={labelClass}>Sport</p>
           <input
             className={inputClass}
             value={item.sport || ""}
-            onChange={(event) => onChange({ ...item, sport: event.target.value })}
+            onChange={(event) =>
+              onChange({ ...item, sport: event.target.value })
+            }
             placeholder="Tennis"
           />
         </div>
       ) : null}
 
-      {(type === "quote" || type === "parent") ? (
+      {type === "quote" || type === "parent" ? (
         <>
           <div className="space-y-2">
             <p className={labelClass}>Name</p>
             <input
               className={inputClass}
               value={item.name || ""}
-              onChange={(event) => onChange({ ...item, name: event.target.value })}
+              onChange={(event) =>
+                onChange({ ...item, name: event.target.value })
+              }
               placeholder="Name"
             />
           </div>
@@ -166,7 +202,9 @@ const TestimonialFields = ({
             <input
               className={inputClass}
               value={item.age || ""}
-              onChange={(event) => onChange({ ...item, age: event.target.value })}
+              onChange={(event) =>
+                onChange({ ...item, age: event.target.value })
+              }
               placeholder="16 or Parent"
             />
           </div>
@@ -178,7 +216,9 @@ const TestimonialFields = ({
               onChange={(event) =>
                 onChange({
                   ...item,
-                  rating: event.target.value ? Number(event.target.value) : undefined,
+                  rating: event.target.value
+                    ? Number(event.target.value)
+                    : undefined
                 })
               }
             >
@@ -195,7 +235,9 @@ const TestimonialFields = ({
             <textarea
               className={textareaClass}
               value={item.quote || ""}
-              onChange={(event) => onChange({ ...item, quote: event.target.value })}
+              onChange={(event) =>
+                onChange({ ...item, quote: event.target.value })
+              }
               placeholder="Quote text"
             />
           </div>
@@ -217,7 +259,9 @@ const TestimonialFields = ({
             <textarea
               className={textareaClass}
               value={item.caption || ""}
-              onChange={(event) => onChange({ ...item, caption: event.target.value })}
+              onChange={(event) =>
+                onChange({ ...item, caption: event.target.value })
+              }
               placeholder="Caption"
             />
           </div>
@@ -231,7 +275,9 @@ const TestimonialFields = ({
             <input
               className={inputClass}
               value={item.videoUrl || ""}
-              onChange={(event) => onChange({ ...item, videoUrl: event.target.value })}
+              onChange={(event) =>
+                onChange({ ...item, videoUrl: event.target.value })
+              }
               placeholder="https://www.youtube.com/embed/..."
             />
           </div>
@@ -240,7 +286,9 @@ const TestimonialFields = ({
             <input
               className={inputClass}
               value={item.videoTitle || ""}
-              onChange={(event) => onChange({ ...item, videoTitle: event.target.value })}
+              onChange={(event) =>
+                onChange({ ...item, videoTitle: event.target.value })
+              }
               placeholder="Video title"
             />
           </div>
@@ -280,7 +328,7 @@ const AdminPage = () => {
     authLoading,
     userEmail,
     signInWithMagicLink,
-    signOut,
+    signOut
   } = useEditableContent();
 
   const [activeTab, setActiveTab] = useState("testimonials");
@@ -291,14 +339,18 @@ const AdminPage = () => {
 
   const handleExport = () => {
     const exportFile = exportContent();
-    const blob = new Blob([JSON.stringify(exportFile, null, 2)], { type: "application/json" });
+    const blob = new Blob([JSON.stringify(exportFile, null, 2)], {
+      type: "application/json"
+    });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
     link.download = "editable-content.json";
     link.click();
     URL.revokeObjectURL(url);
-    setStatusMessage("Exported editable-content.json as a backup of the current live draft.");
+    setStatusMessage(
+      "Exported editable-content.json as a backup of the current live draft."
+    );
     toast.success("JSON exported.");
   };
 
@@ -315,7 +367,10 @@ const AdminPage = () => {
       setStatusMessage(`Imported ${file.name} into the current draft.`);
       toast.success(`${file.name} imported.`);
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Unable to import that JSON file.";
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Unable to import that JSON file.";
       setStatusMessage(message);
       toast.error(message);
     } finally {
@@ -324,7 +379,11 @@ const AdminPage = () => {
   };
 
   const handleSave = async () => {
-    if (!window.confirm("Save these changes live? This will update the deployed site content after save.")) {
+    if (
+      !window.confirm(
+        "Save these changes live? This will update the deployed site content after save."
+      )
+    ) {
       return;
     }
 
@@ -333,7 +392,8 @@ const AdminPage = () => {
       setStatusMessage("Live content saved to Supabase.");
       toast.success("Live content saved.");
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Unable to save content.";
+      const message =
+        error instanceof Error ? error.message : "Unable to save content.";
       setStatusMessage(message);
       toast.error(message);
     }
@@ -345,7 +405,8 @@ const AdminPage = () => {
       setStatusMessage("Pulled the latest live content from Supabase.");
       toast.success("Live content refreshed.");
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Unable to refresh content.";
+      const message =
+        error instanceof Error ? error.message : "Unable to refresh content.";
       setStatusMessage(message);
       toast.error(message);
     }
@@ -364,7 +425,8 @@ const AdminPage = () => {
       setStatusMessage(`Magic link sent to ${email.trim()}.`);
       toast.success("Magic link sent.");
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Unable to send magic link.";
+      const message =
+        error instanceof Error ? error.message : "Unable to send magic link.";
       setStatusMessage(message);
       toast.error(message);
     } finally {
@@ -373,67 +435,111 @@ const AdminPage = () => {
   };
 
   const updateExperience = (id: string, next: Experience) => {
-    setExperiences((current) => current.map((item) => (item.id === id ? next : item)));
+    setExperiences((current) =>
+      current.map((item) => (item.id === id ? next : item))
+    );
   };
 
-  const updateBlogPost = (slug: string, updater: (post: BlogPost) => BlogPost) => {
-    setBlogPosts((current) => current.map((post) => (post.slug === slug ? updater(post) : post)));
+  const updateBlogPost = (
+    slug: string,
+    updater: (post: BlogPost) => BlogPost
+  ) => {
+    setBlogPosts((current) =>
+      current.map((post) => (post.slug === slug ? updater(post) : post))
+    );
   };
 
   const setFeaturedPost = (slug: string, featured: boolean) => {
     setBlogPosts((current) =>
       current.map((post) => ({
         ...post,
-        featured: featured ? post.slug === slug : post.slug === slug ? false : post.featured,
-      })),
+        featured: featured
+          ? post.slug === slug
+          : post.slug === slug
+            ? false
+            : post.featured
+      }))
     );
   };
 
   const updatePartner = (id: string, field: keyof Partner, value: string) => {
-    setPartners((current) => current.map((item) => (item.id === id ? { ...item, [field]: value } : item)));
+    setPartners((current) =>
+      current.map((item) =>
+        item.id === id ? { ...item, [field]: value } : item
+      )
+    );
   };
 
   const updateSection = (sectionId: string, next: TeamSection) => {
-    setTeamSections((current) => current.map((section) => (section.id === sectionId ? next : section)));
+    setTeamSections((current) =>
+      current.map((section) => (section.id === sectionId ? next : section))
+    );
   };
 
-  const updatePerson = (sectionId: string, personId: string, next: TeamPerson) => {
+  const updatePerson = (
+    sectionId: string,
+    personId: string,
+    next: TeamPerson
+  ) => {
     setTeamSections((current) =>
       current.map((section) =>
         section.id === sectionId
-          ? { ...section, people: section.people.map((person) => (person.id === personId ? next : person)) }
-          : section,
-      ),
+          ? {
+              ...section,
+              people: section.people.map((person) =>
+                person.id === personId ? next : person
+              )
+            }
+          : section
+      )
     );
   };
 
   const updateTennisLessonVideo = (id: string, next: TennisLessonVideo) => {
-    setTennisLessonVideos((current) => current.map((item) => (item.id === id ? next : item)));
+    setTennisLessonVideos((current) =>
+      current.map((item) => (item.id === id ? next : item))
+    );
   };
 
-  const updateImpactMetric = (id: string, field: "title" | "value", value: string) => {
+  const updateImpactMetric = (
+    id: string,
+    field: "title" | "value",
+    value: string
+  ) => {
     setImpactMetricsSection((current) => ({
       ...current,
-      items: current.items.map((item) => (item.id === id ? { ...item, [field]: value } : item)),
+      items: current.items.map((item) =>
+        item.id === id ? { ...item, [field]: value } : item
+      )
     }));
   };
 
-  const updateOtherLocation = (id: string, field: keyof Omit<OtherLocation, "id">, value: string) => {
+  const updateOtherLocation = (
+    id: string,
+    field: keyof Omit<OtherLocation, "id">,
+    value: string
+  ) => {
     setOtherLocationsSection((current) => ({
       ...current,
-      items: current.items.map((item) => (item.id === id ? { ...item, [field]: value } : item)),
+      items: current.items.map((item) =>
+        item.id === id ? { ...item, [field]: value } : item
+      )
     }));
   };
 
   const hasInvalidTennisLessonVideos = tennisLessonVideos.some(
-    (item) => item.youtubeUrl.trim() && !normalizeYouTubeEmbedUrl(item.youtubeUrl),
+    (item) =>
+      item.youtubeUrl.trim() && !normalizeYouTubeEmbedUrl(item.youtubeUrl)
   );
 
   if (authLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center px-4">
         <div className="text-center space-y-4">
-          <LoaderCircle className="mx-auto animate-spin text-primary" size={40} />
+          <LoaderCircle
+            className="mx-auto animate-spin text-primary"
+            size={40}
+          />
           <p className="text-muted-foreground">Checking admin access...</p>
         </div>
       </div>
@@ -447,11 +553,16 @@ const AdminPage = () => {
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="border border-border bg-card p-8 md:p-10 space-y-6">
               <div>
-                <p className="font-body font-bold uppercase tracking-[0.3em] text-primary text-sm mb-3">Admin Access</p>
-                <h1 className="font-heading text-4xl md:text-6xl font-black uppercase mb-4">Sign In To Edit</h1>
+                <p className="font-body font-bold uppercase tracking-[0.3em] text-primary text-sm mb-3">
+                  Admin Access
+                </p>
+                <h1 className="font-heading text-4xl md:text-6xl font-black uppercase mb-4">
+                  Sign In To Edit
+                </h1>
                 <p className="text-muted-foreground">
-                  This admin route is powered by Supabase. Enter your email and we will send you a magic link to open
-                  `/admin` with edit access.
+                  This admin route is powered by Supabase. Enter your email and
+                  we will send you a magic link to open `/admin` with edit
+                  access.
                 </p>
               </div>
 
@@ -483,7 +594,9 @@ const AdminPage = () => {
                 </Link>
               </div>
 
-              {statusMessage ? <p className="text-sm text-primary">{statusMessage}</p> : null}
+              {statusMessage ? (
+                <p className="text-sm text-primary">{statusMessage}</p>
+              ) : null}
             </div>
           </div>
         </section>
@@ -497,7 +610,9 @@ const AdminPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <h1 className="font-heading text-4xl md:text-6xl font-black uppercase">Edit Mode</h1>
+              <h1 className="font-heading text-4xl md:text-6xl font-black uppercase">
+                Edit Mode
+              </h1>
             </div>
 
             <div className="flex flex-wrap gap-3">
@@ -524,10 +639,18 @@ const AdminPage = () => {
               <button
                 type="button"
                 onClick={handleSave}
-                disabled={isSaving || hasInvalidTennisLessonVideos || (isSupabaseConfigured && !hasUnsavedChanges)}
+                disabled={
+                  isSaving ||
+                  hasInvalidTennisLessonVideos ||
+                  (isSupabaseConfigured && !hasUnsavedChanges)
+                }
                 className="px-5 py-3 bg-accent text-white font-heading font-bold uppercase tracking-wider text-sm inline-flex items-center gap-2 disabled:opacity-60"
               >
-                {isSaving ? <LoaderCircle size={16} className="animate-spin" /> : <Save size={16} />}
+                {isSaving ? (
+                  <LoaderCircle size={16} className="animate-spin" />
+                ) : (
+                  <Save size={16} />
+                )}
                 Save Live
               </button>
               <button
@@ -552,7 +675,12 @@ const AdminPage = () => {
                   onClick={() => {
                     signOut().then(
                       () => toast.success("Signed out."),
-                      (error) => toast.error(error instanceof Error ? error.message : "Unable to sign out."),
+                      (error) =>
+                        toast.error(
+                          error instanceof Error
+                            ? error.message
+                            : "Unable to sign out."
+                        )
                     );
                   }}
                   className="px-5 py-3 border border-border bg-white text-foreground font-heading font-bold uppercase tracking-wider text-sm inline-flex items-center gap-2"
@@ -564,7 +692,11 @@ const AdminPage = () => {
               <button
                 type="button"
                 onClick={() => {
-                  if (window.confirm("Reset the current draft back to the default site content?")) {
+                  if (
+                    window.confirm(
+                      "Reset the current draft back to the default site content?"
+                    )
+                  ) {
                     resetAll();
                   }
                 }}
@@ -583,42 +715,72 @@ const AdminPage = () => {
             className="hidden"
           />
           <p className="mt-5 text-sm text-muted-foreground">
-            Source: {isSupabaseConfigured ? "Supabase live content" : "default repo seed"} | Draft:{" "}
-            {hasUnsavedChanges ? "unsaved changes" : "up to date"}
+            Source:{" "}
+            {isSupabaseConfigured
+              ? "Supabase live content"
+              : "default repo seed"}{" "}
+            | Draft: {hasUnsavedChanges ? "unsaved changes" : "up to date"}
             {userEmail ? ` | Signed in as ${userEmail}` : ""}
           </p>
-          {isLoadingContent ? <p className="mt-2 text-sm text-muted-foreground">Loading live content...</p> : null}
-          {hasInvalidTennisLessonVideos ? (
-            <p className="mt-2 text-sm text-[#8d5120]">Fix the tennis lesson videos so they are valid YouTube links before saving.</p>
+          {isLoadingContent ? (
+            <p className="mt-2 text-sm text-muted-foreground">
+              Loading live content...
+            </p>
           ) : null}
-          {statusMessage ? <p className="mt-2 text-sm text-primary">{statusMessage}</p> : null}
+          {hasInvalidTennisLessonVideos ? (
+            <p className="mt-2 text-sm text-[#8d5120]">
+              Fix the tennis lesson videos so they are valid YouTube links
+              before saving.
+            </p>
+          ) : null}
+          {statusMessage ? (
+            <p className="mt-2 text-sm text-primary">{statusMessage}</p>
+          ) : null}
         </div>
       </section>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-12">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="h-auto flex-wrap justify-start gap-2 bg-transparent p-0 mb-8">
-            <TabsTrigger value="home" className="px-4 py-3 data-[state=active]:bg-primary data-[state=active]:text-white">
+            <TabsTrigger
+              value="home"
+              className="px-4 py-3 data-[state=active]:bg-primary data-[state=active]:text-white"
+            >
               <FileText size={16} className="mr-2" />
               Home
             </TabsTrigger>
-            <TabsTrigger value="testimonials" className="px-4 py-3 data-[state=active]:bg-primary data-[state=active]:text-white">
+            <TabsTrigger
+              value="testimonials"
+              className="px-4 py-3 data-[state=active]:bg-primary data-[state=active]:text-white"
+            >
               <FileText size={16} className="mr-2" />
               Testimonials
             </TabsTrigger>
-            <TabsTrigger value="sports" className="px-4 py-3 data-[state=active]:bg-primary data-[state=active]:text-white">
+            <TabsTrigger
+              value="sports"
+              className="px-4 py-3 data-[state=active]:bg-primary data-[state=active]:text-white"
+            >
               <Images size={16} className="mr-2" />
               Sports
             </TabsTrigger>
-            <TabsTrigger value="blog" className="px-4 py-3 data-[state=active]:bg-primary data-[state=active]:text-white">
+            <TabsTrigger
+              value="blog"
+              className="px-4 py-3 data-[state=active]:bg-primary data-[state=active]:text-white"
+            >
               <Newspaper size={16} className="mr-2" />
               Blog
             </TabsTrigger>
-            <TabsTrigger value="partners" className="px-4 py-3 data-[state=active]:bg-primary data-[state=active]:text-white">
+            <TabsTrigger
+              value="partners"
+              className="px-4 py-3 data-[state=active]:bg-primary data-[state=active]:text-white"
+            >
               <Images size={16} className="mr-2" />
               Partners
             </TabsTrigger>
-            <TabsTrigger value="team" className="px-4 py-3 data-[state=active]:bg-primary data-[state=active]:text-white">
+            <TabsTrigger
+              value="team"
+              className="px-4 py-3 data-[state=active]:bg-primary data-[state=active]:text-white"
+            >
               <Users size={16} className="mr-2" />
               Team
             </TabsTrigger>
@@ -629,8 +791,12 @@ const AdminPage = () => {
               <EditorCard>
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div>
-                    <p className="font-heading text-2xl font-black uppercase">Impact Metrics</p>
-                    <p className="text-muted-foreground text-sm">Controls the home-page metrics block under the hero.</p>
+                    <p className="font-heading text-2xl font-black uppercase">
+                      Impact Metrics
+                    </p>
+                    <p className="text-muted-foreground text-sm">
+                      Controls the home-page metrics block under the hero.
+                    </p>
                   </div>
                   <label className="flex min-h-[54px] items-center gap-3 border border-border bg-white px-4 py-3">
                     <input
@@ -639,13 +805,15 @@ const AdminPage = () => {
                       onChange={(event) =>
                         setImpactMetricsSection((current) => ({
                           ...current,
-                          isVisible: event.target.checked,
+                          isVisible: event.target.checked
                         }))
                       }
                       className="h-4 w-4 accent-[hsl(var(--primary))]"
                     />
                     <span className="text-sm text-foreground">
-                      {impactMetricsSection.isVisible ? "Section is visible on the live site." : "Section is hidden on the live site."}
+                      {impactMetricsSection.isVisible
+                        ? "Section is visible on the live site."
+                        : "Section is hidden on the live site."}
                     </span>
                   </label>
                 </div>
@@ -665,9 +833,13 @@ const AdminPage = () => {
                                   id: createId("metric"),
                                   title: "New Metric",
                                   value: "0",
-                                  color: impactMetricColors[current.items.length % impactMetricColors.length],
-                                },
-                              ],
+                                  color:
+                                    impactMetricColors[
+                                      current.items.length %
+                                        impactMetricColors.length
+                                    ]
+                                }
+                              ]
                       }))
                     }
                     disabled={impactMetricsSection.items.length >= 6}
@@ -682,11 +854,17 @@ const AdminPage = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   {impactMetricsSection.items.map((item) => (
-                    <div key={item.id} className="border border-border bg-white p-5 space-y-4">
+                    <div
+                      key={item.id}
+                      className="border border-border bg-white p-5 space-y-4"
+                    >
                       <div className="flex items-center justify-between gap-3">
                         <div
                           className="inline-flex rounded-sm px-3 py-2 font-heading text-sm font-black uppercase"
-                          style={{ color: item.color, backgroundColor: `${item.color}1A` }}
+                          style={{
+                            color: item.color,
+                            backgroundColor: `${item.color}1A`
+                          }}
                         >
                           {item.color}
                         </div>
@@ -695,7 +873,9 @@ const AdminPage = () => {
                           onClick={() =>
                             setImpactMetricsSection((current) => ({
                               ...current,
-                              items: current.items.filter((entry) => entry.id !== item.id),
+                              items: current.items.filter(
+                                (entry) => entry.id !== item.id
+                              )
                             }))
                           }
                           disabled={impactMetricsSection.items.length <= 4}
@@ -709,7 +889,13 @@ const AdminPage = () => {
                         <input
                           className={inputClass}
                           value={item.title}
-                          onChange={(event) => updateImpactMetric(item.id, "title", event.target.value)}
+                          onChange={(event) =>
+                            updateImpactMetric(
+                              item.id,
+                              "title",
+                              event.target.value
+                            )
+                          }
                           placeholder="Metric title"
                         />
                       </div>
@@ -718,7 +904,13 @@ const AdminPage = () => {
                         <input
                           className={inputClass}
                           value={item.value}
-                          onChange={(event) => updateImpactMetric(item.id, "value", event.target.value)}
+                          onChange={(event) =>
+                            updateImpactMetric(
+                              item.id,
+                              "value",
+                              event.target.value
+                            )
+                          }
                           placeholder="250+"
                         />
                       </div>
@@ -730,9 +922,12 @@ const AdminPage = () => {
               <EditorCard>
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div>
-                    <p className="font-heading text-2xl font-black uppercase">Other Locations</p>
+                    <p className="font-heading text-2xl font-black uppercase">
+                      Other Locations
+                    </p>
                     <p className="text-muted-foreground text-sm">
-                      Controls the small location maps shown under the main location on the home page.
+                      Controls the small location maps shown under the main
+                      location on the home page.
                     </p>
                   </div>
                   <button
@@ -745,9 +940,9 @@ const AdminPage = () => {
                           {
                             id: createId("location"),
                             name: "New Location",
-                            embedUrl: "",
-                          },
-                        ],
+                            embedUrl: ""
+                          }
+                        ]
                       }))
                     }
                     className="px-4 py-3 bg-primary text-white font-heading font-bold uppercase text-sm tracking-wider"
@@ -764,7 +959,7 @@ const AdminPage = () => {
                     onChange={(event) =>
                       setOtherLocationsSection((current) => ({
                         ...current,
-                        title: event.target.value,
+                        title: event.target.value
                       }))
                     }
                     placeholder="Other Locations"
@@ -773,19 +968,28 @@ const AdminPage = () => {
 
                 <div className="space-y-4">
                   {otherLocationsSection.items.length === 0 ? (
-                    <p className="text-sm text-muted-foreground">No extra locations added yet.</p>
+                    <p className="text-sm text-muted-foreground">
+                      No extra locations added yet.
+                    </p>
                   ) : null}
 
                   {otherLocationsSection.items.map((item) => (
-                    <div key={item.id} className="border border-border bg-white p-5 space-y-4">
+                    <div
+                      key={item.id}
+                      className="border border-border bg-white p-5 space-y-4"
+                    >
                       <div className="flex items-center justify-between gap-3">
-                        <p className="font-heading text-xl font-black uppercase">{item.name || "Location"}</p>
+                        <p className="font-heading text-xl font-black uppercase">
+                          {item.name || "Location"}
+                        </p>
                         <button
                           type="button"
                           onClick={() =>
                             setOtherLocationsSection((current) => ({
                               ...current,
-                              items: current.items.filter((entry) => entry.id !== item.id),
+                              items: current.items.filter(
+                                (entry) => entry.id !== item.id
+                              )
                             }))
                           }
                           className="px-4 py-2 border border-border bg-card text-foreground font-heading font-bold uppercase text-xs tracking-wider"
@@ -800,7 +1004,13 @@ const AdminPage = () => {
                           <input
                             className={inputClass}
                             value={item.name}
-                            onChange={(event) => updateOtherLocation(item.id, "name", event.target.value)}
+                            onChange={(event) =>
+                              updateOtherLocation(
+                                item.id,
+                                "name",
+                                event.target.value
+                              )
+                            }
                             placeholder="New York, USA"
                           />
                         </div>
@@ -810,7 +1020,13 @@ const AdminPage = () => {
                             type="url"
                             className={inputClass}
                             value={item.embedUrl}
-                            onChange={(event) => updateOtherLocation(item.id, "embedUrl", event.target.value)}
+                            onChange={(event) =>
+                              updateOtherLocation(
+                                item.id,
+                                "embedUrl",
+                                event.target.value
+                              )
+                            }
                             placeholder="https://www.google.com/maps/embed?pb=..."
                           />
                         </div>
@@ -830,7 +1046,15 @@ const AdminPage = () => {
                   onClick={() =>
                     setExperiences((current) => [
                       ...current,
-                      { id: createId("quote"), type: "quote", sport: "Tennis", name: "New Name", age: "16", quote: "New quote", rating: 5 },
+                      {
+                        id: createId("quote"),
+                        type: "quote",
+                        sport: "Tennis",
+                        name: "New Name",
+                        age: "16",
+                        quote: "New quote",
+                        rating: 5
+                      }
                     ])
                   }
                   className="px-4 py-3 bg-primary text-white font-heading font-bold uppercase text-sm tracking-wider"
@@ -842,7 +1066,14 @@ const AdminPage = () => {
                   onClick={() =>
                     setExperiences((current) => [
                       ...current,
-                      { id: createId("parent"), type: "parent", sport: "Tennis", name: "Parent Name", quote: "Parent quote", rating: 5 },
+                      {
+                        id: createId("parent"),
+                        type: "parent",
+                        sport: "Tennis",
+                        name: "Parent Name",
+                        quote: "Parent quote",
+                        rating: 5
+                      }
                     ])
                   }
                   className="px-4 py-3 border border-border bg-white text-foreground font-heading font-bold uppercase text-sm tracking-wider"
@@ -854,7 +1085,12 @@ const AdminPage = () => {
                   onClick={() =>
                     setExperiences((current) => [
                       ...current,
-                      { id: createId("photo"), type: "photo", image: "", caption: "New photo caption" },
+                      {
+                        id: createId("photo"),
+                        type: "photo",
+                        image: "",
+                        caption: "New photo caption"
+                      }
                     ])
                   }
                   className="px-4 py-3 border border-border bg-white text-foreground font-heading font-bold uppercase text-sm tracking-wider"
@@ -866,7 +1102,12 @@ const AdminPage = () => {
                   onClick={() =>
                     setExperiences((current) => [
                       ...current,
-                      { id: createId("video"), type: "video", videoUrl: "", videoTitle: "New video" },
+                      {
+                        id: createId("video"),
+                        type: "video",
+                        videoUrl: "",
+                        videoTitle: "New video"
+                      }
                     ])
                   }
                   className="px-4 py-3 border border-border bg-white text-foreground font-heading font-bold uppercase text-sm tracking-wider"
@@ -891,14 +1132,22 @@ const AdminPage = () => {
                     </div>
                     <button
                       type="button"
-                      onClick={() => setExperiences((current) => current.filter((entry) => entry.id !== item.id))}
+                      onClick={() =>
+                        setExperiences((current) =>
+                          current.filter((entry) => entry.id !== item.id)
+                        )
+                      }
                       className="px-4 py-2 border border-border bg-white text-foreground font-heading font-bold uppercase text-xs tracking-wider"
                     >
                       Remove
                     </button>
                   </div>
 
-                  <TestimonialFields item={item} onChange={(next) => updateExperience(item.id, next)} onUpload={uploadImage} />
+                  <TestimonialFields
+                    item={item}
+                    onChange={(next) => updateExperience(item.id, next)}
+                    onUpload={uploadImage}
+                  />
                 </EditorCard>
               ))}
             </div>
@@ -908,9 +1157,13 @@ const AdminPage = () => {
             <EditorCard>
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
-                  <p className="font-heading text-2xl font-black uppercase">Sports Content</p>
+                  <p className="font-heading text-2xl font-black uppercase">
+                    Sports Content
+                  </p>
                   <p className="text-muted-foreground text-sm">
-                    Use this section for editable sport-page content. Tennis lesson videos live here now, and the other sports can be added here later.
+                    Use this section for editable sport-page content. Tennis
+                    lesson videos live here now, and the other sports can be
+                    added here later.
                   </p>
                 </div>
               </div>
@@ -918,18 +1171,27 @@ const AdminPage = () => {
               <div className="border border-border bg-white p-5 md:p-6 space-y-5">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div>
-                    <p className="font-heading text-2xl font-black uppercase">Tennis How Lessons Work</p>
+                    <p className="font-heading text-2xl font-black uppercase">
+                      Tennis How Lessons Work
+                    </p>
                     <p className="text-muted-foreground text-sm">
-                      Add up to 2 YouTube videos for the tennis page. If none are saved, the section stays hidden.
+                      Add up to 2 YouTube videos for the tennis page. If none
+                      are saved, the section stays hidden.
                     </p>
                   </div>
                   <button
                     type="button"
                     onClick={() =>
-                      setTennisLessonVideos((current) => [
-                        ...current,
-                        { id: createId("lesson-video"), title: "Lesson Video", youtubeUrl: "" },
-                      ].slice(0, 2))
+                      setTennisLessonVideos((current) =>
+                        [
+                          ...current,
+                          {
+                            id: createId("lesson-video"),
+                            title: "Lesson Video",
+                            youtubeUrl: ""
+                          }
+                        ].slice(0, 2)
+                      )
                     }
                     disabled={tennisLessonVideos.length >= 2}
                     className="px-4 py-3 border border-border bg-white text-foreground font-heading font-bold uppercase text-sm tracking-wider disabled:opacity-60"
@@ -940,21 +1202,33 @@ const AdminPage = () => {
 
                 <div className="space-y-4">
                   {tennisLessonVideos.length === 0 ? (
-                    <p className="text-muted-foreground">No lesson videos added yet.</p>
+                    <p className="text-muted-foreground">
+                      No lesson videos added yet.
+                    </p>
                   ) : null}
 
                   {tennisLessonVideos.map((video) => {
-                    const normalizedUrl = normalizeYouTubeEmbedUrl(video.youtubeUrl);
-                    const hasInvalidUrl = video.youtubeUrl.trim().length > 0 && !normalizedUrl;
+                    const normalizedUrl = normalizeYouTubeEmbedUrl(
+                      video.youtubeUrl
+                    );
+                    const hasInvalidUrl =
+                      video.youtubeUrl.trim().length > 0 && !normalizedUrl;
 
                     return (
-                      <div key={video.id} className="border border-border bg-white p-5 space-y-4">
+                      <div
+                        key={video.id}
+                        className="border border-border bg-white p-5 space-y-4"
+                      >
                         <div className="flex flex-wrap items-center justify-between gap-3">
-                          <p className="font-heading text-xl font-black uppercase">{video.title || "Lesson Video"}</p>
+                          <p className="font-heading text-xl font-black uppercase">
+                            {video.title || "Lesson Video"}
+                          </p>
                           <button
                             type="button"
                             onClick={() =>
-                              setTennisLessonVideos((current) => current.filter((item) => item.id !== video.id))
+                              setTennisLessonVideos((current) =>
+                                current.filter((item) => item.id !== video.id)
+                              )
                             }
                             className="px-4 py-2 border border-border bg-card text-foreground font-heading font-bold uppercase text-xs tracking-wider"
                           >
@@ -969,7 +1243,10 @@ const AdminPage = () => {
                               className={inputClass}
                               value={video.title}
                               onChange={(event) =>
-                                updateTennisLessonVideo(video.id, { ...video, title: event.target.value })
+                                updateTennisLessonVideo(video.id, {
+                                  ...video,
+                                  title: event.target.value
+                                })
                               }
                               placeholder="Lesson walkthrough"
                             />
@@ -981,26 +1258,42 @@ const AdminPage = () => {
                               className={inputClass}
                               value={video.youtubeUrl}
                               onChange={(event) =>
-                                updateTennisLessonVideo(video.id, { ...video, youtubeUrl: event.target.value })
+                                updateTennisLessonVideo(video.id, {
+                                  ...video,
+                                  youtubeUrl: event.target.value
+                                })
                               }
                               onBlur={(event) => {
-                                const normalized = normalizeYouTubeEmbedUrl(event.target.value);
+                                const normalized = normalizeYouTubeEmbedUrl(
+                                  event.target.value
+                                );
                                 if (normalized) {
-                                  updateTennisLessonVideo(video.id, { ...video, youtubeUrl: normalized });
+                                  updateTennisLessonVideo(video.id, {
+                                    ...video,
+                                    youtubeUrl: normalized
+                                  });
                                 }
                               }}
                               placeholder="https://www.youtube.com/watch?v=..."
                             />
-                            <p className={`text-xs ${hasInvalidUrl ? "text-[#8d5120]" : "text-muted-foreground"}`}>
-                              YouTube only. Watch, share, shorts, and embed links are all accepted.
+                            <p
+                              className={`text-xs ${hasInvalidUrl ? "text-[#8d5120]" : "text-muted-foreground"}`}
+                            >
+                              YouTube only. Watch, share, shorts, and embed
+                              links are all accepted.
                             </p>
                           </div>
                           {normalizedUrl ? (
                             <div className="md:col-span-2 border border-border overflow-hidden">
-                              <div className="relative w-full" style={{ paddingBottom: "56.25%" }}>
+                              <div
+                                className="relative w-full"
+                                style={{ paddingBottom: "56.25%" }}
+                              >
                                 <iframe
                                   src={normalizedUrl}
-                                  title={video.title || "Tennis lesson video preview"}
+                                  title={
+                                    video.title || "Tennis lesson video preview"
+                                  }
                                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                   allowFullScreen
                                   className="absolute inset-0 h-full w-full"
@@ -1023,8 +1316,12 @@ const AdminPage = () => {
                 <EditorCard key={post.slug}>
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <div>
-                      <p className="font-heading text-2xl font-black uppercase">{post.title}</p>
-                      <p className="text-muted-foreground text-sm">{post.slug}</p>
+                      <p className="font-heading text-2xl font-black uppercase">
+                        {post.title}
+                      </p>
+                      <p className="text-muted-foreground text-sm">
+                        {post.slug}
+                      </p>
                     </div>
                     <Link
                       to={`/blog/${post.slug}`}
@@ -1043,13 +1340,14 @@ const AdminPage = () => {
                         onChange={(event) =>
                           updateBlogPost(post.slug, (current) => ({
                             ...current,
-                            tag: event.target.value,
+                            tag: event.target.value
                           }))
                         }
                         placeholder="Optional tag text"
                       />
                       <p className="text-xs text-muted-foreground">
-                        Leave blank for no custom tag. Only one tag shows at a time.
+                        Leave blank for no custom tag. Only one tag shows at a
+                        time.
                       </p>
                     </div>
                     <div className="space-y-2">
@@ -1058,15 +1356,20 @@ const AdminPage = () => {
                         <input
                           type="checkbox"
                           checked={Boolean(post.featured)}
-                          onChange={(event) => setFeaturedPost(post.slug, event.target.checked)}
+                          onChange={(event) =>
+                            setFeaturedPost(post.slug, event.target.checked)
+                          }
                           className="h-4 w-4 accent-[hsl(var(--primary))]"
                         />
                         <span className="text-sm text-foreground">
-                          {post.featured ? "Showing Featured badge on this post." : "No Featured badge on this post."}
+                          {post.featured
+                            ? "Showing Featured badge on this post."
+                            : "No Featured badge on this post."}
                         </span>
                       </label>
                       <p className="text-xs text-muted-foreground">
-                        Turning this on removes Featured from the other blog posts.
+                        Turning this on removes Featured from the other blog
+                        posts.
                       </p>
                     </div>
                     <div className="space-y-2 md:col-span-2">
@@ -1091,7 +1394,12 @@ const AdminPage = () => {
                   onClick={() =>
                     setPartners((current) => [
                       ...current,
-                      { id: createId("partner"), name: "Partner Name", href: "https://", logo: "" },
+                      {
+                        id: createId("partner"),
+                        name: "Partner Name",
+                        href: "https://",
+                        logo: ""
+                      }
                     ])
                   }
                   className="px-4 py-3 bg-primary text-white font-heading font-bold uppercase text-sm tracking-wider"
@@ -1104,12 +1412,20 @@ const AdminPage = () => {
                 <EditorCard key={partner.id}>
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <div>
-                      <p className="font-heading text-2xl font-black uppercase">{partner.name}</p>
-                      <p className="text-muted-foreground text-sm">{partner.id}</p>
+                      <p className="font-heading text-2xl font-black uppercase">
+                        {partner.name}
+                      </p>
+                      <p className="text-muted-foreground text-sm">
+                        {partner.id}
+                      </p>
                     </div>
                     <button
                       type="button"
-                      onClick={() => setPartners((current) => current.filter((item) => item.id !== partner.id))}
+                      onClick={() =>
+                        setPartners((current) =>
+                          current.filter((item) => item.id !== partner.id)
+                        )
+                      }
                       className="px-4 py-2 border border-border bg-white text-foreground font-heading font-bold uppercase text-xs tracking-wider"
                     >
                       Remove
@@ -1122,7 +1438,9 @@ const AdminPage = () => {
                       <input
                         className={inputClass}
                         value={partner.name}
-                        onChange={(event) => updatePartner(partner.id, "name", event.target.value)}
+                        onChange={(event) =>
+                          updatePartner(partner.id, "name", event.target.value)
+                        }
                         placeholder="Partner name"
                       />
                     </div>
@@ -1131,7 +1449,9 @@ const AdminPage = () => {
                       <input
                         className={inputClass}
                         value={partner.href}
-                        onChange={(event) => updatePartner(partner.id, "href", event.target.value)}
+                        onChange={(event) =>
+                          updatePartner(partner.id, "href", event.target.value)
+                        }
                         placeholder="https://..."
                       />
                     </div>
@@ -1139,7 +1459,9 @@ const AdminPage = () => {
                       <ImageField
                         label="Partner Logo"
                         value={partner.logo}
-                        onChange={(value) => updatePartner(partner.id, "logo", value)}
+                        onChange={(value) =>
+                          updatePartner(partner.id, "logo", value)
+                        }
                         onUpload={uploadImage}
                       />
                     </div>
@@ -1157,7 +1479,12 @@ const AdminPage = () => {
                   onClick={() =>
                     setTeamSections((current) => [
                       ...current,
-                      { id: createId("section"), title: "New Category", color: "#4f74d6", people: [] },
+                      {
+                        id: createId("section"),
+                        title: "New Category",
+                        color: "#4f74d6",
+                        people: []
+                      }
                     ])
                   }
                   className="px-4 py-3 bg-primary text-white font-heading font-bold uppercase text-sm tracking-wider"
@@ -1169,12 +1496,20 @@ const AdminPage = () => {
                 <EditorCard key={section.id}>
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <div>
-                      <p className="font-heading text-2xl font-black uppercase">{section.title}</p>
-                      <p className="text-muted-foreground text-sm">{section.id}</p>
+                      <p className="font-heading text-2xl font-black uppercase">
+                        {section.title}
+                      </p>
+                      <p className="text-muted-foreground text-sm">
+                        {section.id}
+                      </p>
                     </div>
                     <button
                       type="button"
-                      onClick={() => setTeamSections((current) => current.filter((item) => item.id !== section.id))}
+                      onClick={() =>
+                        setTeamSections((current) =>
+                          current.filter((item) => item.id !== section.id)
+                        )
+                      }
                       className="px-4 py-2 border border-border bg-white text-foreground font-heading font-bold uppercase text-xs tracking-wider"
                     >
                       Remove Category
@@ -1187,7 +1522,12 @@ const AdminPage = () => {
                       <input
                         className={inputClass}
                         value={section.title}
-                        onChange={(event) => updateSection(section.id, { ...section, title: event.target.value })}
+                        onChange={(event) =>
+                          updateSection(section.id, {
+                            ...section,
+                            title: event.target.value
+                          })
+                        }
                         placeholder="Staff"
                       />
                     </div>
@@ -1196,7 +1536,12 @@ const AdminPage = () => {
                       <input
                         className={inputClass}
                         value={section.color}
-                        onChange={(event) => updateSection(section.id, { ...section, color: event.target.value })}
+                        onChange={(event) =>
+                          updateSection(section.id, {
+                            ...section,
+                            color: event.target.value
+                          })
+                        }
                         placeholder="#4f74d6"
                       />
                     </div>
@@ -1204,15 +1549,22 @@ const AdminPage = () => {
 
                   <div className="space-y-5">
                     {section.people.map((person) => (
-                      <div key={person.id} className="border border-border bg-white p-5 space-y-4">
+                      <div
+                        key={person.id}
+                        className="border border-border bg-white p-5 space-y-4"
+                      >
                         <div className="flex flex-wrap items-center justify-between gap-3">
-                          <p className="font-heading text-xl font-black uppercase">{person.name}</p>
+                          <p className="font-heading text-xl font-black uppercase">
+                            {person.name}
+                          </p>
                           <button
                             type="button"
                             onClick={() =>
                               updateSection(section.id, {
                                 ...section,
-                                people: section.people.filter((item) => item.id !== person.id),
+                                people: section.people.filter(
+                                  (item) => item.id !== person.id
+                                )
                               })
                             }
                             className="px-4 py-2 border border-border bg-card text-foreground font-heading font-bold uppercase text-xs tracking-wider"
@@ -1227,7 +1579,12 @@ const AdminPage = () => {
                             <input
                               className={inputClass}
                               value={person.name}
-                              onChange={(event) => updatePerson(section.id, person.id, { ...person, name: event.target.value })}
+                              onChange={(event) =>
+                                updatePerson(section.id, person.id, {
+                                  ...person,
+                                  name: event.target.value
+                                })
+                              }
                               placeholder="Name"
                             />
                           </div>
@@ -1236,7 +1593,12 @@ const AdminPage = () => {
                             <input
                               className={inputClass}
                               value={person.role}
-                              onChange={(event) => updatePerson(section.id, person.id, { ...person, role: event.target.value })}
+                              onChange={(event) =>
+                                updatePerson(section.id, person.id, {
+                                  ...person,
+                                  role: event.target.value
+                                })
+                              }
                               placeholder="Role"
                             />
                           </div>
@@ -1245,7 +1607,12 @@ const AdminPage = () => {
                             <input
                               className={inputClass}
                               value={person.location || ""}
-                              onChange={(event) => updatePerson(section.id, person.id, { ...person, location: event.target.value })}
+                              onChange={(event) =>
+                                updatePerson(section.id, person.id, {
+                                  ...person,
+                                  location: event.target.value
+                                })
+                              }
                               placeholder="Brooklyn, NY"
                             />
                           </div>
@@ -1258,20 +1625,29 @@ const AdminPage = () => {
                               onChange={(event) =>
                                 updatePerson(section.id, person.id, {
                                   ...person,
-                                  description: limitCharacters(event.target.value, TEAM_DESCRIPTION_MAX_CHARS),
+                                  description: limitCharacters(
+                                    event.target.value,
+                                    TEAM_DESCRIPTION_MAX_CHARS
+                                  )
                                 })
                               }
                               placeholder="Optional short description"
                             />
                             <p className="text-xs text-muted-foreground">
-                              {(person.description || "").length}/{TEAM_DESCRIPTION_MAX_CHARS} characters
+                              {(person.description || "").length}/
+                              {TEAM_DESCRIPTION_MAX_CHARS} characters
                             </p>
                           </div>
                           <div className="md:col-span-2">
                             <ImageField
                               label="Card Image"
                               value={person.image}
-                              onChange={(value) => updatePerson(section.id, person.id, { ...person, image: value })}
+                              onChange={(value) =>
+                                updatePerson(section.id, person.id, {
+                                  ...person,
+                                  image: value
+                                })
+                              }
                               onUpload={uploadImage}
                             />
                           </div>
@@ -1285,66 +1661,97 @@ const AdminPage = () => {
                                     ...person,
                                     socialLinks: [
                                       ...(person.socialLinks || []).slice(0, 3),
-                                      { id: createId("social"), platform: "instagram", href: "" },
-                                    ].slice(0, 3),
+                                      {
+                                        id: createId("social"),
+                                        platform: "instagram",
+                                        href: ""
+                                      }
+                                    ].slice(0, 3)
                                   })
                                 }
-                                disabled={(person.socialLinks?.length || 0) >= 3}
+                                disabled={
+                                  (person.socialLinks?.length || 0) >= 3
+                                }
                                 className="px-4 py-2 border border-border bg-card text-foreground font-heading font-bold uppercase text-xs tracking-wider disabled:opacity-60"
                               >
                                 + Add Social
                               </button>
                             </div>
 
-                            {(person.socialLinks || []).slice(0, 3).map((socialLink) => (
-                              <div key={socialLink.id} className="grid grid-cols-1 md:grid-cols-[160px_minmax(0,1fr)_auto] gap-3">
-                                <select
-                                  className={inputClass}
-                                  value={socialLink.platform}
-                                  onChange={(event) =>
-                                    updatePerson(section.id, person.id, {
-                                      ...person,
-                                      socialLinks: (person.socialLinks || []).map((item) =>
-                                        item.id === socialLink.id
-                                          ? { ...item, platform: event.target.value as TeamSocialPlatform }
-                                          : item,
-                                      ),
-                                    })
-                                  }
+                            {(person.socialLinks || [])
+                              .slice(0, 3)
+                              .map((socialLink) => (
+                                <div
+                                  key={socialLink.id}
+                                  className="grid grid-cols-1 md:grid-cols-[160px_minmax(0,1fr)_auto] gap-3"
                                 >
-                                  {socialPlatformOptions.map((option) => (
-                                    <option key={option.value} value={option.value}>
-                                      {option.label}
-                                    </option>
-                                  ))}
-                                </select>
-                                <input
-                                  className={inputClass}
-                                  value={socialLink.href}
-                                  onChange={(event) =>
-                                    updatePerson(section.id, person.id, {
-                                      ...person,
-                                      socialLinks: (person.socialLinks || []).map((item) =>
-                                        item.id === socialLink.id ? { ...item, href: event.target.value } : item,
-                                      ),
-                                    })
-                                  }
-                                  placeholder="https://..."
-                                />
-                                <button
-                                  type="button"
-                                  onClick={() =>
-                                    updatePerson(section.id, person.id, {
-                                      ...person,
-                                      socialLinks: (person.socialLinks || []).filter((item) => item.id !== socialLink.id),
-                                    })
-                                  }
-                                  className="px-4 py-2 border border-border bg-card text-foreground font-heading font-bold uppercase text-xs tracking-wider"
-                                >
-                                  Remove
-                                </button>
-                              </div>
-                            ))}
+                                  <select
+                                    className={inputClass}
+                                    value={socialLink.platform}
+                                    onChange={(event) =>
+                                      updatePerson(section.id, person.id, {
+                                        ...person,
+                                        socialLinks: (
+                                          person.socialLinks || []
+                                        ).map((item) =>
+                                          item.id === socialLink.id
+                                            ? {
+                                                ...item,
+                                                platform: event.target
+                                                  .value as TeamSocialPlatform
+                                              }
+                                            : item
+                                        )
+                                      })
+                                    }
+                                  >
+                                    {socialPlatformOptions.map((option) => (
+                                      <option
+                                        key={option.value}
+                                        value={option.value}
+                                      >
+                                        {option.label}
+                                      </option>
+                                    ))}
+                                  </select>
+                                  <input
+                                    className={inputClass}
+                                    value={socialLink.href}
+                                    onChange={(event) =>
+                                      updatePerson(section.id, person.id, {
+                                        ...person,
+                                        socialLinks: (
+                                          person.socialLinks || []
+                                        ).map((item) =>
+                                          item.id === socialLink.id
+                                            ? {
+                                                ...item,
+                                                href: event.target.value
+                                              }
+                                            : item
+                                        )
+                                      })
+                                    }
+                                    placeholder="https://..."
+                                  />
+                                  <button
+                                    type="button"
+                                    onClick={() =>
+                                      updatePerson(section.id, person.id, {
+                                        ...person,
+                                        socialLinks: (
+                                          person.socialLinks || []
+                                        ).filter(
+                                          (item) => item.id !== socialLink.id
+                                        )
+                                      })
+                                    }
+                                    className="px-4 py-2 border border-border bg-card text-foreground font-heading font-bold uppercase text-xs tracking-wider"
+                                  >
+                                    Remove
+                                  </button>
+                                </div>
+                              ))}
                           </div>
                         </div>
                       </div>
@@ -1361,13 +1768,13 @@ const AdminPage = () => {
                               id: createId("person"),
                               name: "New Name",
                               role: "New Role",
-                                  location: "",
+                              location: "",
                               image: "",
                               alt: "Team member",
                               description: "",
-                              socialLinks: [],
-                            },
-                          ],
+                              socialLinks: []
+                            }
+                          ]
                         })
                       }
                       className="px-4 py-3 border border-border bg-white text-foreground font-heading font-bold uppercase text-sm tracking-wider"
