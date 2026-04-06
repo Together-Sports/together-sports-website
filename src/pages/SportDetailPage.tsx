@@ -3,7 +3,11 @@ import { Link, useParams } from "react-router-dom";
 import ScrollReveal from "@/components/ScrollReveal";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useEditableContent } from "@/lib/editable-content";
-import { formatUstaSession, type TennisSession, type UstaSearchItem } from "@/lib/usta-sessions";
+import {
+  formatUstaSession,
+  type TennisSession,
+  type UstaSearchItem
+} from "@/lib/usta-sessions";
 import { normalizeYouTubeEmbedUrl } from "@/lib/youtube";
 import tennisAction from "@/assets/tennis-action.jpg";
 import basketballAction from "@/assets/basketball-action.jpg";
@@ -14,7 +18,13 @@ import secondServe from "@/assets/second-serve.jpg";
 
 const sportData: Record<
   string,
-  { name: string; image: string; tagline: string; description: string; schedule: string[] }
+  {
+    name: string;
+    image: string;
+    tagline: string;
+    description: string;
+    schedule: string[];
+  }
 > = {
   tennis: {
     name: "Tennis",
@@ -22,7 +32,11 @@ const sportData: Record<
     tagline: "Every serve is a fresh start.",
     description:
       "Our tennis program provides free coaching, equipment, and court time to youth aged 8-18. From beginners to competitive players, we build skills and confidence through structured lessons and match play.",
-    schedule: ["Monday & Wednesday: 4:00-6:00 PM", "Saturday: 9:00 AM-12:00 PM", "Summer Intensive: June-August"],
+    schedule: [
+      "Monday & Wednesday: 4:00-6:00 PM",
+      "Saturday: 9:00 AM-12:00 PM",
+      "Summer Intensive: June-August"
+    ]
   },
   basketball: {
     name: "Basketball",
@@ -30,7 +44,7 @@ const sportData: Record<
     tagline: "The court is where leaders are made.",
     description:
       "Our basketball program teaches fundamentals, teamwork, and game strategy. Open to all skill levels, we focus on building confidence through competitive play and mentorship.",
-    schedule: ["Tuesday & Thursday: 4:00-6:00 PM", "Saturday: 1:00-4:00 PM"],
+    schedule: ["Tuesday & Thursday: 4:00-6:00 PM", "Saturday: 1:00-4:00 PM"]
   },
   football: {
     name: "Football",
@@ -38,7 +52,7 @@ const sportData: Record<
     tagline: "Every play counts. Every player matters.",
     description:
       "Our football program emphasizes discipline, teamwork, and sportsmanship. We provide equipment and coaching for flag and tackle football across multiple age groups.",
-    schedule: ["Monday & Wednesday: 4:30-6:30 PM", "Saturday: 10:00 AM-1:00 PM"],
+    schedule: ["Monday & Wednesday: 4:30-6:30 PM", "Saturday: 10:00 AM-1:00 PM"]
   },
   soccer: {
     name: "Soccer",
@@ -46,7 +60,7 @@ const sportData: Record<
     tagline: "One touch can change the game.",
     description:
       "Our soccer program builds confidence, agility, and team-first habits through skill work, small-sided games, and supportive coaching for every level.",
-    schedule: ["Tuesday & Thursday: 4:30-6:30 PM", "Saturday: 9:00 AM-12:00 PM"],
+    schedule: ["Tuesday & Thursday: 4:30-6:30 PM", "Saturday: 9:00 AM-12:00 PM"]
   },
   golf: {
     name: "Golf",
@@ -54,8 +68,8 @@ const sportData: Record<
     tagline: "The long game starts here.",
     description:
       "Our golf program introduces youth to the sport of patience and precision. With access to courses and professional instruction, we open doors that many thought were closed.",
-    schedule: ["Wednesday: 3:30-5:30 PM", "Saturday: 8:00-11:00 AM"],
-  },
+    schedule: ["Wednesday: 3:30-5:30 PM", "Saturday: 8:00-11:00 AM"]
+  }
 };
 
 const sportTheme: Record<
@@ -75,8 +89,8 @@ const sportTheme: Record<
       "absolute right-8 top-12 h-10 w-10 rotate-45 bg-white/12 md:right-12 md:h-16 md:w-16",
       "absolute right-[16%] bottom-12 h-14 w-14 rounded-full bg-white/10 md:h-24 md:w-24",
       "absolute right-[28%] top-[42%] h-6 w-6 rounded-full bg-white/10 md:h-10 md:w-10",
-      "absolute left-[12%] bottom-10 h-10 w-10 rounded-full bg-white/10 md:h-16 md:w-16",
-    ],
+      "absolute left-[12%] bottom-10 h-10 w-10 rounded-full bg-white/10 md:h-16 md:w-16"
+    ]
   },
   basketball: {
     heroBackground: "bg-[hsl(var(--sport-basketball))]",
@@ -87,8 +101,8 @@ const sportTheme: Record<
       "absolute right-10 top-12 h-12 w-12 rotate-45 bg-white/12 md:h-24 md:w-24",
       "absolute right-[22%] bottom-10 h-8 w-8 rounded-full bg-white/10 md:h-12 md:w-12",
       "absolute right-[32%] top-[40%] h-6 w-6 bg-white/10 scrapbook-rotate-2 md:h-10 md:w-10",
-      "absolute left-[12%] bottom-8 h-9 w-9 rounded-full bg-white/10 md:h-14 md:w-14",
-    ],
+      "absolute left-[12%] bottom-8 h-9 w-9 rounded-full bg-white/10 md:h-14 md:w-14"
+    ]
   },
   football: {
     heroBackground: "bg-[hsl(var(--sport-football))]",
@@ -99,8 +113,8 @@ const sportTheme: Record<
       "absolute right-10 top-14 h-14 w-14 rotate-45 bg-white/12 md:h-20 md:w-20",
       "absolute right-[20%] bottom-12 h-8 w-8 rounded-full bg-white/12 md:h-12 md:w-12",
       "absolute right-[30%] top-[42%] h-7 w-7 rounded-full bg-white/10 md:h-11 md:w-11",
-      "absolute left-[14%] bottom-10 h-10 w-10 rounded-full bg-white/10 md:h-14 md:w-14",
-    ],
+      "absolute left-[14%] bottom-10 h-10 w-10 rounded-full bg-white/10 md:h-14 md:w-14"
+    ]
   },
   soccer: {
     heroBackground: "bg-[hsl(var(--sport-soccer))]",
@@ -111,8 +125,8 @@ const sportTheme: Record<
       "absolute right-10 top-12 h-12 w-12 bg-white/12 scrapbook-rotate-2 md:h-[4.5rem] md:w-[4.5rem]",
       "absolute right-[18%] bottom-10 h-8 w-8 rounded-full bg-white/10 md:h-12 md:w-12",
       "absolute right-[30%] top-[41%] h-7 w-7 rounded-full bg-white/10 md:h-10 md:w-10",
-      "absolute left-[14%] bottom-8 h-10 w-10 rotate-45 bg-white/10 md:h-14 md:w-14",
-    ],
+      "absolute left-[14%] bottom-8 h-10 w-10 rotate-45 bg-white/10 md:h-14 md:w-14"
+    ]
   },
   golf: {
     heroBackground: "bg-[hsl(var(--sport-golf))]",
@@ -123,15 +137,17 @@ const sportTheme: Record<
       "absolute right-12 top-10 h-12 w-12 rotate-45 bg-white/12 md:h-24 md:w-24",
       "absolute right-[18%] bottom-8 h-8 w-8 rounded-full bg-white/10 md:h-12 md:w-12",
       "absolute right-[28%] top-[44%] h-6 w-6 bg-white/10 scrapbook-rotate-1 md:h-10 md:w-10",
-      "absolute left-[16%] bottom-9 h-9 w-9 rounded-full bg-white/10 md:h-14 md:w-14",
-    ],
-  },
+      "absolute left-[16%] bottom-9 h-9 w-9 rounded-full bg-white/10 md:h-14 md:w-14"
+    ]
+  }
 };
 
-const fetchUstaSessionsDirect = async (signal: AbortSignal): Promise<TennisSession[]> => {
+const fetchUstaSessionsDirect = async (
+  signal: AbortSignal
+): Promise<TennisSession[]> => {
   const filtersResponse = await fetch(
     "https://playtennis.usta.com/togethertennis/Coaching/GetSearchFilters?subCategory=GroupCoaching",
-    { signal },
+    { signal }
   );
 
   if (!filtersResponse.ok) {
@@ -139,14 +155,15 @@ const fetchUstaSessionsDirect = async (signal: AbortSignal): Promise<TennisSessi
   }
 
   const rawFilters = await filtersResponse.json();
-  const filtersData = typeof rawFilters === "string" ? JSON.parse(rawFilters) : rawFilters;
+  const filtersData =
+    typeof rawFilters === "string" ? JSON.parse(rawFilters) : rawFilters;
 
   const searchResponse = await fetch(
     "https://prd-usta-kube.clubspark.pro/unified-search-api/api/Search/classic-coaching/Query",
     {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
         options: {
@@ -155,12 +172,12 @@ const fetchUstaSessionsDirect = async (signal: AbortSignal): Promise<TennisSessi
           sortKey: "date",
           // USTA/ClubSpark returns these two fields flipped in the filters payload.
           latitude: filtersData.longitude,
-          longitude: filtersData.latitude,
+          longitude: filtersData.latitude
         },
-        filters: filtersData.filters.background,
+        filters: filtersData.filters.background
       }),
-      signal,
-    },
+      signal
+    }
   );
 
   if (!searchResponse.ok) {
@@ -168,7 +185,9 @@ const fetchUstaSessionsDirect = async (signal: AbortSignal): Promise<TennisSessi
   }
 
   const searchData = await searchResponse.json();
-  return (searchData.searchResults ?? []).map((result: { item: UstaSearchItem }) => formatUstaSession(result.item));
+  return (searchData.searchResults ?? []).map(
+    (result: { item: UstaSearchItem }) => formatUstaSession(result.item)
+  );
 };
 
 const SportDetailPage = () => {
@@ -184,7 +203,7 @@ const SportDetailPage = () => {
   const validTennisLessonVideos = tennisLessonVideos
     .map((video) => ({
       ...video,
-      youtubeUrl: normalizeYouTubeEmbedUrl(video.youtubeUrl) || "",
+      youtubeUrl: normalizeYouTubeEmbedUrl(video.youtubeUrl) || ""
     }))
     .filter((video) => video.youtubeUrl)
     .slice(0, 2);
@@ -204,7 +223,7 @@ const SportDetailPage = () => {
         if (!import.meta.env.DEV) {
           try {
             const apiResponse = await fetch("/api/usta-sessions", {
-              signal: abortController.signal,
+              signal: abortController.signal
             });
 
             if (!apiResponse.ok) {
@@ -215,13 +234,17 @@ const SportDetailPage = () => {
             setTennisSessions(apiSessions);
             return;
           } catch {
-            const fallbackSessions = await fetchUstaSessionsDirect(abortController.signal);
+            const fallbackSessions = await fetchUstaSessionsDirect(
+              abortController.signal
+            );
             setTennisSessions(fallbackSessions);
             return;
           }
         }
 
-        const directSessions = await fetchUstaSessionsDirect(abortController.signal);
+        const directSessions = await fetchUstaSessionsDirect(
+          abortController.signal
+        );
         setTennisSessions(directSessions);
       } catch {
         if (!abortController.signal.aborted) {
@@ -244,7 +267,9 @@ const SportDetailPage = () => {
   if (!data) {
     return (
       <div className="py-32 text-center">
-        <h1 className="font-heading text-4xl font-black uppercase">Sport not found</h1>
+        <h1 className="font-heading text-4xl font-black uppercase">
+          Sport not found
+        </h1>
         <Link to="/" className="mt-4 inline-block text-accent">
           Back to Home
         </Link>
@@ -263,7 +288,9 @@ const SportDetailPage = () => {
             <h1 className="mb-4 font-heading text-5xl font-black uppercase leading-[0.95] text-white md:text-7xl">
               {data.name}
             </h1>
-            <p className="max-w-2xl font-body text-lg text-white md:text-xl">{data.tagline}</p>
+            <p className="max-w-2xl font-body text-lg text-white md:text-xl">
+              {data.tagline}
+            </p>
           </div>
         </div>
       </section>
@@ -274,7 +301,9 @@ const SportDetailPage = () => {
             <h2 className="mb-6 font-heading text-4xl font-black uppercase md:text-5xl">
               About the <span className={aboutAccentClass}>Program</span>
             </h2>
-            <p className="text-lg leading-relaxed text-muted-foreground">{data.description}</p>
+            <p className="text-lg leading-relaxed text-muted-foreground">
+              {data.description}
+            </p>
           </ScrollReveal>
         </div>
       </section>
@@ -288,10 +317,18 @@ const SportDetailPage = () => {
                   <h2 className="mb-8 font-heading text-4xl font-black uppercase md:text-5xl">
                     How Lessons <span className="text-accent">Work</span>
                   </h2>
-                  <div className={`grid gap-8 ${validTennisLessonVideos.length > 1 ? "md:grid-cols-2" : ""}`}>
+                  <div
+                    className={`grid gap-8 ${validTennisLessonVideos.length > 1 ? "md:grid-cols-2" : ""}`}
+                  >
                     {validTennisLessonVideos.map((video) => (
-                      <div key={video.id} className="overflow-hidden border border-border bg-background">
-                        <div className="relative w-full" style={{ paddingBottom: "56.25%" }}>
+                      <div
+                        key={video.id}
+                        className="overflow-hidden border border-border bg-background"
+                      >
+                        <div
+                          className="relative w-full"
+                          style={{ paddingBottom: "56.25%" }}
+                        >
                           <iframe
                             src={video.youtubeUrl}
                             title={video.title || "How tennis lessons work"}
@@ -303,7 +340,9 @@ const SportDetailPage = () => {
                         </div>
                         {video.title ? (
                           <div className="p-4">
-                            <p className="font-heading text-xl font-black uppercase">{video.title}</p>
+                            <p className="font-heading text-xl font-black uppercase">
+                              {video.title}
+                            </p>
                           </div>
                         ) : null}
                       </div>
@@ -321,9 +360,11 @@ const SportDetailPage = () => {
                   Live <span className="brush-underline">USTA Sessions</span>
                 </h2>
                 <p className="mb-10 text-lg leading-relaxed text-muted-foreground">
-                  Discover our range of tennis programs designed for all skill levels, from beginner to advanced. Join
-                  us for group sessions, fun community events, and the joy of learning tennis in a supportive
-                  environment. Private lessons are also available, please contact us directly to arrange.
+                  Discover our range of tennis programs designed for all skill
+                  levels, from beginner to advanced. Join us for group sessions,
+                  fun community events, and the joy of learning tennis in a
+                  supportive environment. Private lessons are also available,
+                  please contact us directly to arrange.
                 </p>
 
                 {sessionsLoading ? (
@@ -365,34 +406,52 @@ const SportDetailPage = () => {
                                 <h3 className="mb-2 font-heading text-3xl font-black uppercase text-foreground md:text-4xl">
                                   {session.name}
                                 </h3>
-                                <p className="text-lg text-foreground md:text-xl">{session.nextSessionLabel}</p>
+                                <p className="text-lg text-foreground md:text-xl">
+                                  {session.nextSessionLabel}
+                                </p>
                               </div>
 
                               <div className="grid grid-cols-1 gap-x-8 gap-y-4 text-foreground sm:grid-cols-2">
                                 <div>
-                                  <p className="mb-1 font-body text-xs font-bold uppercase tracking-[0.16em]">Location</p>
-                                  <p className="text-lg">{session.locationName}</p>
+                                  <p className="mb-1 font-body text-xs font-bold uppercase tracking-[0.16em]">
+                                    Location
+                                  </p>
+                                  <p className="text-lg">
+                                    {session.locationName}
+                                  </p>
                                 </div>
                                 <div>
-                                  <p className="mb-1 font-body text-xs font-bold uppercase tracking-[0.16em]">Coach</p>
+                                  <p className="mb-1 font-body text-xs font-bold uppercase tracking-[0.16em]">
+                                    Coach
+                                  </p>
                                   <p className="text-lg">{session.coachName}</p>
                                 </div>
                                 <div>
-                                  <p className="mb-1 font-body text-xs font-bold uppercase tracking-[0.16em]">Level</p>
-                                  <p className="text-lg">{session.levelLabel}</p>
+                                  <p className="mb-1 font-body text-xs font-bold uppercase tracking-[0.16em]">
+                                    Level
+                                  </p>
+                                  <p className="text-lg">
+                                    {session.levelLabel}
+                                  </p>
                                 </div>
                                 <div>
                                   <p className="mb-1 font-body text-xs font-bold uppercase tracking-[0.16em]">
                                     Next Session
                                   </p>
-                                  <p className="text-lg">{session.nextSessionLabel}</p>
+                                  <p className="text-lg">
+                                    {session.nextSessionLabel}
+                                  </p>
                                 </div>
                                 <div>
-                                  <p className="mb-1 font-body text-xs font-bold uppercase tracking-[0.16em]">Date</p>
+                                  <p className="mb-1 font-body text-xs font-bold uppercase tracking-[0.16em]">
+                                    Date
+                                  </p>
                                   <p className="text-lg">{session.dateLabel}</p>
                                 </div>
                                 <div>
-                                  <p className="mb-1 font-body text-xs font-bold uppercase tracking-[0.16em]">Time</p>
+                                  <p className="mb-1 font-body text-xs font-bold uppercase tracking-[0.16em]">
+                                    Time
+                                  </p>
                                   <p className="text-lg">{session.timeLabel}</p>
                                 </div>
                               </div>
@@ -415,7 +474,10 @@ const SportDetailPage = () => {
         <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
           <ScrollReveal direction="scale">
             <h2 className="mb-4 font-heading text-4xl font-black uppercase md:text-5xl">
-              Ready to <span className="text-accent">{isTennis ? "Register?" : "Enter the Waitlist?"}</span>
+              Ready to{" "}
+              <span className="text-accent">
+                {isTennis ? "Register?" : "Enter the Waitlist?"}
+              </span>
             </h2>
             <p className="mx-auto mb-8 max-w-md text-lg text-muted-foreground">
               {isTennis
@@ -474,13 +536,16 @@ const SportDetailPage = () => {
                   Second Serve
                 </h2>
                 <p className="mb-6 text-lg leading-relaxed text-muted-foreground">
-                  Second Serve is a service from our partner Rally Forward NYC. Alongside that partnership, Together Tennis
-                  is building its own Second Serve effort focused on collecting quality used tennis equipment that
-                  people would otherwise throw away and donating it back into the community.
+                  Second Serve is a service from our partner Rally Forward NYC.
+                  Alongside that partnership, Together Tennis is building its
+                  own Second Serve effort focused on collecting quality used
+                  tennis equipment that people would otherwise throw away and
+                  donating it back into the community.
                 </p>
                 <p className="mb-6 text-lg leading-relaxed text-muted-foreground">
-                  The goal is simple: keep rackets, bags, balls, and gear in circulation so more kids can play with
-                  what they need instead of being priced out of the sport.
+                  The goal is simple: keep rackets, bags, balls, and gear in
+                  circulation so more kids can play with what they need instead
+                  of being priced out of the sport.
                 </p>
                 <Link
                   to="/get-involved"

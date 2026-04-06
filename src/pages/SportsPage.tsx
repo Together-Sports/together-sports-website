@@ -9,10 +9,18 @@ import togetherSoccer from "@/assets/TogetherSoccer.webp";
 
 const sports = [
   { name: "Together Tennis", image: togetherTennis, path: "/sports/tennis" },
-  { name: "Together Basketball", image: togetherBasketball, path: "/sports/basketball" },
-  { name: "Together Football", image: togetherFootball, path: "/sports/football" },
+  {
+    name: "Together Basketball",
+    image: togetherBasketball,
+    path: "/sports/basketball"
+  },
+  {
+    name: "Together Football",
+    image: togetherFootball,
+    path: "/sports/football"
+  },
   { name: "Together Golf", image: togetherGolf, path: "/sports/golf" },
-  { name: "Together Soccer", image: togetherSoccer, path: "/sports/soccer" },
+  { name: "Together Soccer", image: togetherSoccer, path: "/sports/soccer" }
 ];
 
 const SportsPage = () => {
@@ -37,7 +45,8 @@ const SportsPage = () => {
               <span className="sm:whitespace-nowrap">Sports</span>
             </h1>
             <p className="text-white font-bold text-lg md:text-xl max-w-2xl mx-auto font-body">
-              Five sports. One mission. Building the next generation of leaders through access, mentorship, and play.
+              Five sports. One mission. Building the next generation of leaders
+              through access, mentorship, and play.
             </p>
           </motion.div>
         </div>
@@ -47,8 +56,15 @@ const SportsPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12 items-center">
             {sports.map((sport, i) => (
-              <ScrollReveal key={sport.name} delay={i * 0.1} direction={i % 2 === 0 ? "left" : "right"}>
-                <Link to={sport.path} className="group flex items-center justify-center py-4 md:py-6">
+              <ScrollReveal
+                key={sport.name}
+                delay={i * 0.1}
+                direction={i % 2 === 0 ? "left" : "right"}
+              >
+                <Link
+                  to={sport.path}
+                  className="group flex items-center justify-center py-4 md:py-6"
+                >
                   <img
                     src={sport.image}
                     alt={sport.name}
@@ -64,7 +80,8 @@ const SportsPage = () => {
           <ScrollReveal>
             <div className="mt-12 md:mt-14 text-center">
               <p className="text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto">
-                Each program is designed to build skills, character, and community.
+                Each program is designed to build skills, character, and
+                community.
               </p>
             </div>
           </ScrollReveal>

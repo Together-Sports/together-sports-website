@@ -13,15 +13,15 @@ const navItems = [
       { label: "Basketball", path: "/sports/basketball", color: "#f6a15c" },
       { label: "Football", path: "/sports/football", color: "#84a6ff" },
       { label: "Soccer", path: "/sports/soccer", color: "#39b870" },
-      { label: "Golf", path: "/sports/golf", color: "#ab9bfa" },
-    ],
+      { label: "Golf", path: "/sports/golf", color: "#ab9bfa" }
+    ]
   },
   { label: "Sports", path: "/sports" },
   { label: "Team", path: "/team" },
   { label: "Experiences", path: "/experiences" },
   { label: "Blog", path: "/blog" },
   { label: "Contact", path: "/contact" },
-  { label: "Partners", path: "/partners" },
+  { label: "Partners", path: "/partners" }
 ];
 
 const Navbar = () => {
@@ -53,7 +53,9 @@ const Navbar = () => {
                 <div
                   key={item.path}
                   className="relative"
-                  onMouseEnter={() => setOpenDropdown(item.dropdown ? item.path : null)}
+                  onMouseEnter={() =>
+                    setOpenDropdown(item.dropdown ? item.path : null)
+                  }
                   onMouseLeave={() => setOpenDropdown(null)}
                 >
                   <Link

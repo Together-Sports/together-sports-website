@@ -8,7 +8,7 @@ const sportAccent: Record<string, string> = {
   Basketball: "text-[hsl(var(--sport-basketball))]",
   Football: "text-[hsl(var(--sport-football))]",
   Soccer: "text-[hsl(var(--sport-soccer))]",
-  Golf: "text-[hsl(var(--sport-golf))]",
+  Golf: "text-[hsl(var(--sport-golf))]"
 };
 
 const renderStars = (rating?: number) => {
@@ -23,7 +23,9 @@ const QuoteCard = ({ item, index }: { item: Experience; index: number }) => {
   return (
     <ScrollReveal direction="up" delay={index * 0.1}>
       <div className="h-full p-8 bg-background border border-border hover:border-accent transition-colors duration-300 text-center">
-        <p className={`font-heading font-bold uppercase text-sm mb-4 ${sportAccent[item.sport || ""] || "text-accent"}`}>
+        <p
+          className={`font-heading font-bold uppercase text-sm mb-4 ${sportAccent[item.sport || ""] || "text-accent"}`}
+        >
           {item.sport || "Together Sports"}
         </p>
         <p className="text-foreground text-xl leading-relaxed mb-6 font-body italic">
@@ -33,7 +35,9 @@ const QuoteCard = ({ item, index }: { item: Experience; index: number }) => {
           {item.age ? `- ${item.name}, ${item.age}` : `- ${item.name}`}
         </p>
         {item.rating ? (
-          <p className="mt-3 font-heading text-lg tracking-[0.22em] text-[#f6a15c]">{renderStars(item.rating)}</p>
+          <p className="mt-3 font-heading text-lg tracking-[0.22em] text-[#f6a15c]">
+            {renderStars(item.rating)}
+          </p>
         ) : null}
       </div>
     </ScrollReveal>
@@ -76,7 +80,9 @@ const VideoCard = ({ item, index }: { item: Experience; index: number }) => (
       </div>
       {item.videoTitle ? (
         <div className="p-4 text-center">
-          <p className="font-heading font-bold uppercase text-sm">{item.videoTitle}</p>
+          <p className="font-heading font-bold uppercase text-sm">
+            {item.videoTitle}
+          </p>
         </div>
       ) : null}
     </div>
@@ -109,8 +115,9 @@ const ExperiencesPage = () => {
               <span className="sm:whitespace-nowrap">Experiences</span>
             </h1>
             <p className="text-white font-bold text-lg md:text-xl max-w-2xl mx-auto font-body">
-              Hear from the athletes, families, and coaches who make Together Sports what it is. These are their
-              words, their moments, and their stories.
+              Hear from the athletes, families, and coaches who make Together
+              Sports what it is. These are their words, their moments, and their
+              stories.
             </p>
           </motion.div>
         </div>
@@ -120,7 +127,9 @@ const ExperiencesPage = () => {
         <section className="pt-20 pb-12 md:pt-28 md:pb-16 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <ScrollReveal>
-              <h2 className="font-heading text-5xl md:text-7xl font-black uppercase mb-12 text-center">Moments Captured</h2>
+              <h2 className="font-heading text-5xl md:text-7xl font-black uppercase mb-12 text-center">
+                Moments Captured
+              </h2>
             </ScrollReveal>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {photos.map((p, i) => (
@@ -150,7 +159,9 @@ const ExperiencesPage = () => {
         <section className="py-20 md:py-28 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <ScrollReveal>
-              <h2 className="font-heading text-5xl md:text-7xl font-black uppercase mb-12 text-center">Parents Speak</h2>
+              <h2 className="font-heading text-5xl md:text-7xl font-black uppercase mb-12 text-center">
+                Parents Speak
+              </h2>
             </ScrollReveal>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {parentQuotes.map((q, i) => (
@@ -160,8 +171,6 @@ const ExperiencesPage = () => {
           </div>
         </section>
       ) : null}
-
-  
     </div>
   );
 };

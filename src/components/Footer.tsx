@@ -38,7 +38,7 @@ const quickLinks = [
   { label: "Experiences", path: "/experiences" },
   { label: "Blog", path: "/blog" },
   { label: "Partners", path: "/partners" },
-  { label: "Contact", path: "/contact" },
+  { label: "Contact", path: "/contact" }
 ];
 
 const sportLinks = [
@@ -46,7 +46,7 @@ const sportLinks = [
   { label: "Basketball", path: "/sports/basketball", color: "#f6a15c" },
   { label: "Football", path: "/sports/football", color: "#84a6ff" },
   { label: "Soccer", path: "/sports/soccer", color: "#39b870" },
-  { label: "Golf", path: "/sports/golf", color: "#ab9bfa" },
+  { label: "Golf", path: "/sports/golf", color: "#ab9bfa" }
 ];
 
 const involvementLinks = [
@@ -54,21 +54,33 @@ const involvementLinks = [
   {
     label: "Volunteer",
     path: "https://docs.google.com/forms/d/e/1FAIpQLSes2__aGaa25i1By5o-fc_pBHDxSnjnaBDJGzHsDOaKR_FKDw/viewform?usp=publish-editor",
-    external: true,
+    external: true
   },
   { label: "Donate", path: "/contact", external: false },
   {
     label: "Become a Partner",
     path: "https://docs.google.com/forms/d/e/1FAIpQLSePxWPnfSmEIF77mppapcF8fMcIhBC4uhE1c5EVux0dAK6pmA/viewform?usp=header",
-    external: true,
-  },
+    external: true
+  }
 ];
 
 const socialLinks = [
-  { href: "https://www.instagram.com/togethertennis/", label: "Instagram", Icon: InstagramIcon },
-  { href: "https://www.tiktok.com/@together_sports", label: "TikTok", Icon: TikTokIcon },
-  { href: "https://www.linkedin.com/company/108267093/", label: "LinkedIn", Icon: LinkedInIcon },
-  { href: "/contact", label: "Email", Icon: MailFillIcon },
+  {
+    href: "https://www.instagram.com/togethertennis/",
+    label: "Instagram",
+    Icon: InstagramIcon
+  },
+  {
+    href: "https://www.tiktok.com/@together_sports",
+    label: "TikTok",
+    Icon: TikTokIcon
+  },
+  {
+    href: "https://www.linkedin.com/company/108267093/",
+    label: "LinkedIn",
+    Icon: LinkedInIcon
+  },
+  { href: "/contact", label: "Email", Icon: MailFillIcon }
 ];
 
 const Footer = () => {
@@ -81,7 +93,11 @@ const Footer = () => {
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-12">
         <div className="grid grid-cols-1 gap-6 border-b border-white/10 pb-8 lg:grid-cols-[1fr_auto] lg:items-start">
           <Link to="/" className="inline-flex items-end gap-2 sm:gap-3">
-            <img src={footerLogo} alt="Together Sports logo" className="relative -translate-y-1.5 h-12 w-auto shrink-0 sm:-translate-y-2 sm:h-16 md:h-20" />
+            <img
+              src={footerLogo}
+              alt="Together Sports logo"
+              className="relative -translate-y-1.5 h-12 w-auto shrink-0 sm:-translate-y-2 sm:h-16 md:h-20"
+            />
             <span className="pb-1 font-heading text-2xl sm:text-4xl md:text-6xl font-black uppercase tracking-wide text-white leading-none">
               Together Sports
             </span>
@@ -122,11 +138,16 @@ const Footer = () => {
 
         <div className="grid grid-cols-1 gap-8 py-8 sm:grid-cols-2 md:grid-cols-4">
           <div>
-            <h4 className="mb-3 font-heading text-lg md:text-2xl font-black uppercase tracking-wider text-white">Explore</h4>
+            <h4 className="mb-3 font-heading text-lg md:text-2xl font-black uppercase tracking-wider text-white">
+              Explore
+            </h4>
             <ul className="space-y-2.5">
               {quickLinks.map((item) => (
                 <li key={item.path}>
-                  <Link to={item.path} className="text-base font-[Montserrat] font-semibold text-white transition-colors duration-200 hover:text-white/75">
+                  <Link
+                    to={item.path}
+                    className="text-base font-[Montserrat] font-semibold text-white transition-colors duration-200 hover:text-white/75"
+                  >
                     {item.label}
                   </Link>
                 </li>
@@ -135,7 +156,9 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="mb-3 font-heading text-lg md:text-2xl font-black uppercase tracking-wider text-white">Sports</h4>
+            <h4 className="mb-3 font-heading text-lg md:text-2xl font-black uppercase tracking-wider text-white">
+              Sports
+            </h4>
             <ul className="space-y-2.5">
               {sportLinks.map((item) => (
                 <li key={item.path}>
@@ -152,7 +175,9 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="mb-3 font-heading text-lg md:text-2xl font-black uppercase tracking-wider text-white">Ways To Help</h4>
+            <h4 className="mb-3 font-heading text-lg md:text-2xl font-black uppercase tracking-wider text-white">
+              Ways To Help
+            </h4>
             <ul className="space-y-2.5">
               {involvementLinks.map((item) => (
                 <li key={`${item.label}-${item.path}`}>
@@ -166,7 +191,10 @@ const Footer = () => {
                       {item.label}
                     </a>
                   ) : (
-                    <Link to={item.path} className="text-base font-[Montserrat] font-semibold text-white transition-colors duration-200 hover:text-white/75">
+                    <Link
+                      to={item.path}
+                      className="text-base font-[Montserrat] font-semibold text-white transition-colors duration-200 hover:text-white/75"
+                    >
                       {item.label}
                     </Link>
                   )}
@@ -176,9 +204,14 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="mb-3 font-heading text-lg md:text-2xl font-black uppercase tracking-wider text-white">Reach Us</h4>
+            <h4 className="mb-3 font-heading text-lg md:text-2xl font-black uppercase tracking-wider text-white">
+              Reach Us
+            </h4>
             <div className="space-y-3 text-white">
-              <Link to="/contact" className="text-base font-[Montserrat] font-semibold transition-colors duration-200 hover:text-white/75">
+              <Link
+                to="/contact"
+                className="text-base font-[Montserrat] font-semibold transition-colors duration-200 hover:text-white/75"
+              >
                 Contact Page
               </Link>
             </div>
@@ -186,7 +219,9 @@ const Footer = () => {
         </div>
 
         <div className="border-t border-white/10 pt-10">
-          <p className="text-xs md:text-sm text-white/60">Together Sports is a 501(c)(3) nonprofit organization.</p>
+          <p className="text-xs md:text-sm text-white/60">
+            Together Sports is a 501(c)(3) nonprofit organization.
+          </p>
         </div>
       </div>
     </footer>
