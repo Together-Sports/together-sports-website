@@ -5,12 +5,14 @@ import togetherTennis from "@/assets/TogetherTennis.webp";
 import togetherBasketball from "@/assets/TogetherBB.webp";
 import togetherFootball from "@/assets/TogetherFB.webp";
 import togetherGolf from "@/assets/TogetherGolf.webp";
+import togetherSoccer from "@/assets/TogetherSoccer.webp";
 
 const sports = [
   { name: "Together Tennis", image: togetherTennis, path: "/sports/tennis" },
   { name: "Together Basketball", image: togetherBasketball, path: "/sports/basketball" },
   { name: "Together Football", image: togetherFootball, path: "/sports/football" },
   { name: "Together Golf", image: togetherGolf, path: "/sports/golf" },
+  { name: "Together Soccer", image: togetherSoccer, path: "/sports/soccer" },
 ];
 
 const SportsPage = () => {
@@ -35,7 +37,7 @@ const SportsPage = () => {
               <span className="sm:whitespace-nowrap">Sports</span>
             </h1>
             <p className="text-white font-bold text-lg md:text-xl max-w-2xl mx-auto font-body">
-              Four sports. One mission. Building the next generation of leaders through access, mentorship, and play.
+              Five sports. One mission. Building the next generation of leaders through access, mentorship, and play.
             </p>
           </motion.div>
         </div>
@@ -43,7 +45,7 @@ const SportsPage = () => {
 
       <section className="py-16 md:py-20 bg-white relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12 items-center">
             {sports.map((sport, i) => (
               <ScrollReveal key={sport.name} delay={i * 0.1} direction={i % 2 === 0 ? "left" : "right"}>
                 <Link to={sport.path} className="group flex items-center justify-center py-4 md:py-6">

@@ -7,6 +7,7 @@ const sportAccent: Record<string, string> = {
   Tennis: "text-[hsl(var(--sport-tennis))]",
   Basketball: "text-[hsl(var(--sport-basketball))]",
   Football: "text-[hsl(var(--sport-football))]",
+  Soccer: "text-[hsl(var(--sport-soccer))]",
   Golf: "text-[hsl(var(--sport-golf))]",
 };
 

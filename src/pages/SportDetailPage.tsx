@@ -9,6 +9,7 @@ import tennisAction from "@/assets/tennis-action.jpg";
 import basketballAction from "@/assets/basketball-action.jpg";
 import footballAction from "@/assets/football-action.jpg";
 import golfAction from "@/assets/golf-action.jpg";
+import togetherSoccer from "@/assets/TogetherSoccer.webp";
 import secondServe from "@/assets/second-serve.jpg";
 
 const sportData: Record<
@@ -38,6 +39,14 @@ const sportData: Record<
     description:
       "Our football program emphasizes discipline, teamwork, and sportsmanship. We provide equipment and coaching for flag and tackle football across multiple age groups.",
     schedule: ["Monday & Wednesday: 4:30-6:30 PM", "Saturday: 10:00 AM-1:00 PM"],
+  },
+  soccer: {
+    name: "Soccer",
+    image: togetherSoccer,
+    tagline: "One touch can change the game.",
+    description:
+      "Our soccer program builds confidence, agility, and team-first habits through skill work, small-sided games, and supportive coaching for every level.",
+    schedule: ["Tuesday & Thursday: 4:30-6:30 PM", "Saturday: 9:00 AM-12:00 PM"],
   },
   golf: {
     name: "Golf",
@@ -91,6 +100,18 @@ const sportTheme: Record<
       "absolute right-[20%] bottom-12 h-8 w-8 rounded-full bg-white/12 md:h-12 md:w-12",
       "absolute right-[30%] top-[42%] h-7 w-7 rounded-full bg-white/10 md:h-11 md:w-11",
       "absolute left-[14%] bottom-10 h-10 w-10 rounded-full bg-white/10 md:h-14 md:w-14",
+    ],
+  },
+  soccer: {
+    heroBackground: "bg-[hsl(var(--sport-soccer))]",
+    accentText: "text-[hsl(var(--sport-soccer))]",
+    shapeClassNames: [
+      "absolute left-8 top-10 h-12 w-12 rounded-full bg-white/14 md:h-24 md:w-24",
+      "absolute left-[22%] top-8 h-9 w-9 rotate-12 bg-white/10 md:h-14 md:w-14",
+      "absolute right-10 top-12 h-12 w-12 bg-white/12 scrapbook-rotate-2 md:h-[4.5rem] md:w-[4.5rem]",
+      "absolute right-[18%] bottom-10 h-8 w-8 rounded-full bg-white/10 md:h-12 md:w-12",
+      "absolute right-[30%] top-[41%] h-7 w-7 rounded-full bg-white/10 md:h-10 md:w-10",
+      "absolute left-[14%] bottom-8 h-10 w-10 rotate-45 bg-white/10 md:h-14 md:w-14",
     ],
   },
   golf: {

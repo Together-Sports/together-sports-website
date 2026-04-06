@@ -45,6 +45,7 @@ const sportLinks = [
   { label: "Tennis", path: "/sports/tennis", color: "#87cb4a" },
   { label: "Basketball", path: "/sports/basketball", color: "#f6a15c" },
   { label: "Football", path: "/sports/football", color: "#84a6ff" },
+  { label: "Soccer", path: "/sports/soccer", color: "#39b870" },
   { label: "Golf", path: "/sports/golf", color: "#ab9bfa" },
 ];
 
