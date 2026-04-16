@@ -1,5 +1,13 @@
+import { useEffect } from "react";
 import ScrollReveal from "@/components/ScrollReveal";
-import { HandCoins, Handshake, HeartHandshake, type LucideIcon } from "lucide-react";
+import StripeDonateSection from "@/components/StripeDonateSection";
+import {
+  HandCoins,
+  Handshake,
+  HeartHandshake,
+  type LucideIcon
+} from "lucide-react";
+import { useLocation } from "react-router-dom";
 
 const getInvolvedItems: {
   title: string;
@@ -16,8 +24,8 @@ const getInvolvedItems: {
     cta: "Give Now",
     Icon: HandCoins,
     color: "#f6a15c",
-    href: "/contact",
-    external: false,
+    href: "#donate",
+    external: false
   },
   {
     title: "Volunteer",
@@ -26,7 +34,7 @@ const getInvolvedItems: {
     Icon: HeartHandshake,
     color: "#ab9bfa",
     href: "https://docs.google.com/forms/d/e/1FAIpQLSes2__aGaa25i1By5o-fc_pBHDxSnjnaBDJGzHsDOaKR_FKDw/viewform?usp=publish-editor",
-    external: true,
+    external: true
   },
   {
     title: "Partner",
@@ -35,11 +43,24 @@ const getInvolvedItems: {
     Icon: Handshake,
     color: "#87cb4a",
     href: "https://docs.google.com/forms/d/e/1FAIpQLSePxWPnfSmEIF77mppapcF8fMcIhBC4uhE1c5EVux0dAK6pmA/viewform?usp=header",
-    external: true,
-  },
+    external: true
+  }
 ];
 
 const GetInvolvedPage = () => {
+  const location = useLocation();
+  const showDonationSuccess =
+    new URLSearchParams(window.location.search).get("donation") === "success";
+
+  useEffect(() => {
+    if (location.hash !== "#donate") {
+      return;
+    }
+
+    const donateSection = document.getElementById("donate");
+    donateSection?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [location.hash]);
+
   return (
     <div className="overflow-hidden">
       <section className="bg-primary min-h-[calc(100vh-4rem)] md:min-h-[calc(100vh-5rem)] py-12 md:py-16">
@@ -59,32 +80,51 @@ const GetInvolvedPage = () => {
             </div>
 
             <div className="grid grid-cols-1 items-stretch gap-6 md:grid-cols-3 md:gap-8">
-            {getInvolvedItems.map((item, i) => (
-              <ScrollReveal key={item.title} delay={i * 0.15} direction="up">
-                <div
-                  className="flex h-full min-h-[400px] flex-col bg-white p-8 md:min-h-[500px] md:p-10"
-                >
-                  <div className="mb-6">
-                    <item.Icon className="h-12 w-12 md:h-14 md:w-14" strokeWidth={2.2} style={{ color: item.color }} />
+              {getInvolvedItems.map((item, i) => (
+                <ScrollReveal key={item.title} delay={i * 0.15} direction="up">
+                  <div className="flex h-full min-h-[400px] flex-col bg-white p-8 md:min-h-[500px] md:p-10">
+                    <div className="mb-6">
+                      <item.Icon
+                        className="h-12 w-12 md:h-14 md:w-14"
+                        strokeWidth={2.2}
+                        style={{ color: item.color }}
+                      />
+                    </div>
+                    <h3 className="mb-4 font-heading text-4xl font-black uppercase leading-[0.95] md:text-5xl">
+                      {item.title}
+                    </h3>
+                    <p className="mb-8 flex-1 text-xl leading-relaxed text-muted-foreground md:text-2xl">
+                      {item.desc}
+                    </p>
+                    <a
+                      href={item.href}
+                      target={item.external ? "_blank" : undefined}
+                      rel={item.external ? "noreferrer" : undefined}
+                      className="inline-block self-start px-8 py-4 font-heading text-base font-bold uppercase tracking-wider text-white transition-all duration-200 hover:scale-105 hover:rotate-1 md:text-lg"
+                      style={{ backgroundColor: item.color }}
+                    >
+                      {item.cta} →
+                    </a>
                   </div>
-                  <h3 className="mb-4 font-heading text-4xl font-black uppercase leading-[0.95] md:text-5xl">
-                    {item.title}
-                  </h3>
-                  <p className="mb-8 flex-1 text-xl leading-relaxed text-muted-foreground md:text-2xl">{item.desc}</p>
-                  <a
-                    href={item.href}
-                    target={item.external ? "_blank" : undefined}
-                    rel={item.external ? "noreferrer" : undefined}
-                    className="inline-block self-start px-8 py-4 font-heading text-base font-bold uppercase tracking-wider text-white transition-all duration-200 hover:scale-105 hover:rotate-1 md:text-lg"
-                    style={{ backgroundColor: item.color }}
-                  >
-                    {item.cta} →
-                  </a>
-                </div>
-              </ScrollReveal>
-            ))}
+                </ScrollReveal>
+              ))}
             </div>
           </div>
+        </div>
+      </section>
+
+      <section id="donate" className="scroll-mt-24 bg-[#f4f8ff] py-14 md:py-20">
+        <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
+          {showDonationSuccess ? (
+            <div className="mb-6 rounded-2xl border border-emerald-300 bg-emerald-50 px-5 py-4 text-emerald-900">
+              <p className="font-semibold">Thank you for your donation.</p>
+              <p className="mt-1 text-sm">
+                Your support helps expand youth access to sports opportunities.
+              </p>
+            </div>
+          ) : null}
+
+          <StripeDonateSection />
         </div>
       </section>
     </div>

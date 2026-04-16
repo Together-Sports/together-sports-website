@@ -90,6 +90,9 @@ RESEND_API_KEY=
 CONTACT_TO_EMAIL=
 CONTACT_FROM_EMAIL=
 CONTACT_ALLOWED_ORIGINS=
+VITE_STRIPE_PUBLISHABLE_KEY=
+STRIPE_SECRET_KEY=
+STRIPE_ALLOWED_ORIGINS=
 ```
 
 What they do:
@@ -110,6 +113,12 @@ What they do:
   - verified sender used by Resend
 - `CONTACT_ALLOWED_ORIGINS`
   - optional comma-separated allowed origins for the contact API
+- `VITE_STRIPE_PUBLISHABLE_KEY`
+  - Stripe publishable key used by the embedded donation checkout UI
+- `STRIPE_SECRET_KEY`
+  - Stripe secret key used by the donation session API (`/api/create-donation-session`)
+- `STRIPE_ALLOWED_ORIGINS`
+  - optional comma-separated allowed origins for the Stripe donation API
 
 Example:
 

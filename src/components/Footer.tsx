@@ -56,7 +56,7 @@ const involvementLinks = [
     path: "https://docs.google.com/forms/d/e/1FAIpQLSes2__aGaa25i1By5o-fc_pBHDxSnjnaBDJGzHsDOaKR_FKDw/viewform?usp=publish-editor",
     external: true
   },
-  { label: "Donate", path: "/contact", external: false },
+  { label: "Donate", path: "/get-involved#donate", external: false },
   {
     label: "Become a Partner",
     path: "https://docs.google.com/forms/d/e/1FAIpQLSePxWPnfSmEIF77mppapcF8fMcIhBC4uhE1c5EVux0dAK6pmA/viewform?usp=header",
