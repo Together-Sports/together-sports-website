@@ -186,7 +186,7 @@ const Index = () => {
                   Our Sports
                 </a>
                 <Link
-                  to="/get-involved"
+                  to="/get-involved#donate"
                   className="inline-block px-8 py-4 bg-accent text-white font-heading font-bold text-lg uppercase tracking-wider hover:scale-105 hover:rotate-1 transition-all duration-200"
                 >
                   Donate Now
