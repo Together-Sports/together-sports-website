@@ -264,50 +264,72 @@ const TestimonialFields = ({
               {(item.images && item.images.length > 0
                 ? item.images
                 : item.image
-                ? [item.image]
-                : [])
-                .map((img, idx) => (
-                  <div key={idx} className="border border-border bg-white p-4">
-                    <div className="flex items-center justify-between mb-3">
-                      <p className="font-heading font-bold uppercase text-sm">Photo {idx + 1}</p>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const nextImages = (item.images && [...item.images]) || (item.image ? [item.image] : []);
-                          nextImages.splice(idx, 1);
-                          onChange({ ...item, images: nextImages.length ? nextImages : undefined, image: nextImages[0] });
-                        }}
-                        className="px-3 py-1 border border-border bg-card text-foreground text-xs uppercase"
-                      >
-                        Remove
-                      </button>
-                    </div>
-                    <ImageField
-                      label={`Photo ${idx + 1}`}
-                      value={img || ""}
-                      onChange={(value) => {
-                        const nextImages = (item.images && [...item.images]) || (item.image ? [item.image] : []);
-                        nextImages[idx] = value;
-                        onChange({ ...item, images: nextImages, image: nextImages[0] });
+                  ? [item.image]
+                  : []
+              ).map((img, idx) => (
+                <div key={idx} className="border border-border bg-white p-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <p className="font-heading font-bold uppercase text-sm">
+                      Photo {idx + 1}
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const nextImages =
+                          (item.images && [...item.images]) ||
+                          (item.image ? [item.image] : []);
+                        nextImages.splice(idx, 1);
+                        onChange({
+                          ...item,
+                          images: nextImages.length ? nextImages : undefined,
+                          image: nextImages[0]
+                        });
                       }}
-                      onUpload={onUpload}
-                    />
+                      className="px-3 py-1 border border-border bg-card text-foreground text-xs uppercase"
+                    >
+                      Remove
+                    </button>
                   </div>
-                ))}
+                  <ImageField
+                    label={`Photo ${idx + 1}`}
+                    value={img || ""}
+                    onChange={(value) => {
+                      const nextImages =
+                        (item.images && [...item.images]) ||
+                        (item.image ? [item.image] : []);
+                      nextImages[idx] = value;
+                      onChange({
+                        ...item,
+                        images: nextImages,
+                        image: nextImages[0]
+                      });
+                    }}
+                    onUpload={onUpload}
+                  />
+                </div>
+              ))}
 
               <div className="flex gap-3">
                 <button
                   type="button"
                   onClick={() => {
-                    const nextImages = (item.images && [...item.images]) || (item.image ? [item.image] : []);
+                    const nextImages =
+                      (item.images && [...item.images]) ||
+                      (item.image ? [item.image] : []);
                     nextImages.push("");
-                    onChange({ ...item, images: nextImages, image: nextImages[0] });
+                    onChange({
+                      ...item,
+                      images: nextImages,
+                      image: nextImages[0]
+                    });
                   }}
                   className="px-4 py-3 bg-primary text-white font-heading font-bold uppercase text-sm tracking-wider"
                 >
                   + Add Image
                 </button>
-                <p className="self-center text-sm text-muted-foreground">Add multiple images to create a slideshow.</p>
+                <p className="self-center text-sm text-muted-foreground">
+                  Add multiple images to create a slideshow.
+                </p>
               </div>
             </div>
           </div>
@@ -586,10 +608,7 @@ const AdminPage = () => {
     }));
   };
 
-  const updateSportDescription = (
-    id: string,
-    next: SportDescription
-  ) => {
+  const updateSportDescription = (id: string, next: SportDescription) => {
     setSportDescriptions((current) =>
       current.map((item) => (item.id === id ? next : item))
     );
@@ -1231,7 +1250,8 @@ const AdminPage = () => {
                     Sports Content
                   </p>
                   <p className="text-muted-foreground text-sm">
-                    Edit sport descriptions, taglines, and schedules. Changes appear on the sport detail pages.
+                    Edit sport descriptions, taglines, and schedules. Changes
+                    appear on the sport detail pages.
                   </p>
                 </div>
               </div>
@@ -1242,8 +1262,8 @@ const AdminPage = () => {
                     Tennis How Lessons Work
                   </p>
                   <p className="text-muted-foreground text-sm">
-                    Add up to 2 YouTube videos for the tennis page. If none
-                    are saved, the section stays hidden.
+                    Add up to 2 YouTube videos for the tennis page. If none are
+                    saved, the section stays hidden.
                   </p>
                 </div>
 

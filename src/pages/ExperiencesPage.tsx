@@ -1,7 +1,13 @@
 import { motion } from "framer-motion";
 import { MapPin } from "lucide-react";
 import ScrollReveal from "@/components/ScrollReveal";
-import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselPrevious,
+  CarouselNext
+} from "@/components/ui/carousel";
 import { useEditableContent } from "@/lib/editable-content";
 import type { Experience } from "@/data/experiences";
 

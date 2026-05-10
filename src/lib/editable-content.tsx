@@ -6,7 +6,7 @@ import {
   useState,
   type Dispatch,
   type ReactNode,
-  type SetStateAction,
+  type SetStateAction
 } from "react";
 import type { User } from "@supabase/supabase-js";
 import type { BlogPost } from "@/data/blogPosts";
@@ -24,14 +24,14 @@ import {
   type ImpactMetricsSection,
   type OtherLocationsSection,
   type TennisLessonVideo,
-  type SportDescription,
+  type SportDescription
 } from "@/lib/editable-content-format";
 import {
   isSupabaseConfigured,
   isAllowedAdminEmail,
   supabase,
   SUPABASE_SITE_CONTENT_ID,
-  SUPABASE_SITE_MEDIA_BUCKET,
+  SUPABASE_SITE_MEDIA_BUCKET
 } from "@/lib/supabase";
 
 type EditableContentContextValue = EditableContentState & {
@@ -61,8 +61,10 @@ type EditableContentContextValue = EditableContentState & {
   signOut: () => Promise<void>;
 };
 
-const createDefaultContent = (): EditableContentState => hydrateEditableContentState(editableContentSeed);
-const createSerializedSnapshot = (content: EditableContentState) => JSON.stringify(serializeEditableContentState(content));
+const createDefaultContent = (): EditableContentState =>
+  hydrateEditableContentState(editableContentSeed);
+const createSerializedSnapshot = (content: EditableContentState) =>
+  JSON.stringify(serializeEditableContentState(content));
 const PREVIEW_DRAFT_STORAGE_KEY = "together-sports-preview-draft";
 const UPLOAD_IMAGE_MAX_DIMENSION = 2200;
 const UPLOAD_IMAGE_QUALITY = 0.86;
@@ -74,7 +76,7 @@ const mergeLiveBlogPosts = (savedPosts: BlogPost[], livePosts: BlogPost[]) =>
     return {
       ...post,
       featured: savedPost?.featured ?? false,
-      tag: savedPost?.tag ?? "",
+      tag: savedPost?.tag ?? ""
     };
   });
 
@@ -101,7 +103,7 @@ const withLiveBlogPosts = async (content: EditableContentState) => {
 
     return {
       ...content,
-      blogPosts: mergeLiveBlogPosts(content.blogPosts, payload.posts),
+      blogPosts: mergeLiveBlogPosts(content.blogPosts, payload.posts)
     };
   } catch (error) {
     console.error(error);
@@ -113,7 +115,8 @@ const readFileAsDataUrl = (file: File) =>
   new Promise<string>((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => resolve(String(reader.result ?? ""));
-    reader.onerror = () => reject(new Error("Unable to read the selected image."));
+    reader.onerror = () =>
+      reject(new Error("Unable to read the selected image."));
     reader.readAsDataURL(file);
   });
 
@@ -135,16 +138,24 @@ const loadImageElement = (file: File) =>
     image.src = objectUrl;
   });
 
-const canvasToBlob = (canvas: HTMLCanvasElement, type: string, quality?: number) =>
+const canvasToBlob = (
+  canvas: HTMLCanvasElement,
+  type: string,
+  quality?: number
+) =>
   new Promise<Blob>((resolve, reject) => {
-    canvas.toBlob((blob) => {
-      if (!blob) {
-        reject(new Error("Unable to optimize that image."));
-        return;
-      }
+    canvas.toBlob(
+      (blob) => {
+        if (!blob) {
+          reject(new Error("Unable to optimize that image."));
+          return;
+        }
 
-      resolve(blob);
-    }, type, quality);
+        resolve(blob);
+      },
+      type,
+      quality
+    );
   });
 
 const optimizeUploadImage = async (file: File) => {
@@ -158,7 +169,10 @@ const optimizeUploadImage = async (file: File) => {
 
   const image = await loadImageElement(file);
   const longestSide = Math.max(image.naturalWidth, image.naturalHeight);
-  const scale = longestSide > UPLOAD_IMAGE_MAX_DIMENSION ? UPLOAD_IMAGE_MAX_DIMENSION / longestSide : 1;
+  const scale =
+    longestSide > UPLOAD_IMAGE_MAX_DIMENSION
+      ? UPLOAD_IMAGE_MAX_DIMENSION / longestSide
+      : 1;
   const targetWidth = Math.max(1, Math.round(image.naturalWidth * scale));
   const targetHeight = Math.max(1, Math.round(image.naturalHeight * scale));
 
@@ -173,7 +187,11 @@ const optimizeUploadImage = async (file: File) => {
 
   context.drawImage(image, 0, 0, targetWidth, targetHeight);
 
-  const optimizedBlob = await canvasToBlob(canvas, "image/webp", UPLOAD_IMAGE_QUALITY);
+  const optimizedBlob = await canvasToBlob(
+    canvas,
+    "image/webp",
+    UPLOAD_IMAGE_QUALITY
+  );
 
   if (optimizedBlob.size >= file.size) {
     return file;
@@ -182,23 +200,42 @@ const optimizeUploadImage = async (file: File) => {
   const optimizedName = file.name.replace(/\.[^/.]+$/, "") || "upload";
   return new File([optimizedBlob], `${optimizedName}.webp`, {
     type: "image/webp",
-    lastModified: Date.now(),
+    lastModified: Date.now()
   });
 };
 
-const EditableContentContext = createContext<EditableContentContextValue | null>(null);
+const EditableContentContext =
+  createContext<EditableContentContextValue | null>(null);
 const defaultContent = createDefaultContent();
 const defaultSnapshot = createSerializedSnapshot(defaultContent);
 
-export const EditableContentProvider = ({ children }: { children: ReactNode }) => {
-  const [blogPosts, setBlogPosts] = useState<BlogPost[]>(() => defaultContent.blogPosts);
-  const [experiences, setExperiences] = useState<Experience[]>(() => defaultContent.experiences);
-  const [partners, setPartners] = useState<Partner[]>(() => defaultContent.partners);
-  const [teamSections, setTeamSections] = useState<TeamSection[]>(() => defaultContent.teamSections);
-  const [tennisLessonVideos, setTennisLessonVideos] = useState<TennisLessonVideo[]>(() => defaultContent.tennisLessonVideos);
-  const [impactMetricsSection, setImpactMetricsSection] = useState<ImpactMetricsSection>(() => defaultContent.impactMetricsSection);
-  const [otherLocationsSection, setOtherLocationsSection] = useState<OtherLocationsSection>(() => defaultContent.otherLocationsSection);
-  const [sportDescriptions, setSportDescriptions] = useState<SportDescription[]>(() => defaultContent.sportDescriptions);
+export const EditableContentProvider = ({
+  children
+}: {
+  children: ReactNode;
+}) => {
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>(
+    () => defaultContent.blogPosts
+  );
+  const [experiences, setExperiences] = useState<Experience[]>(
+    () => defaultContent.experiences
+  );
+  const [partners, setPartners] = useState<Partner[]>(
+    () => defaultContent.partners
+  );
+  const [teamSections, setTeamSections] = useState<TeamSection[]>(
+    () => defaultContent.teamSections
+  );
+  const [tennisLessonVideos, setTennisLessonVideos] = useState<
+    TennisLessonVideo[]
+  >(() => defaultContent.tennisLessonVideos);
+  const [impactMetricsSection, setImpactMetricsSection] =
+    useState<ImpactMetricsSection>(() => defaultContent.impactMetricsSection);
+  const [otherLocationsSection, setOtherLocationsSection] =
+    useState<OtherLocationsSection>(() => defaultContent.otherLocationsSection);
+  const [sportDescriptions, setSportDescriptions] = useState<
+    SportDescription[]
+  >(() => defaultContent.sportDescriptions);
   const [lastSavedSnapshot, setLastSavedSnapshot] = useState(defaultSnapshot);
   const [isLoadingContent, setIsLoadingContent] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -229,10 +266,13 @@ export const EditableContentProvider = ({ children }: { children: ReactNode }) =
       tennisLessonVideos,
       impactMetricsSection,
       otherLocationsSection,
-      sportDescriptions,
+      sportDescriptions
     });
 
-    window.localStorage.setItem(PREVIEW_DRAFT_STORAGE_KEY, JSON.stringify(previewContent));
+    window.localStorage.setItem(
+      PREVIEW_DRAFT_STORAGE_KEY,
+      JSON.stringify(previewContent)
+    );
   };
 
   const readLiveContent = async () => {
@@ -255,11 +295,15 @@ export const EditableContentProvider = ({ children }: { children: ReactNode }) =
       throw error;
     }
 
-    let nextContent = data?.content ? parseEditableContentImport(data.content) : defaultContent;
+    let nextContent = data?.content
+      ? parseEditableContentImport(data.content)
+      : defaultContent;
 
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
-      const previewDraft = window.localStorage.getItem(PREVIEW_DRAFT_STORAGE_KEY);
+      const previewDraft = window.localStorage.getItem(
+        PREVIEW_DRAFT_STORAGE_KEY
+      );
 
       if (params.get("preview") === "1" && previewDraft) {
         try {
@@ -316,7 +360,7 @@ export const EditableContentProvider = ({ children }: { children: ReactNode }) =
       });
 
     const {
-      data: { subscription },
+      data: { subscription }
     } = supabase.auth.onAuthStateChange((_event, session) => {
       const nextUser = session?.user ?? null;
       if (nextUser?.email && !isAllowedAdminEmail(nextUser.email)) {
@@ -362,9 +406,18 @@ export const EditableContentProvider = ({ children }: { children: ReactNode }) =
         tennisLessonVideos,
         impactMetricsSection,
         otherLocationsSection,
-        sportDescriptions,
+        sportDescriptions
       }),
-    [blogPosts, experiences, partners, teamSections, tennisLessonVideos, impactMetricsSection, otherLocationsSection, sportDescriptions],
+    [
+      blogPosts,
+      experiences,
+      partners,
+      teamSections,
+      tennisLessonVideos,
+      impactMetricsSection,
+      otherLocationsSection,
+      sportDescriptions
+    ]
   );
   const hasUnsavedChanges = currentSnapshot !== lastSavedSnapshot;
 
@@ -411,15 +464,15 @@ export const EditableContentProvider = ({ children }: { children: ReactNode }) =
             tennisLessonVideos,
             impactMetricsSection,
             otherLocationsSection,
-            sportDescriptions,
+            sportDescriptions
           });
           const { error } = await supabase.from("site_content").upsert(
             {
               id: SUPABASE_SITE_CONTENT_ID,
               content,
-              updated_at: new Date().toISOString(),
+              updated_at: new Date().toISOString()
             },
-            { onConflict: "id" },
+            { onConflict: "id" }
           );
 
           if (error) {
@@ -445,24 +498,30 @@ export const EditableContentProvider = ({ children }: { children: ReactNode }) =
         }
 
         const preparedFile = await optimizeUploadImage(file);
-        const fileExtension = preparedFile.name.split(".").pop()?.toLowerCase() ?? "jpg";
-        const fileName = preparedFile.name
-          .replace(/\.[^/.]+$/, "")
-          .toLowerCase()
-          .replace(/[^a-z0-9]+/g, "-")
-          .replace(/^-+|-+$/g, "")
-          .slice(0, 40) || "upload";
+        const fileExtension =
+          preparedFile.name.split(".").pop()?.toLowerCase() ?? "jpg";
+        const fileName =
+          preparedFile.name
+            .replace(/\.[^/.]+$/, "")
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/^-+|-+$/g, "")
+            .slice(0, 40) || "upload";
         const filePath = `admin/${Date.now()}-${fileName}.${fileExtension}`;
-        const { data, error } = await supabase.storage.from(SUPABASE_SITE_MEDIA_BUCKET).upload(filePath, preparedFile, {
-          cacheControl: "3600",
-          upsert: false,
-        });
+        const { data, error } = await supabase.storage
+          .from(SUPABASE_SITE_MEDIA_BUCKET)
+          .upload(filePath, preparedFile, {
+            cacheControl: "3600",
+            upsert: false
+          });
 
         if (error) {
           throw error;
         }
 
-        const { data: publicUrlData } = supabase.storage.from(SUPABASE_SITE_MEDIA_BUCKET).getPublicUrl(data.path);
+        const { data: publicUrlData } = supabase.storage
+          .from(SUPABASE_SITE_MEDIA_BUCKET)
+          .getPublicUrl(data.path);
         return publicUrlData.publicUrl;
       },
       exportContent: () =>
@@ -474,7 +533,7 @@ export const EditableContentProvider = ({ children }: { children: ReactNode }) =
           tennisLessonVideos,
           impactMetricsSection,
           otherLocationsSection,
-          sportDescriptions,
+          sportDescriptions
         }),
       importContent: (input) => {
         const next = parseEditableContentImport(input);
@@ -496,10 +555,13 @@ export const EditableContentProvider = ({ children }: { children: ReactNode }) =
           throw new Error("That email is not allowed to access the admin.");
         }
 
-        const emailRedirectTo = typeof window !== "undefined" ? `${window.location.origin}/admin` : undefined;
+        const emailRedirectTo =
+          typeof window !== "undefined"
+            ? `${window.location.origin}/admin`
+            : undefined;
         const { error } = await supabase.auth.signInWithOtp({
           email,
-          options: { emailRedirectTo, shouldCreateUser: false },
+          options: { emailRedirectTo, shouldCreateUser: false }
         });
 
         if (error) {
@@ -515,7 +577,7 @@ export const EditableContentProvider = ({ children }: { children: ReactNode }) =
         if (error) {
           throw error;
         }
-      },
+      }
     }),
     [
       blogPosts,
@@ -532,18 +594,24 @@ export const EditableContentProvider = ({ children }: { children: ReactNode }) =
       isSaving,
       user,
       authLoading,
-      savePreviewDraft,
-    ],
+      savePreviewDraft
+    ]
   );
 
-  return <EditableContentContext.Provider value={value}>{children}</EditableContentContext.Provider>;
+  return (
+    <EditableContentContext.Provider value={value}>
+      {children}
+    </EditableContentContext.Provider>
+  );
 };
 
 export const useEditableContent = () => {
   const context = useContext(EditableContentContext);
 
   if (!context) {
-    throw new Error("useEditableContent must be used within EditableContentProvider");
+    throw new Error(
+      "useEditableContent must be used within EditableContentProvider"
+    );
   }
 
   return context;

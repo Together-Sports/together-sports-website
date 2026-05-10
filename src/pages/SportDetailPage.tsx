@@ -137,7 +137,7 @@ const fetchUstaSessionsDirect = async (
 const SportDetailPage = () => {
   const { sport } = useParams<{ sport: string }>();
   const { tennisLessonVideos, sportDescriptions } = useEditableContent();
-  
+
   const sportImageMap: Record<string, string> = {
     tennis: tennisAction,
     basketball: basketballAction,
