@@ -12,8 +12,10 @@ export type Experience = {
   quote?: string;
   name?: string;
   age?: string;
+  location?: string;
   rating?: number;
   image?: string;
+  images?: string[];
   caption?: string;
   videoUrl?: string;
   videoTitle?: string;
@@ -28,6 +30,7 @@ const experiences: Experience[] = [
       "My 4-year-old had her first tennis lesson with Coach Harry, and it could not have gone better. He met her where she was, encouraging, kind, and full of energy. Together Tennis makes tennis feel welcoming for families at every level.",
     name: "Leigh H.",
     age: "Parent",
+    location: "New York",
     rating: 5,
   },
   {
@@ -38,6 +41,7 @@ const experiences: Experience[] = [
       "Zoe had a great experience practicing tennis with Harry. He did an excellent job teaching her techniques to improve her game. I would highly recommend Harry to any students who are looking to become better tennis players.",
     name: "Michael B.",
     age: "Parent",
+    location: "New Jersey",
     rating: 5,
   },
   {
@@ -48,6 +52,7 @@ const experiences: Experience[] = [
       "Theo has always been quite shy, especially in new environments where he would normally stay close to me. Seeing him open up with you has been truly special, thank you for helping him come out of his shell!",
     name: "Rachel L.",
     age: "Parent",
+    location: "Connecticut",
     rating: 5,
   },
   {
@@ -57,12 +62,14 @@ const experiences: Experience[] = [
     quote:
       "We have seen so much confidence grow through the program. The coaches make the environment feel positive, focused, and welcoming for families.",
     name: "Parent Name",
+    location: "Pennsylvania",
     rating: 5,
   },
   {
     id: "photo-1",
     type: "photo",
     image: image0903,
+    images: [image0903, image3782],
     caption: "Practice moments that turn into confidence.",
   },
   {

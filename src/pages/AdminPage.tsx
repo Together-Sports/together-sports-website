@@ -22,7 +22,8 @@ import type { Partner } from "@/data/partners";
 import type { TeamPerson, TeamSection, TeamSocialPlatform } from "@/data/team";
 import type {
   OtherLocation,
-  TennisLessonVideo
+  TennisLessonVideo,
+  SportDescription
 } from "@/lib/editable-content-format";
 import { useEditableContent } from "@/lib/editable-content";
 import { normalizeYouTubeEmbedUrl } from "@/lib/youtube";
@@ -209,6 +210,17 @@ const TestimonialFields = ({
             />
           </div>
           <div className="space-y-2">
+            <p className={labelClass}>Location</p>
+            <input
+              className={inputClass}
+              value={item.location || ""}
+              onChange={(event) =>
+                onChange({ ...item, location: event.target.value })
+              }
+              placeholder="New York, NY"
+            />
+          </div>
+          <div className="space-y-2">
             <p className={labelClass}>Star Rating</p>
             <select
               className={inputClass}
@@ -247,12 +259,57 @@ const TestimonialFields = ({
       {type === "photo" ? (
         <>
           <div className="md:col-span-2">
-            <ImageField
-              label="Photo"
-              value={item.image || ""}
-              onChange={(value) => onChange({ ...item, image: value })}
-              onUpload={onUpload}
-            />
+            <p className={labelClass}>Photos</p>
+            <div className="space-y-4">
+              {(item.images && item.images.length > 0
+                ? item.images
+                : item.image
+                ? [item.image]
+                : [])
+                .map((img, idx) => (
+                  <div key={idx} className="border border-border bg-white p-4">
+                    <div className="flex items-center justify-between mb-3">
+                      <p className="font-heading font-bold uppercase text-sm">Photo {idx + 1}</p>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const nextImages = (item.images && [...item.images]) || (item.image ? [item.image] : []);
+                          nextImages.splice(idx, 1);
+                          onChange({ ...item, images: nextImages.length ? nextImages : undefined, image: nextImages[0] });
+                        }}
+                        className="px-3 py-1 border border-border bg-card text-foreground text-xs uppercase"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                    <ImageField
+                      label={`Photo ${idx + 1}`}
+                      value={img || ""}
+                      onChange={(value) => {
+                        const nextImages = (item.images && [...item.images]) || (item.image ? [item.image] : []);
+                        nextImages[idx] = value;
+                        onChange({ ...item, images: nextImages, image: nextImages[0] });
+                      }}
+                      onUpload={onUpload}
+                    />
+                  </div>
+                ))}
+
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const nextImages = (item.images && [...item.images]) || (item.image ? [item.image] : []);
+                    nextImages.push("");
+                    onChange({ ...item, images: nextImages, image: nextImages[0] });
+                  }}
+                  className="px-4 py-3 bg-primary text-white font-heading font-bold uppercase text-sm tracking-wider"
+                >
+                  + Add Image
+                </button>
+                <p className="self-center text-sm text-muted-foreground">Add multiple images to create a slideshow.</p>
+              </div>
+            </div>
           </div>
           <div className="space-y-2 md:col-span-2">
             <p className={labelClass}>Caption</p>
@@ -307,6 +364,7 @@ const AdminPage = () => {
     tennisLessonVideos,
     impactMetricsSection,
     otherLocationsSection,
+    sportDescriptions,
     setBlogPosts,
     setExperiences,
     setPartners,
@@ -314,6 +372,7 @@ const AdminPage = () => {
     setTennisLessonVideos,
     setImpactMetricsSection,
     setOtherLocationsSection,
+    setSportDescriptions,
     resetAll,
     saveContent,
     refreshContent,
@@ -525,6 +584,15 @@ const AdminPage = () => {
         item.id === id ? { ...item, [field]: value } : item
       )
     }));
+  };
+
+  const updateSportDescription = (
+    id: string,
+    next: SportDescription
+  ) => {
+    setSportDescriptions((current) =>
+      current.map((item) => (item.id === id ? next : item))
+    );
   };
 
   const hasInvalidTennisLessonVideos = tennisLessonVideos.some(
@@ -1052,6 +1120,7 @@ const AdminPage = () => {
                         sport: "Tennis",
                         name: "New Name",
                         age: "16",
+                        location: "",
                         quote: "New quote",
                         rating: 5
                       }
@@ -1071,6 +1140,7 @@ const AdminPage = () => {
                         type: "parent",
                         sport: "Tennis",
                         name: "Parent Name",
+                        location: "",
                         quote: "Parent quote",
                         rating: 5
                       }
@@ -1161,43 +1231,20 @@ const AdminPage = () => {
                     Sports Content
                   </p>
                   <p className="text-muted-foreground text-sm">
-                    Use this section for editable sport-page content. Tennis
-                    lesson videos live here now, and the other sports can be
-                    added here later.
+                    Edit sport descriptions, taglines, and schedules. Changes appear on the sport detail pages.
                   </p>
                 </div>
               </div>
 
               <div className="border border-border bg-white p-5 md:p-6 space-y-5">
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <div>
-                    <p className="font-heading text-2xl font-black uppercase">
-                      Tennis How Lessons Work
-                    </p>
-                    <p className="text-muted-foreground text-sm">
-                      Add up to 2 YouTube videos for the tennis page. If none
-                      are saved, the section stays hidden.
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setTennisLessonVideos((current) =>
-                        [
-                          ...current,
-                          {
-                            id: createId("lesson-video"),
-                            title: "Lesson Video",
-                            youtubeUrl: ""
-                          }
-                        ].slice(0, 2)
-                      )
-                    }
-                    disabled={tennisLessonVideos.length >= 2}
-                    className="px-4 py-3 border border-border bg-white text-foreground font-heading font-bold uppercase text-sm tracking-wider disabled:opacity-60"
-                  >
-                    + Add Lesson Video
-                  </button>
+                <div>
+                  <p className="font-heading text-2xl font-black uppercase">
+                    Tennis How Lessons Work
+                  </p>
+                  <p className="text-muted-foreground text-sm">
+                    Add up to 2 YouTube videos for the tennis page. If none
+                    are saved, the section stays hidden.
+                  </p>
                 </div>
 
                 <div className="space-y-4">
@@ -1305,7 +1352,134 @@ const AdminPage = () => {
                       </div>
                     );
                   })}
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setTennisLessonVideos((current) =>
+                        [
+                          ...current,
+                          {
+                            id: createId("lesson-video"),
+                            title: "Lesson Video",
+                            youtubeUrl: ""
+                          }
+                        ].slice(0, 2)
+                      )
+                    }
+                    disabled={tennisLessonVideos.length >= 2}
+                    className="px-4 py-3 border border-border bg-white text-foreground font-heading font-bold uppercase text-sm tracking-wider disabled:opacity-60"
+                  >
+                    + Add Lesson Video
+                  </button>
                 </div>
+              </div>
+            </EditorCard>
+
+            <EditorCard>
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <p className="font-heading text-2xl font-black uppercase">
+                    Sport Descriptions
+                  </p>
+                  <p className="text-muted-foreground text-sm">
+                    Edit each sport's tagline, description, and schedule times.
+                  </p>
+                </div>
+              </div>
+
+              <div className="space-y-6">
+                {sportDescriptions.map((sport) => (
+                  <div
+                    key={sport.id}
+                    className="border border-border bg-white p-5 md:p-6 space-y-4"
+                  >
+                    <p className="font-heading text-xl font-black uppercase">
+                      {sport.name}
+                    </p>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <p className={labelClass}>Tagline</p>
+                        <input
+                          className={inputClass}
+                          value={sport.tagline}
+                          onChange={(event) =>
+                            updateSportDescription(sport.id, {
+                              ...sport,
+                              tagline: event.target.value
+                            })
+                          }
+                          placeholder="Short inspirational phrase"
+                        />
+                      </div>
+
+                      <div className="space-y-2 md:col-span-2">
+                        <p className={labelClass}>Description</p>
+                        <textarea
+                          className={textareaClass}
+                          value={sport.description}
+                          onChange={(event) =>
+                            updateSportDescription(sport.id, {
+                              ...sport,
+                              description: event.target.value
+                            })
+                          }
+                          placeholder="Full program description"
+                        />
+                      </div>
+
+                      <div className="space-y-2 md:col-span-2">
+                        <p className={labelClass}>Schedule</p>
+                        <div className="space-y-2">
+                          {sport.schedule.map((time, index) => (
+                            <div key={index} className="flex gap-2">
+                              <input
+                                className={inputClass}
+                                value={time}
+                                onChange={(event) => {
+                                  const newSchedule = [...sport.schedule];
+                                  newSchedule[index] = event.target.value;
+                                  updateSportDescription(sport.id, {
+                                    ...sport,
+                                    schedule: newSchedule
+                                  });
+                                }}
+                                placeholder="e.g., Monday & Wednesday: 4:00-6:00 PM"
+                              />
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  updateSportDescription(sport.id, {
+                                    ...sport,
+                                    schedule: sport.schedule.filter(
+                                      (_, i) => i !== index
+                                    )
+                                  });
+                                }}
+                                className="px-4 py-2 border border-border bg-card text-foreground font-heading font-bold uppercase text-xs tracking-wider whitespace-nowrap"
+                              >
+                                Remove
+                              </button>
+                            </div>
+                          ))}
+                          <button
+                            type="button"
+                            onClick={() => {
+                              updateSportDescription(sport.id, {
+                                ...sport,
+                                schedule: [...sport.schedule, ""]
+                              });
+                            }}
+                            className="px-4 py-2 border border-border bg-white text-foreground font-heading font-bold uppercase text-xs tracking-wider"
+                          >
+                            + Add Time
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </EditorCard>
           </TabsContent>

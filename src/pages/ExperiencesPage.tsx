@@ -1,5 +1,7 @@
 import { motion } from "framer-motion";
+import { MapPin } from "lucide-react";
 import ScrollReveal from "@/components/ScrollReveal";
+import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
 import { useEditableContent } from "@/lib/editable-content";
 import type { Experience } from "@/data/experiences";
 
@@ -34,6 +36,12 @@ const QuoteCard = ({ item, index }: { item: Experience; index: number }) => {
         <p className="text-muted-foreground font-heading font-bold uppercase">
           {item.age ? `- ${item.name}, ${item.age}` : `- ${item.name}`}
         </p>
+        {item.location ? (
+          <p className="mt-2 inline-flex items-center justify-center gap-2 text-xs font-body font-semibold uppercase tracking-[0.18em] text-muted-foreground/80">
+            <MapPin className="h-3.5 w-3.5 text-[#f6a15c]" strokeWidth={2.5} />
+            <span>{item.location}</span>
+          </p>
+        ) : null}
         {item.rating ? (
           <p className="mt-3 font-heading text-lg tracking-[0.22em] text-[#f6a15c]">
             {renderStars(item.rating)}
@@ -48,13 +56,36 @@ const PhotoCard = ({ item, index }: { item: Experience; index: number }) => {
   return (
     <ScrollReveal direction="scale" delay={index * 0.12}>
       <div className="text-center">
-        <img
-          src={item.image || ""}
-          alt={item.caption || "Experience photo"}
-          className="w-full h-[300px] md:h-[350px] object-cover"
-          loading="lazy"
-          decoding="async"
-        />
+        {item.images && item.images.length > 1 ? (
+          <div className="relative">
+            <Carousel className="">
+              <CarouselContent className="flex">
+                {item.images.map((src, idx) => (
+                  <CarouselItem key={idx} className="h-[300px] md:h-[350px]">
+                    <img
+                      src={src}
+                      alt={item.caption || `Experience photo ${idx + 1}`}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="" />
+              <CarouselNext className="" />
+            </Carousel>
+          </div>
+        ) : (
+          <img
+            src={item.image || ""}
+            alt={item.caption || "Experience photo"}
+            className="w-full h-[300px] md:h-[350px] object-cover"
+            loading="lazy"
+            decoding="async"
+          />
+        )}
+
         {item.caption ? (
           <p className="mt-3 text-muted-foreground text-sm font-body italic">
             {item.caption}
@@ -68,14 +99,13 @@ const PhotoCard = ({ item, index }: { item: Experience; index: number }) => {
 const VideoCard = ({ item, index }: { item: Experience; index: number }) => (
   <ScrollReveal direction="up" delay={index * 0.15}>
     <div className="border border-border bg-background overflow-hidden">
-      <div className="relative w-full" style={{ paddingBottom: "56.25%" }}>
+      <div className="relative w-full aspect-video">
         <iframe
           src={item.videoUrl}
           title={item.videoTitle || "Video"}
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
           className="absolute inset-0 w-full h-full"
-          loading="lazy"
         />
       </div>
       {item.videoTitle ? (
@@ -139,21 +169,6 @@ const ExperiencesPage = () => {
           </div>
         </section>
       ) : null}
-
-      <section className="py-20 md:py-28">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <ScrollReveal>
-            <h2 className="font-heading text-5xl md:text-7xl font-black uppercase mb-12 text-center">
-              In <span className="brush-underline">Their</span> Words
-            </h2>
-          </ScrollReveal>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {quotes.map((q, i) => (
-              <QuoteCard key={q.id} item={q} index={i} />
-            ))}
-          </div>
-        </div>
-      </section>
 
       {parentQuotes.length > 0 ? (
         <section className="py-20 md:py-28 bg-white">

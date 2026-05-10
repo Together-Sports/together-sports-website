@@ -33,6 +33,14 @@ export type OtherLocationsSection = {
   items: OtherLocation[];
 };
 
+export type SportDescription = {
+  id: string;
+  name: string;
+  tagline: string;
+  description: string;
+  schedule: string[];
+};
+
 export type EditableContentState = {
   blogPosts: BlogPost[];
   experiences: Experience[];
@@ -41,6 +49,7 @@ export type EditableContentState = {
   tennisLessonVideos: TennisLessonVideo[];
   impactMetricsSection: ImpactMetricsSection;
   otherLocationsSection: OtherLocationsSection;
+  sportDescriptions: SportDescription[];
 };
 
 export type PortableEditableContentState = EditableContentState;
@@ -99,6 +108,7 @@ export const serializeEditableContentState = (
   experiences: content.experiences.map((item) => ({
     ...item,
     image: toPortableMediaValue(item.image),
+    images: Array.isArray(item.images) ? item.images.map((src) => toPortableMediaValue(src)) : undefined,
   })),
   partners: content.partners.map((item) => ({
     ...item,
@@ -126,6 +136,9 @@ export const serializeEditableContentState = (
       ? content.otherLocationsSection.items.map((item) => ({ ...item }))
       : [],
   },
+  sportDescriptions: Array.isArray(content.sportDescriptions)
+    ? content.sportDescriptions.map((item) => ({ ...item }))
+    : [],
 });
 
 export const hydrateEditableContentState = (
@@ -138,6 +151,7 @@ export const hydrateEditableContentState = (
   experiences: content.experiences.map((item) => ({
     ...item,
     image: fromPortableMediaValue(item.image),
+    images: Array.isArray(item.images) ? item.images.map((src) => fromPortableMediaValue(src)) : undefined,
   })),
   partners: content.partners.map((item) => ({
     ...item,
@@ -171,6 +185,9 @@ export const hydrateEditableContentState = (
           title: "Other Locations",
           items: [],
         },
+  sportDescriptions: Array.isArray(content.sportDescriptions)
+    ? content.sportDescriptions.map((item) => ({ ...item }))
+    : [],
 });
 
 const hasContentShape = (value: unknown): value is PortableEditableContentState =>
@@ -194,6 +211,7 @@ export const parseEditableContentImport = (input: unknown): EditableContentState
         title: "Other Locations",
         items: [],
       },
+      sportDescriptions: [],
     });
   }
 
@@ -224,6 +242,7 @@ export const parseEditableContentImport = (input: unknown): EditableContentState
         title: "Other Locations",
         items: [],
       },
+      sportDescriptions: [],
     });
   }
 

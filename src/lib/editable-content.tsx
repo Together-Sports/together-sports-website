@@ -24,6 +24,7 @@ import {
   type ImpactMetricsSection,
   type OtherLocationsSection,
   type TennisLessonVideo,
+  type SportDescription,
 } from "@/lib/editable-content-format";
 import {
   isSupabaseConfigured,
@@ -41,6 +42,7 @@ type EditableContentContextValue = EditableContentState & {
   setTennisLessonVideos: Dispatch<SetStateAction<TennisLessonVideo[]>>;
   setImpactMetricsSection: Dispatch<SetStateAction<ImpactMetricsSection>>;
   setOtherLocationsSection: Dispatch<SetStateAction<OtherLocationsSection>>;
+  setSportDescriptions: Dispatch<SetStateAction<SportDescription[]>>;
   resetAll: () => void;
   saveContent: () => Promise<void>;
   refreshContent: () => Promise<void>;
@@ -196,6 +198,7 @@ export const EditableContentProvider = ({ children }: { children: ReactNode }) =
   const [tennisLessonVideos, setTennisLessonVideos] = useState<TennisLessonVideo[]>(() => defaultContent.tennisLessonVideos);
   const [impactMetricsSection, setImpactMetricsSection] = useState<ImpactMetricsSection>(() => defaultContent.impactMetricsSection);
   const [otherLocationsSection, setOtherLocationsSection] = useState<OtherLocationsSection>(() => defaultContent.otherLocationsSection);
+  const [sportDescriptions, setSportDescriptions] = useState<SportDescription[]>(() => defaultContent.sportDescriptions);
   const [lastSavedSnapshot, setLastSavedSnapshot] = useState(defaultSnapshot);
   const [isLoadingContent, setIsLoadingContent] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -210,6 +213,7 @@ export const EditableContentProvider = ({ children }: { children: ReactNode }) =
     setTennisLessonVideos(next.tennisLessonVideos);
     setImpactMetricsSection(next.impactMetricsSection);
     setOtherLocationsSection(next.otherLocationsSection);
+    setSportDescriptions(next.sportDescriptions);
   };
 
   const savePreviewDraft = () => {
@@ -225,6 +229,7 @@ export const EditableContentProvider = ({ children }: { children: ReactNode }) =
       tennisLessonVideos,
       impactMetricsSection,
       otherLocationsSection,
+      sportDescriptions,
     });
 
     window.localStorage.setItem(PREVIEW_DRAFT_STORAGE_KEY, JSON.stringify(previewContent));
@@ -357,8 +362,9 @@ export const EditableContentProvider = ({ children }: { children: ReactNode }) =
         tennisLessonVideos,
         impactMetricsSection,
         otherLocationsSection,
+        sportDescriptions,
       }),
-    [blogPosts, experiences, partners, teamSections, tennisLessonVideos, impactMetricsSection, otherLocationsSection],
+    [blogPosts, experiences, partners, teamSections, tennisLessonVideos, impactMetricsSection, otherLocationsSection, sportDescriptions],
   );
   const hasUnsavedChanges = currentSnapshot !== lastSavedSnapshot;
 
@@ -372,12 +378,14 @@ export const EditableContentProvider = ({ children }: { children: ReactNode }) =
       tennisLessonVideos,
       impactMetricsSection,
       otherLocationsSection,
+      sportDescriptions,
       setExperiences,
       setPartners,
       setTeamSections,
       setTennisLessonVideos,
       setImpactMetricsSection,
       setOtherLocationsSection,
+      setSportDescriptions,
       resetAll: () => {
         const defaults = createDefaultContent();
         applyContent(defaults);
@@ -403,6 +411,7 @@ export const EditableContentProvider = ({ children }: { children: ReactNode }) =
             tennisLessonVideos,
             impactMetricsSection,
             otherLocationsSection,
+            sportDescriptions,
           });
           const { error } = await supabase.from("site_content").upsert(
             {
@@ -465,6 +474,7 @@ export const EditableContentProvider = ({ children }: { children: ReactNode }) =
           tennisLessonVideos,
           impactMetricsSection,
           otherLocationsSection,
+          sportDescriptions,
         }),
       importContent: (input) => {
         const next = parseEditableContentImport(input);
@@ -515,6 +525,7 @@ export const EditableContentProvider = ({ children }: { children: ReactNode }) =
       tennisLessonVideos,
       impactMetricsSection,
       otherLocationsSection,
+      sportDescriptions,
       currentSnapshot,
       hasUnsavedChanges,
       isLoadingContent,

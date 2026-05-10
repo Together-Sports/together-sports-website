@@ -24,6 +24,7 @@ const editableContentSeed: PortableEditableContentState = {
       "quote": "My 4-year-old had her first tennis lesson with Coach Harry, and it could not have gone better. He met her where she was, encouraging, kind, and full of energy. Together Tennis makes tennis feel welcoming for families at every level.",
       "name": "Leigh H.",
       "age": "Parent",
+      "location": "New York",
       "rating": 5
     },
     {
@@ -33,6 +34,7 @@ const editableContentSeed: PortableEditableContentState = {
       "quote": "Zoe had a great experience practicing tennis with Harry. He did an excellent job teaching her techniques to improve her game. I would highly recommend Harry to any students who are looking to become better tennis players.",
       "name": "Michael B.",
       "age": "Parent",
+      "location": "New Jersey",
       "rating": 5
     },
     {
@@ -42,6 +44,7 @@ const editableContentSeed: PortableEditableContentState = {
       "quote": "Theo has always been quite shy, especially in new environments where he would normally stay close to me. Seeing him open up with you has been truly special, thank you for helping him come out of his shell!",
       "name": "Rachel L.",
       "age": "Parent",
+      "location": "Connecticut",
       "rating": 5
     },
     {
@@ -50,6 +53,7 @@ const editableContentSeed: PortableEditableContentState = {
       "sport": "Basketball",
       "quote": "We have seen so much confidence grow through the program. The coaches make the environment feel positive, focused, and welcoming for families.",
       "name": "Parent Name",
+      "location": "Pennsylvania",
       "rating": 5
     },
     {
@@ -221,7 +225,60 @@ const editableContentSeed: PortableEditableContentState = {
   "otherLocationsSection": {
     "title": "Other Locations",
     "items": []
-  }
+  },
+  "sportDescriptions": [
+    {
+      "id": "tennis",
+      "name": "Tennis",
+      "tagline": "Every serve is a fresh start.",
+      "description": "Our tennis program provides free coaching, equipment, and court time to youth aged 8-18. From beginners to competitive players, we build skills and confidence through structured lessons and match play.",
+      "schedule": [
+        "Monday & Wednesday: 4:00-6:00 PM",
+        "Saturday: 9:00 AM-12:00 PM",
+        "Summer Intensive: June-August"
+      ]
+    },
+    {
+      "id": "basketball",
+      "name": "Basketball",
+      "tagline": "The court is where leaders are made.",
+      "description": "Our basketball program teaches fundamentals, teamwork, and game strategy. Open to all skill levels, we focus on building confidence through competitive play and mentorship.",
+      "schedule": [
+        "Tuesday & Thursday: 4:00-6:00 PM",
+        "Saturday: 1:00-4:00 PM"
+      ]
+    },
+    {
+      "id": "football",
+      "name": "Football",
+      "tagline": "Every play counts. Every player matters.",
+      "description": "Our football program emphasizes discipline, teamwork, and sportsmanship. We provide equipment and coaching for flag and tackle football across multiple age groups.",
+      "schedule": [
+        "Monday & Wednesday: 4:30-6:30 PM",
+        "Saturday: 10:00 AM-1:00 PM"
+      ]
+    },
+    {
+      "id": "soccer",
+      "name": "Soccer",
+      "tagline": "One touch can change the game.",
+      "description": "Our soccer program builds confidence, agility, and team-first habits through skill work, small-sided games, and supportive coaching for every level.",
+      "schedule": [
+        "Tuesday & Thursday: 4:30-6:30 PM",
+        "Saturday: 9:00 AM-12:00 PM"
+      ]
+    },
+    {
+      "id": "golf",
+      "name": "Golf",
+      "tagline": "The long game starts here.",
+      "description": "Our golf program introduces youth to the sport of patience and precision. With access to courses and professional instruction, we open doors that many thought were closed.",
+      "schedule": [
+        "Wednesday: 3:30-5:30 PM",
+        "Saturday: 8:00-11:00 AM"
+      ]
+    }
+  ]
 };
 
 export default editableContentSeed;

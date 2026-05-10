@@ -16,62 +16,6 @@ import golfAction from "@/assets/golf-action.jpg";
 import togetherSoccer from "@/assets/TogetherSoccer.webp";
 import secondServe from "@/assets/second-serve.jpg";
 
-const sportData: Record<
-  string,
-  {
-    name: string;
-    image: string;
-    tagline: string;
-    description: string;
-    schedule: string[];
-  }
-> = {
-  tennis: {
-    name: "Tennis",
-    image: tennisAction,
-    tagline: "Every serve is a fresh start.",
-    description:
-      "Our tennis program provides free coaching, equipment, and court time to youth aged 8-18. From beginners to competitive players, we build skills and confidence through structured lessons and match play.",
-    schedule: [
-      "Monday & Wednesday: 4:00-6:00 PM",
-      "Saturday: 9:00 AM-12:00 PM",
-      "Summer Intensive: June-August"
-    ]
-  },
-  basketball: {
-    name: "Basketball",
-    image: basketballAction,
-    tagline: "The court is where leaders are made.",
-    description:
-      "Our basketball program teaches fundamentals, teamwork, and game strategy. Open to all skill levels, we focus on building confidence through competitive play and mentorship.",
-    schedule: ["Tuesday & Thursday: 4:00-6:00 PM", "Saturday: 1:00-4:00 PM"]
-  },
-  football: {
-    name: "Football",
-    image: footballAction,
-    tagline: "Every play counts. Every player matters.",
-    description:
-      "Our football program emphasizes discipline, teamwork, and sportsmanship. We provide equipment and coaching for flag and tackle football across multiple age groups.",
-    schedule: ["Monday & Wednesday: 4:30-6:30 PM", "Saturday: 10:00 AM-1:00 PM"]
-  },
-  soccer: {
-    name: "Soccer",
-    image: togetherSoccer,
-    tagline: "One touch can change the game.",
-    description:
-      "Our soccer program builds confidence, agility, and team-first habits through skill work, small-sided games, and supportive coaching for every level.",
-    schedule: ["Tuesday & Thursday: 4:30-6:30 PM", "Saturday: 9:00 AM-12:00 PM"]
-  },
-  golf: {
-    name: "Golf",
-    image: golfAction,
-    tagline: "The long game starts here.",
-    description:
-      "Our golf program introduces youth to the sport of patience and precision. With access to courses and professional instruction, we open doors that many thought were closed.",
-    schedule: ["Wednesday: 3:30-5:30 PM", "Saturday: 8:00-11:00 AM"]
-  }
-};
-
 const sportTheme: Record<
   string,
   {
@@ -192,8 +136,30 @@ const fetchUstaSessionsDirect = async (
 
 const SportDetailPage = () => {
   const { sport } = useParams<{ sport: string }>();
-  const { tennisLessonVideos } = useEditableContent();
-  const data = sportData[sport || ""];
+  const { tennisLessonVideos, sportDescriptions } = useEditableContent();
+  
+  const sportImageMap: Record<string, string> = {
+    tennis: tennisAction,
+    basketball: basketballAction,
+    football: footballAction,
+    soccer: togetherSoccer,
+    golf: golfAction
+  };
+
+  const sportDescription = sportDescriptions.find(
+    (s) => s.id === (sport || "").toLowerCase()
+  );
+
+  const data = sportDescription
+    ? {
+        name: sportDescription.name,
+        image: sportImageMap[sport || ""] || tennisAction,
+        tagline: sportDescription.tagline,
+        description: sportDescription.description,
+        schedule: sportDescription.schedule
+      }
+    : null;
+
   const [tennisSessions, setTennisSessions] = useState<TennisSession[]>([]);
   const [sessionsLoading, setSessionsLoading] = useState(false);
   const [sessionsError, setSessionsError] = useState<string | null>(null);
