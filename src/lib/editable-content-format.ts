@@ -41,6 +41,27 @@ export type SportDescription = {
   schedule: string[];
 };
 
+export type SiteNavItem = {
+  label: string;
+  path: string;
+  dropdown?: { label: string; path: string; color?: string }[];
+};
+
+export type SiteValue = {
+  title: string;
+  desc: string;
+  bg?: string;
+};
+
+export type SiteText = {
+  navItems: SiteNavItem[];
+  hero: { lines: string[]; subtitle: string; ctaPrimary: string; ctaSecondary: string };
+  mission: string[];
+  values: SiteValue[];
+  sportsSection: { title: string; subtitle: string };
+  testimonials: { title: string; subtitle: string };
+};
+
 export type EditableContentState = {
   blogPosts: BlogPost[];
   experiences: Experience[];
@@ -50,6 +71,7 @@ export type EditableContentState = {
   impactMetricsSection: ImpactMetricsSection;
   otherLocationsSection: OtherLocationsSection;
   sportDescriptions: SportDescription[];
+  siteText: SiteText;
 };
 
 export type PortableEditableContentState = EditableContentState;
@@ -139,6 +161,14 @@ export const serializeEditableContentState = (
   sportDescriptions: Array.isArray(content.sportDescriptions)
     ? content.sportDescriptions.map((item) => ({ ...item }))
     : [],
+  siteText: content.siteText ? { ...content.siteText } : {
+    navItems: [],
+    hero: { lines: [], subtitle: "", ctaPrimary: "", ctaSecondary: "" },
+    mission: [],
+    values: [],
+    sportsSection: { title: "Our Sports", subtitle: "" },
+    testimonials: { title: "Testimonials", subtitle: "" }
+  },
 });
 
 export const hydrateEditableContentState = (
@@ -188,6 +218,36 @@ export const hydrateEditableContentState = (
   sportDescriptions: Array.isArray(content.sportDescriptions)
     ? content.sportDescriptions.map((item) => ({ ...item }))
     : [],
+  siteText:
+    content.siteText && isPlainObject(content.siteText)
+      ? {
+          navItems: Array.isArray((content.siteText as any).navItems)
+            ? (content.siteText as any).navItems.map((n: any) => ({ ...n }))
+            : [],
+          hero: isPlainObject((content.siteText as any).hero)
+            ? { ...((content.siteText as any).hero) }
+            : { lines: [], subtitle: "", ctaPrimary: "", ctaSecondary: "" },
+          mission: Array.isArray((content.siteText as any).mission)
+            ? (content.siteText as any).mission.map((p: any) => String(p))
+            : [],
+          values: Array.isArray((content.siteText as any).values)
+            ? (content.siteText as any).values.map((v: any) => ({ ...v }))
+            : [],
+          sportsSection: isPlainObject((content.siteText as any).sportsSection)
+            ? { ...((content.siteText as any).sportsSection) }
+            : { title: "Our Sports", subtitle: "" },
+          testimonials: isPlainObject((content.siteText as any).testimonials)
+            ? { ...((content.siteText as any).testimonials) }
+            : { title: "Testimonials", subtitle: "" }
+        }
+      : {
+          navItems: [],
+          hero: { lines: [], subtitle: "", ctaPrimary: "", ctaSecondary: "" },
+          mission: [],
+          values: [],
+          sportsSection: { title: "Our Sports", subtitle: "" },
+          testimonials: { title: "Testimonials", subtitle: "" }
+        },
 });
 
 const hasContentShape = (value: unknown): value is PortableEditableContentState =>

@@ -3,8 +3,9 @@ import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import headerLogo from "@/assets/headerlogo.svg";
+import { useEditableContent } from "@/lib/editable-content";
 
-const navItems = [
+const defaultNavItems = [
   {
     label: "Home",
     path: "/",
@@ -27,6 +28,8 @@ const navItems = [
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const { siteText } = useEditableContent();
+  const navItems = siteText?.navItems?.length ? siteText.navItems : defaultNavItems;
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-primary border-b border-primary/80">
@@ -38,7 +41,7 @@ const Navbar = () => {
               alt="Together Sports logo"
               loading="eager"
               decoding="async"
-              fetchPriority="high"
+              fetchpriority="high"
               className="relative -translate-y-0.5 h-7 w-auto shrink-0 sm:h-8 md:h-10"
             />
             <span className="flex items-center font-heading text-lg sm:text-2xl md:text-3xl font-black uppercase tracking-[0.08em] sm:tracking-wider leading-none text-[#ffffff]">

@@ -47,7 +47,7 @@ const PartnersPage = () => {
                       alt={partner.name}
                       loading={groupIndex === 0 ? "eager" : "lazy"}
                       decoding="async"
-                      fetchPriority={groupIndex === 0 ? "high" : "low"}
+                      fetchpriority={groupIndex === 0 ? "high" : "low"}
                       className="max-w-full max-h-full object-contain"
                     />
                   </a>

@@ -279,6 +279,46 @@ const editableContentSeed: PortableEditableContentState = {
       ]
     }
   ]
+  ,
+  "siteText": {
+    "navItems": [
+      {
+        "label": "Home",
+        "path": "/",
+        "dropdown": [
+          { "label": "Tennis", "path": "/sports/tennis", "color": "#87cb4a" },
+          { "label": "Basketball", "path": "/sports/basketball", "color": "#f6a15c" },
+          { "label": "Football", "path": "/sports/football", "color": "#84a6ff" },
+          { "label": "Soccer", "path": "/sports/soccer", "color": "#39b870" },
+          { "label": "Golf", "path": "/sports/golf", "color": "#ab9bfa" }
+        ]
+      },
+      { "label": "Sports", "path": "/sports" },
+      { "label": "Team", "path": "/team" },
+      { "label": "Experiences", "path": "/experiences" },
+      { "label": "Blog", "path": "/blog" },
+      { "label": "Contact", "path": "/contact" },
+      { "label": "Partners", "path": "/partners" }
+    ],
+    "hero": {
+      "lines": ["Play Loud.", "Build Strong."],
+      "subtitle": "Together Sports is a 501(c)(3) nonprofit empowering youth through sports, mentorship, and community one game at a time.",
+      "ctaPrimary": "Our Sports",
+      "ctaSecondary": "Donate Now"
+    },
+    "mission": [
+      "Together Sports is a nonprofit dedicated to building stronger communities through athletics. We provide accessible sports programs and create opportunities for youth to connect, grow, and thrive.",
+      "We believe every kid deserves a chance to play. Through free sports programs, mentorship, and community building, we're creating the next generation of leaders — on and off the field.",
+      "From tennis courts to basketball hoops, from football fields to golf courses — we meet kids where they are and take them where they want to go."
+    ],
+    "values": [
+      { "title": "Access", "desc": "Every kid plays, regardless of background or income.", "bg": "#f6a15c" },
+      { "title": "Growth", "desc": "Sports build character, discipline, and confidence.", "bg": "#87cb4a" },
+      { "title": "Community", "desc": "We rise together — athletes, mentors, families.", "bg": "#ab9bfa" }
+    ],
+    "sportsSection": { "title": "Our Sports", "subtitle": "Explore all four Together Sports programs in one place." },
+    "testimonials": { "title": "Testimonials", "subtitle": "The little stories that show the big picture: connection, encouragement, and growth." }
+  }
 };
 
 export default editableContentSeed;

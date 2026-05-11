@@ -407,10 +407,13 @@ const AdminPage = () => {
     isSupabaseConfigured,
     isAuthenticated,
     authLoading,
+    siteText,
+    setSiteText,
     userEmail,
     signInWithMagicLink,
     signOut
   } = useEditableContent();
+  
 
   const [activeTab, setActiveTab] = useState("testimonials");
   const [statusMessage, setStatusMessage] = useState("");
@@ -830,6 +833,13 @@ const AdminPage = () => {
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="h-auto flex-wrap justify-start gap-2 bg-transparent p-0 mb-8">
             <TabsTrigger
+              value="site"
+              className="px-4 py-3 data-[state=active]:bg-primary data-[state=active]:text-white"
+            >
+              <FileText size={16} className="mr-2" />
+              Site Copy
+            </TabsTrigger>
+            <TabsTrigger
               value="home"
               className="px-4 py-3 data-[state=active]:bg-primary data-[state=active]:text-white"
             >
@@ -873,6 +883,333 @@ const AdminPage = () => {
             </TabsTrigger>
           </TabsList>
 
+          <TabsContent value="site">
+                <div className="space-y-6">
+                  <EditorCard>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="font-heading text-2xl font-black uppercase">Hero Copy</p>
+                        <p className="text-muted-foreground text-sm">Top-of-page hero lines and CTAs.</p>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <p className={labelClass}>Hero Line 1</p>
+                        <input
+                          className={inputClass}
+                          value={siteText?.hero?.lines?.[0] ?? ""}
+                          onChange={(e) =>
+                            setSiteText((current) => ({
+                              ...current,
+                              hero: {
+                                ...(current.hero || {}),
+                                lines: [e.target.value, current.hero?.lines?.[1] ?? ""]
+                              }
+                            }))
+                          }
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <p className={labelClass}>Hero Line 2</p>
+                        <input
+                          className={inputClass}
+                          value={siteText?.hero?.lines?.[1] ?? ""}
+                          onChange={(e) =>
+                            setSiteText((current) => ({
+                              ...current,
+                              hero: {
+                                ...(current.hero || {}),
+                                lines: [current.hero?.lines?.[0] ?? "", e.target.value]
+                              }
+                            }))
+                          }
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <p className={labelClass}>Hero Subtitle</p>
+                      <textarea
+                        className={textareaClass}
+                        value={siteText?.hero?.subtitle ?? ""}
+                        onChange={(e) =>
+                          setSiteText((current) => ({
+                            ...current,
+                            hero: { ...(current.hero || {}), subtitle: e.target.value }
+                          }))
+                        }
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <p className={labelClass}>Primary CTA Label</p>
+                        <input
+                          className={inputClass}
+                          value={siteText?.hero?.ctaPrimary ?? ""}
+                          onChange={(e) =>
+                            setSiteText((current) => ({
+                              ...current,
+                              hero: { ...(current.hero || {}), ctaPrimary: e.target.value }
+                            }))
+                          }
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <p className={labelClass}>Secondary CTA Label</p>
+                        <input
+                          className={inputClass}
+                          value={siteText?.hero?.ctaSecondary ?? ""}
+                          onChange={(e) =>
+                            setSiteText((current) => ({
+                              ...current,
+                              hero: { ...(current.hero || {}), ctaSecondary: e.target.value }
+                            }))
+                          }
+                        />
+                      </div>
+                    </div>
+                  </EditorCard>
+
+                  <EditorCard>
+                    <p className="font-heading text-2xl font-black uppercase">Mission Paragraphs</p>
+                    <p className="text-muted-foreground text-sm">Edit top mission paragraphs shown on the home page.</p>
+                    <div className="space-y-4">
+                      {(siteText?.mission ?? []).map((p, idx) => (
+                        <div key={`mission-${idx}`} className="space-y-2">
+                          <p className={labelClass}>Paragraph {idx + 1}</p>
+                          <textarea
+                            className={textareaClass}
+                            value={p}
+                            onChange={(e) =>
+                              setSiteText((current) => {
+                                const next = [...(current.mission || [])];
+                                next[idx] = e.target.value;
+                                return { ...current, mission: next };
+                              })
+                            }
+                          />
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setSiteText((current) => ({
+                                ...current,
+                                mission: (current.mission || []).filter((_, i) => i !== idx)
+                              }))
+                            }
+                            className="px-3 py-2 border border-border bg-card text-foreground text-sm"
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      ))}
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setSiteText((current) => ({
+                            ...current,
+                            mission: [...(current.mission || []), "New paragraph"]
+                          }))
+                        }
+                        className="px-4 py-3 bg-primary text-white font-heading font-bold uppercase text-sm tracking-wider"
+                      >
+                        + Add Paragraph
+                      </button>
+                    </div>
+                  </EditorCard>
+
+                  <EditorCard>
+                    <p className="font-heading text-2xl font-black uppercase">Values / What We Stand For</p>
+                    <p className="text-muted-foreground text-sm">Edit the three values shown on the home page.</p>
+                    <div className="space-y-4">
+                      {(siteText?.values ?? []).map((v, idx) => (
+                        <div key={`value-${idx}`} className="border border-border bg-white p-4">
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <div className="space-y-2">
+                              <p className={labelClass}>Title</p>
+                              <input
+                                className={inputClass}
+                                value={v.title}
+                                onChange={(e) =>
+                                  setSiteText((current) => {
+                                    const next = [...(current.values || [])];
+                                    next[idx] = { ...next[idx], title: e.target.value };
+                                    return { ...current, values: next };
+                                  })
+                                }
+                              />
+                            </div>
+                            <div className="space-y-2 md:col-span-2">
+                              <p className={labelClass}>Description</p>
+                              <input
+                                className={inputClass}
+                                value={v.desc}
+                                onChange={(e) =>
+                                  setSiteText((current) => {
+                                    const next = [...(current.values || [])];
+                                    next[idx] = { ...next[idx], desc: e.target.value };
+                                    return { ...current, values: next };
+                                  })
+                                }
+                              />
+                            </div>
+                          </div>
+                          <div className="mt-3 flex items-center gap-3">
+                            <p className="text-sm text-muted-foreground">Background color (CSS class or color):</p>
+                            <input
+                              className={inputClass}
+                              value={v.bg ?? ""}
+                              onChange={(e) =>
+                                setSiteText((current) => {
+                                  const next = [...(current.values || [])];
+                                  next[idx] = { ...next[idx], bg: e.target.value };
+                                  return { ...current, values: next };
+                                })
+                              }
+                            />
+                            <button
+                              type="button"
+                              onClick={() =>
+                                setSiteText((current) => ({
+                                  ...current,
+                                  values: (current.values || []).filter((_, i) => i !== idx)
+                                }))
+                              }
+                              className="px-3 py-2 border border-border bg-card text-foreground text-sm"
+                            >
+                              Remove
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setSiteText((current) => ({
+                            ...current,
+                            values: [...(current.values || []), { title: "New", desc: "", bg: "" }]
+                          }))
+                        }
+                        className="px-4 py-3 bg-primary text-white font-heading font-bold uppercase text-sm tracking-wider"
+                      >
+                        + Add Value
+                      </button>
+                    </div>
+                  </EditorCard>
+
+                  <EditorCard>
+                    <p className="font-heading text-2xl font-black uppercase">Sports & Testimonials</p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <p className={labelClass}>Sports Section Title</p>
+                        <input
+                          className={inputClass}
+                          value={siteText?.sportsSection?.title ?? ""}
+                          onChange={(e) =>
+                            setSiteText((current) => ({
+                              ...current,
+                              sportsSection: { ...(current.sportsSection || {}), title: e.target.value }
+                            }))
+                          }
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <p className={labelClass}>Sports Section Subtitle</p>
+                        <input
+                          className={inputClass}
+                          value={siteText?.sportsSection?.subtitle ?? ""}
+                          onChange={(e) =>
+                            setSiteText((current) => ({
+                              ...current,
+                              sportsSection: { ...(current.sportsSection || {}), subtitle: e.target.value }
+                            }))
+                          }
+                        />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                      <div className="space-y-2">
+                        <p className={labelClass}>Testimonials Title</p>
+                        <input
+                          className={inputClass}
+                          value={siteText?.testimonials?.title ?? ""}
+                          onChange={(e) =>
+                            setSiteText((current) => ({
+                              ...current,
+                              testimonials: { ...(current.testimonials || {}), title: e.target.value }
+                            }))
+                          }
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <p className={labelClass}>Testimonials Subtitle</p>
+                        <input
+                          className={inputClass}
+                          value={siteText?.testimonials?.subtitle ?? ""}
+                          onChange={(e) =>
+                            setSiteText((current) => ({
+                              ...current,
+                              testimonials: { ...(current.testimonials || {}), subtitle: e.target.value }
+                            }))
+                          }
+                        />
+                      </div>
+                    </div>
+                  </EditorCard>
+
+                  <EditorCard>
+                    <p className="font-heading text-2xl font-black uppercase">Navigation Labels</p>
+                    <p className="text-muted-foreground text-sm">Edit the top-level nav labels (dropdowns remain unchanged).</p>
+                    <div className="space-y-3 mt-4">
+                      {(siteText?.navItems ?? []).map((n, idx) => (
+                        <div key={`nav-${idx}`} className="grid grid-cols-1 md:grid-cols-3 gap-3 items-center">
+                          <div className="space-y-2 md:col-span-2">
+                            <p className={labelClass}>Label</p>
+                            <input
+                              className={inputClass}
+                              value={n.label}
+                              onChange={(e) =>
+                                setSiteText((current) => {
+                                  const next = [...(current.navItems || [])];
+                                  next[idx] = { ...next[idx], label: e.target.value };
+                                  return { ...current, navItems: next };
+                                })
+                              }
+                            />
+                          </div>
+                          <div className="text-right">
+                            <button
+                              type="button"
+                              onClick={() =>
+                                setSiteText((current) => ({
+                                  ...current,
+                                  navItems: (current.navItems || []).filter((_, i) => i !== idx)
+                                }))
+                              }
+                              className="px-3 py-2 border border-border bg-card text-foreground text-sm"
+                            >
+                              Remove
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setSiteText((current) => ({
+                            ...current,
+                            navItems: [...(current.navItems || []), { label: "New", path: "/" }]
+                          }))
+                        }
+                        className="px-4 py-3 bg-primary text-white font-heading font-bold uppercase text-sm tracking-wider"
+                      >
+                        + Add Nav Item
+                      </button>
+                    </div>
+                  </EditorCard>
+                </div>
+              </TabsContent>
           <TabsContent value="home">
             <div className="space-y-6">
               <EditorCard>

@@ -83,7 +83,7 @@ const BlogPostPage = () => {
               alt={post.title}
               loading="eager"
               decoding="async"
-              fetchPriority="high"
+              fetchpriority="high"
               className="w-full h-[260px] md:h-[420px] object-cover"
             />
           </div>

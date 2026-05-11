@@ -130,9 +130,26 @@ const MapEmbedCard = ({
 
 const Index = () => {
   const { experiences, impactMetricsSection, otherLocationsSection } = useEditableContent();
+  const { siteText } = useEditableContent();
   const featuredTestimonials = experiences
     .filter((item) => item.type === "quote" || item.type === "parent")
     .slice(0, 3);
+  const heroLines = siteText?.hero?.lines || ["Play Loud.", "Build Strong."];
+  const heroSubtitle = siteText?.hero?.subtitle || "Together Sports is a 501(c)(3) nonprofit empowering youth through sports, mentorship, and community one game at a time.";
+  const heroCtaPrimary = siteText?.hero?.ctaPrimary || "Our Sports";
+  const heroCtaSecondary = siteText?.hero?.ctaSecondary || "Donate Now";
+  const missionParagraphs = siteText?.mission?.length ? siteText.mission : [
+    "Together Sports is a nonprofit dedicated to building stronger communities through athletics. We provide accessible sports programs and create opportunities for youth to connect, grow, and thrive.",
+    "We believe every kid deserves a chance to play. Through free sports programs, mentorship, and community building, we\'re creating the next generation of leaders — on and off the field.",
+    "From tennis courts to basketball hoops, from football fields to golf courses — we meet kids where they are and take them where they want to go."
+  ];
+  const values = siteText?.values?.length ? siteText.values : [
+    { title: "Access", desc: "Every kid plays, regardless of background or income.", bg: "bg-[#f6a15c]" },
+    { title: "Growth", desc: "Sports build character, discipline, and confidence.", bg: "bg-[#87cb4a]" },
+    { title: "Community", desc: "We rise together — athletes, mentors, families.", bg: "bg-[#ab9bfa]" }
+  ];
+  const sportsSection = siteText?.sportsSection ?? { title: "Our Sports", subtitle: "Explore all four Together Sports programs in one place." };
+  const testimonialsText = siteText?.testimonials ?? { title: "Testimonials", subtitle: "The little stories that show the big picture: connection, encouragement, and growth." };
   const otherLocations = otherLocationsSection.items.filter((item) => item.embedUrl.trim());
 
   return (
@@ -171,25 +188,22 @@ const Index = () => {
               className="max-w-2xl"
             >
               <h1 className="font-heading text-6xl sm:text-7xl md:text-8xl lg:text-[6.4rem] xl:text-[7rem] font-black uppercase leading-[0.94] mb-8 text-foreground">
-                <span className="block whitespace-nowrap">Play Loud.</span>
-                <span className="block whitespace-nowrap text-[#4f74d6]">Build Strong.</span>
+                <span className="block whitespace-nowrap">{heroLines[0]}</span>
+                <span className="block whitespace-nowrap text-[#4f74d6]">{heroLines[1] ?? ""}</span>
               </h1>
-              <p className="text-foreground/70 text-lg md:text-xl max-w-xl mb-8 font-body">
-                Together Sports is a 501(c)(3) nonprofit empowering youth through sports, mentorship, and community
-                one game at a time.
-              </p>
+              <p className="text-foreground/70 text-lg md:text-xl max-w-xl mb-8 font-body">{heroSubtitle}</p>
               <div className="flex flex-wrap gap-4">
                 <a
                   href="#sports"
                   className="inline-block px-8 py-4 bg-primary text-white font-heading font-bold text-lg uppercase tracking-wider hover:scale-105 hover:-rotate-1 transition-all duration-200"
                 >
-                  Our Sports
+                  {heroCtaPrimary}
                 </a>
                 <Link
                   to="/get-involved#donate"
                   className="inline-block px-8 py-4 bg-accent text-white font-heading font-bold text-lg uppercase tracking-wider hover:scale-105 hover:rotate-1 transition-all duration-200"
                 >
-                  Donate Now
+                  {heroCtaSecondary}
                 </Link>
               </div>
             </motion.div>
@@ -206,7 +220,7 @@ const Index = () => {
                   alt="Together Sports action moment"
                   loading="eager"
                   decoding="async"
-                  fetchPriority="high"
+                  fetchpriority="high"
                   className="block w-full h-full object-cover"
                 />
               </div>
@@ -216,7 +230,7 @@ const Index = () => {
                   alt="Together Sports community moment"
                   loading="eager"
                   decoding="async"
-                  fetchPriority="high"
+                  fetchpriority="high"
                   className="block w-full h-full object-cover"
                 />
               </div>
@@ -226,7 +240,7 @@ const Index = () => {
                   alt="Together Sports team moment"
                   loading="eager"
                   decoding="async"
-                  fetchPriority="high"
+                  fetchpriority="high"
                   className="block w-full h-full object-cover"
                 />
               </div>
@@ -243,18 +257,9 @@ const Index = () => {
               <h2 className="font-heading text-5xl md:text-7xl font-black uppercase mb-6 text-foreground">
                 Our <span className="brush-underline">Mission</span>
               </h2>
-              <p className="text-muted-foreground text-lg leading-relaxed mb-4">
-                Together Sports is a nonprofit dedicated to building stronger communities through athletics. We provide
-                accessible sports programs and create opportunities for youth to connect, grow, and thrive.
-              </p>
-              <p className="text-muted-foreground text-lg leading-relaxed mb-4">
-                We believe every kid deserves a chance to play. Through free sports programs, mentorship, and community
-                building, we&apos;re creating the next generation of leaders — on and off the field.
-              </p>
-              <p className="text-muted-foreground text-lg leading-relaxed mb-10">
-                From tennis courts to basketball hoops, from football fields to golf courses — we meet kids where they are
-                and take them where they want to go.
-              </p>
+              {missionParagraphs.map((p, i) => (
+                <p key={`mission-${i}`} className="text-muted-foreground text-lg leading-relaxed mb-4">{p}</p>
+              ))}
             </ScrollReveal>
 
             <ScrollReveal direction="left">
@@ -282,29 +287,10 @@ const Index = () => {
             </ScrollReveal>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-8">
-              {[
-                {
-                  title: "Access",
-                  desc: "Every kid plays, regardless of background or income.",
-                  bg: "bg-[#f6a15c]",
-                  hoverMotion: "hover:-rotate-1",
-                },
-                {
-                  title: "Growth",
-                  desc: "Sports build character, discipline, and confidence.",
-                  bg: "bg-[#87cb4a]",
-                  hoverMotion: "hover:rotate-1",
-                },
-                {
-                  title: "Community",
-                  desc: "We rise together — athletes, mentors, families.",
-                  bg: "bg-[#ab9bfa]",
-                  hoverMotion: "hover:-rotate-1",
-                },
-              ].map((value, index) => (
+              {values.map((value, index) => (
                 <ScrollReveal key={value.title} delay={index * 0.12}>
                   <div
-                    className={`group border-2 border-transparent p-8 md:p-10 transition-all duration-200 hover:scale-105 ${value.bg} ${value.hoverMotion}`}
+                    className={`group border-2 border-transparent p-8 md:p-10 transition-all duration-200 hover:scale-105 ${value.bg ?? "bg-[#87cb4a]"}`}
                   >
                     <h4 className="font-heading text-3xl md:text-4xl font-black uppercase mb-4 text-white">
                       {value.title}
@@ -342,12 +328,8 @@ const Index = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <ScrollReveal>
             <div className="mx-auto max-w-4xl text-center">
-              <h2 className="font-heading text-5xl md:text-7xl font-black uppercase mb-4">
-                Our Sports
-              </h2>
-              <p className="text-muted-foreground text-lg md:text-xl mb-10 max-w-2xl mx-auto">
-                Explore all four Together Sports programs in one place.
-              </p>
+              <h2 className="font-heading text-5xl md:text-7xl font-black uppercase mb-4">{sportsSection.title}</h2>
+              <p className="text-muted-foreground text-lg md:text-xl mb-10 max-w-2xl mx-auto">{sportsSection.subtitle}</p>
               <Link
                 to="/sports"
                 className="inline-block px-8 py-4 bg-primary text-white font-heading font-bold text-lg uppercase tracking-wider hover:scale-105 hover:-rotate-1 transition-all duration-200"
@@ -371,12 +353,8 @@ const Index = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="px-6 py-8 md:px-10 md:py-10 lg:px-12">
             <ScrollReveal>
-              <h2 className="font-heading text-5xl md:text-7xl font-black uppercase mb-4 text-white text-center">
-                Testimonials
-              </h2>
-              <p className="text-white font-bold text-lg mb-20 max-w-lg mx-auto text-center">
-                The little stories that show the big picture: connection, encouragement, and growth.
-              </p>
+              <h2 className="font-heading text-5xl md:text-7xl font-black uppercase mb-4 text-white text-center">{testimonialsText.title}</h2>
+              <p className="text-white font-bold text-lg mb-20 max-w-lg mx-auto text-center">{testimonialsText.subtitle}</p>
             </ScrollReveal>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">

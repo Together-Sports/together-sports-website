@@ -24,7 +24,8 @@ import {
   type ImpactMetricsSection,
   type OtherLocationsSection,
   type TennisLessonVideo,
-  type SportDescription
+  type SportDescription,
+  type SiteText
 } from "@/lib/editable-content-format";
 import {
   isSupabaseConfigured,
@@ -43,6 +44,8 @@ type EditableContentContextValue = EditableContentState & {
   setImpactMetricsSection: Dispatch<SetStateAction<ImpactMetricsSection>>;
   setOtherLocationsSection: Dispatch<SetStateAction<OtherLocationsSection>>;
   setSportDescriptions: Dispatch<SetStateAction<SportDescription[]>>;
+  siteText: SiteText;
+  setSiteText: Dispatch<SetStateAction<SiteText>>;
   resetAll: () => void;
   saveContent: () => Promise<void>;
   refreshContent: () => Promise<void>;
@@ -236,6 +239,7 @@ export const EditableContentProvider = ({
   const [sportDescriptions, setSportDescriptions] = useState<
     SportDescription[]
   >(() => defaultContent.sportDescriptions);
+  const [siteText, setSiteText] = useState(() => defaultContent.siteText);
   const [lastSavedSnapshot, setLastSavedSnapshot] = useState(defaultSnapshot);
   const [isLoadingContent, setIsLoadingContent] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -251,6 +255,7 @@ export const EditableContentProvider = ({
     setImpactMetricsSection(next.impactMetricsSection);
     setOtherLocationsSection(next.otherLocationsSection);
     setSportDescriptions(next.sportDescriptions);
+    setSiteText(next.siteText);
   };
 
   const savePreviewDraft = () => {
@@ -266,7 +271,8 @@ export const EditableContentProvider = ({
       tennisLessonVideos,
       impactMetricsSection,
       otherLocationsSection,
-      sportDescriptions
+      sportDescriptions,
+      siteText
     });
 
     window.localStorage.setItem(
@@ -406,7 +412,8 @@ export const EditableContentProvider = ({
         tennisLessonVideos,
         impactMetricsSection,
         otherLocationsSection,
-        sportDescriptions
+        sportDescriptions,
+        siteText
       }),
     [
       blogPosts,
@@ -416,7 +423,8 @@ export const EditableContentProvider = ({
       tennisLessonVideos,
       impactMetricsSection,
       otherLocationsSection,
-      sportDescriptions
+      sportDescriptions,
+      siteText
     ]
   );
   const hasUnsavedChanges = currentSnapshot !== lastSavedSnapshot;
@@ -426,6 +434,8 @@ export const EditableContentProvider = ({
       experiences,
       blogPosts,
       setBlogPosts,
+      siteText,
+      setSiteText,
       partners,
       teamSections,
       tennisLessonVideos,
@@ -464,7 +474,8 @@ export const EditableContentProvider = ({
             tennisLessonVideos,
             impactMetricsSection,
             otherLocationsSection,
-            sportDescriptions
+            sportDescriptions,
+            siteText
           });
           const { error } = await supabase.from("site_content").upsert(
             {
@@ -533,7 +544,8 @@ export const EditableContentProvider = ({
           tennisLessonVideos,
           impactMetricsSection,
           otherLocationsSection,
-          sportDescriptions
+          sportDescriptions,
+          siteText
         }),
       importContent: (input) => {
         const next = parseEditableContentImport(input);
@@ -594,7 +606,8 @@ export const EditableContentProvider = ({
       isSaving,
       user,
       authLoading,
-      savePreviewDraft
+      savePreviewDraft,
+      siteText
     ]
   );
 
