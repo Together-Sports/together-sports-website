@@ -8,7 +8,7 @@ const formatDate = (value: string) =>
   new Date(value).toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
-    year: "numeric",
+    year: "numeric"
   });
 
 const BlogPostPage = () => {
@@ -28,8 +28,12 @@ const BlogPostPage = () => {
     return (
       <section className="py-24 md:py-32">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="font-heading text-5xl md:text-7xl font-black uppercase mb-6">Loading Post</h1>
-          <p className="text-muted-foreground text-lg">Fetching the latest article...</p>
+          <h1 className="font-heading text-5xl md:text-7xl font-black uppercase mb-6">
+            Loading Post
+          </h1>
+          <p className="text-muted-foreground text-lg">
+            Fetching the latest article...
+          </p>
         </div>
       </section>
     );
@@ -39,8 +43,12 @@ const BlogPostPage = () => {
     return (
       <section className="py-24 md:py-32">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p className="font-body font-bold uppercase tracking-[0.3em] text-accent text-sm mb-4">Blog</p>
-          <h1 className="font-heading text-5xl md:text-7xl font-black uppercase mb-6">Post Not Found</h1>
+          <p className="font-body font-bold uppercase tracking-[0.3em] text-accent text-sm mb-4">
+            Blog
+          </p>
+          <h1 className="font-heading text-5xl md:text-7xl font-black uppercase mb-6">
+            Post Not Found
+          </h1>
           <p className="text-muted-foreground text-lg mb-8">
             That article is not available right now.
           </p>
@@ -69,7 +77,9 @@ const BlogPostPage = () => {
           <p className="font-body font-bold uppercase tracking-[0.3em] text-accent text-sm mb-4">
             {post.tag?.trim() || "Together Sports"}
           </p>
-          <h1 className="font-heading text-5xl md:text-7xl font-black uppercase leading-[0.9] mb-6">{post.title}</h1>
+          <h1 className="font-heading text-5xl md:text-7xl font-black uppercase leading-[0.9] mb-6">
+            {post.title}
+          </h1>
           <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm font-body uppercase tracking-[0.18em] text-muted-foreground">
             <span>{formatDate(post.publishedAt)}</span>
             <span>{post.author}</span>
@@ -89,7 +99,10 @@ const BlogPostPage = () => {
           </div>
         ) : null}
 
-        <div className="blog-content" dangerouslySetInnerHTML={{ __html: post.contentHtml }} />
+        <div
+          className="blog-content"
+          dangerouslySetInnerHTML={{ __html: post.contentHtml }}
+        />
       </div>
     </article>
   );

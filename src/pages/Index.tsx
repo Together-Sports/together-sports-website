@@ -21,7 +21,7 @@ const heroSpins = [
     rotate: -360,
     duration: 24,
     delay: 0,
-    scaleX: 1,
+    scaleX: 1
   },
   {
     image: golfSpin,
@@ -30,7 +30,7 @@ const heroSpins = [
     rotate: 360,
     duration: 18,
     delay: 1.5,
-    scaleX: 1,
+    scaleX: 1
   },
   {
     image: basketSpin,
@@ -39,7 +39,7 @@ const heroSpins = [
     rotate: 360,
     duration: 28,
     delay: 3,
-    scaleX: 1,
+    scaleX: 1
   },
   {
     image: footballSpin,
@@ -48,8 +48,8 @@ const heroSpins = [
     rotate: 0,
     duration: 0,
     delay: 0,
-    scaleX: -1,
-  },
+    scaleX: -1
+  }
 ];
 
 const sportsCtaSpins = [
@@ -59,38 +59,41 @@ const sportsCtaSpins = [
     rotate: -360,
     duration: 24,
     delay: 0,
-    scaleX: 1,
+    scaleX: 1
   },
   {
     image: basketSpin,
-    className: "absolute left-[19%] top-1/2 hidden w-32 -translate-y-1/2 xl:block",
+    className:
+      "absolute left-[19%] top-1/2 hidden w-32 -translate-y-1/2 xl:block",
     rotate: 360,
     duration: 28,
     delay: 1.5,
-    scaleX: 1,
+    scaleX: 1
   },
   {
     image: golfSpin,
-    className: "absolute right-[19%] top-1/2 hidden w-32 -translate-y-1/2 xl:block",
+    className:
+      "absolute right-[19%] top-1/2 hidden w-32 -translate-y-1/2 xl:block",
     rotate: 360,
     duration: 18,
     delay: 0.8,
-    scaleX: 1,
+    scaleX: 1
   },
   {
     image: footballSpin,
-    className: "absolute right-20 top-1/2 hidden w-32 -translate-y-1/2 xl:block",
+    className:
+      "absolute right-20 top-1/2 hidden w-32 -translate-y-1/2 xl:block",
     rotate: 360,
     duration: 30,
     delay: 2.2,
-    scaleX: -1,
-  },
+    scaleX: -1
+  }
 ];
 
 const MapEmbedCard = ({
   embedUrl,
   title,
-  className,
+  className
 }: {
   embedUrl: string;
   title: string;
@@ -114,13 +117,16 @@ const MapEmbedCard = ({
       className="absolute inset-0"
       style={{ background: "transparent", cursor: "default" }}
       onClick={(event) => {
-        const rect = (event.currentTarget as HTMLDivElement).getBoundingClientRect();
+        const rect = (
+          event.currentTarget as HTMLDivElement
+        ).getBoundingClientRect();
         const y = event.clientY - rect.top;
         const x = event.clientX - rect.left;
         if (y > rect.height - 80 && x > rect.width - 80) {
           event.currentTarget.style.pointerEvents = "none";
           setTimeout(() => {
-            (event.currentTarget as HTMLDivElement).style.pointerEvents = "auto";
+            (event.currentTarget as HTMLDivElement).style.pointerEvents =
+              "auto";
           }, 100);
         }
       }}
@@ -129,28 +135,56 @@ const MapEmbedCard = ({
 );
 
 const Index = () => {
-  const { experiences, impactMetricsSection, otherLocationsSection } = useEditableContent();
+  const { experiences, impactMetricsSection, otherLocationsSection } =
+    useEditableContent();
   const { siteText } = useEditableContent();
   const featuredTestimonials = experiences
     .filter((item) => item.type === "quote" || item.type === "parent")
     .slice(0, 3);
   const heroLines = siteText?.hero?.lines || ["Play Loud.", "Build Strong."];
-  const heroSubtitle = siteText?.hero?.subtitle || "Together Sports is a 501(c)(3) nonprofit empowering youth through sports, mentorship, and community one game at a time.";
+  const heroSubtitle =
+    siteText?.hero?.subtitle ||
+    "Together Sports is a 501(c)(3) nonprofit empowering youth through sports, mentorship, and community one game at a time.";
   const heroCtaPrimary = siteText?.hero?.ctaPrimary || "Our Sports";
   const heroCtaSecondary = siteText?.hero?.ctaSecondary || "Donate Now";
-  const missionParagraphs = siteText?.mission?.length ? siteText.mission : [
-    "Together Sports is a nonprofit dedicated to building stronger communities through athletics. We provide accessible sports programs and create opportunities for youth to connect, grow, and thrive.",
-    "We believe every kid deserves a chance to play. Through free sports programs, mentorship, and community building, we\'re creating the next generation of leaders — on and off the field.",
-    "From tennis courts to basketball hoops, from football fields to golf courses — we meet kids where they are and take them where they want to go."
-  ];
-  const values = siteText?.values?.length ? siteText.values : [
-    { title: "Access", desc: "Every kid plays, regardless of background or income.", bg: "bg-[#f6a15c]" },
-    { title: "Growth", desc: "Sports build character, discipline, and confidence.", bg: "bg-[#87cb4a]" },
-    { title: "Community", desc: "We rise together — athletes, mentors, families.", bg: "bg-[#ab9bfa]" }
-  ];
-  const sportsSection = siteText?.sportsSection ?? { title: "Our Sports", subtitle: "Explore all four Together Sports programs in one place." };
-  const testimonialsText = siteText?.testimonials ?? { title: "Testimonials", subtitle: "The little stories that show the big picture: connection, encouragement, and growth." };
-  const otherLocations = otherLocationsSection.items.filter((item) => item.embedUrl.trim());
+  const missionParagraphs = siteText?.mission?.length
+    ? siteText.mission
+    : [
+        "Together Sports is a nonprofit dedicated to building stronger communities through athletics. We provide accessible sports programs and create opportunities for youth to connect, grow, and thrive.",
+        "We believe every kid deserves a chance to play. Through free sports programs, mentorship, and community building, we\'re creating the next generation of leaders — on and off the field.",
+        "From tennis courts to basketball hoops, from football fields to golf courses — we meet kids where they are and take them where they want to go."
+      ];
+  const values = siteText?.values?.length
+    ? siteText.values
+    : [
+        {
+          title: "Access",
+          desc: "Every kid plays, regardless of background or income.",
+          bg: "bg-[#f6a15c]"
+        },
+        {
+          title: "Growth",
+          desc: "Sports build character, discipline, and confidence.",
+          bg: "bg-[#87cb4a]"
+        },
+        {
+          title: "Community",
+          desc: "We rise together — athletes, mentors, families.",
+          bg: "bg-[#ab9bfa]"
+        }
+      ];
+  const sportsSection = siteText?.sportsSection ?? {
+    title: "Our Sports",
+    subtitle: "Explore all four Together Sports programs in one place."
+  };
+  const testimonialsText = siteText?.testimonials ?? {
+    title: "Testimonials",
+    subtitle:
+      "The little stories that show the big picture: connection, encouragement, and growth."
+  };
+  const otherLocations = otherLocationsSection.items.filter((item) =>
+    item.embedUrl.trim()
+  );
 
   return (
     <div className="overflow-hidden">
@@ -161,18 +195,36 @@ const Index = () => {
             key={item.image}
             className={item.className}
             whileHover={{ scale: 1.08, y: -6 }}
-            transition={{ scale: { duration: 0.2, ease: "easeOut" }, y: { duration: 0.2, ease: "easeOut" } }}
+            transition={{
+              scale: { duration: 0.2, ease: "easeOut" },
+              y: { duration: 0.2, ease: "easeOut" }
+            }}
           >
             <motion.img
               src={item.image}
               alt=""
               aria-hidden="true"
               className="block w-full h-auto"
-              initial={item.duration > 0 ? { rotate: 0, scaleX: item.scaleX } : { scaleX: item.scaleX }}
-              animate={item.duration > 0 ? { rotate: item.rotate, scaleX: item.scaleX } : { scaleX: item.scaleX }}
+              initial={
+                item.duration > 0
+                  ? { rotate: 0, scaleX: item.scaleX }
+                  : { scaleX: item.scaleX }
+              }
+              animate={
+                item.duration > 0
+                  ? { rotate: item.rotate, scaleX: item.scaleX }
+                  : { scaleX: item.scaleX }
+              }
               transition={
                 item.duration > 0
-                  ? { rotate: { duration: item.duration, delay: item.delay, ease: "linear", repeat: Infinity } }
+                  ? {
+                      rotate: {
+                        duration: item.duration,
+                        delay: item.delay,
+                        ease: "linear",
+                        repeat: Infinity
+                      }
+                    }
                   : undefined
               }
             />
@@ -189,9 +241,13 @@ const Index = () => {
             >
               <h1 className="font-heading text-6xl sm:text-7xl md:text-8xl lg:text-[6.4rem] xl:text-[7rem] font-black uppercase leading-[0.94] mb-8 text-foreground">
                 <span className="block whitespace-nowrap">{heroLines[0]}</span>
-                <span className="block whitespace-nowrap text-[#4f74d6]">{heroLines[1] ?? ""}</span>
+                <span className="block whitespace-nowrap text-[#4f74d6]">
+                  {heroLines[1] ?? ""}
+                </span>
               </h1>
-              <p className="text-foreground/70 text-lg md:text-xl max-w-xl mb-8 font-body">{heroSubtitle}</p>
+              <p className="text-foreground/70 text-lg md:text-xl max-w-xl mb-8 font-body">
+                {heroSubtitle}
+              </p>
               <div className="flex flex-wrap gap-4">
                 <a
                   href="#sports"
@@ -258,7 +314,12 @@ const Index = () => {
                 Our <span className="brush-underline">Mission</span>
               </h2>
               {missionParagraphs.map((p, i) => (
-                <p key={`mission-${i}`} className="text-muted-foreground text-lg leading-relaxed mb-4">{p}</p>
+                <p
+                  key={`mission-${i}`}
+                  className="text-muted-foreground text-lg leading-relaxed mb-4"
+                >
+                  {p}
+                </p>
               ))}
             </ScrollReveal>
 
@@ -281,8 +342,8 @@ const Index = () => {
                 What{" "}
                 <span className="relative inline-block after:absolute after:bottom-[-4px] after:left-0 after:h-2 after:w-full after:skew-x-[-12deg] after:rounded-[2px] after:bg-[#87cb4a] after:content-['']">
                   <span className="relative z-10">We</span>
-                </span>
-                {" "}Stand For
+                </span>{" "}
+                Stand For
               </h3>
             </ScrollReveal>
 
@@ -321,15 +382,26 @@ const Index = () => {
               className="block w-full h-auto"
               initial={{ rotate: 0, scaleX: item.scaleX }}
               animate={{ rotate: item.rotate, scaleX: item.scaleX }}
-              transition={{ rotate: { duration: item.duration, delay: item.delay, ease: "linear", repeat: Infinity } }}
+              transition={{
+                rotate: {
+                  duration: item.duration,
+                  delay: item.delay,
+                  ease: "linear",
+                  repeat: Infinity
+                }
+              }}
             />
           </motion.div>
         ))}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <ScrollReveal>
             <div className="mx-auto max-w-4xl text-center">
-              <h2 className="font-heading text-5xl md:text-7xl font-black uppercase mb-4">{sportsSection.title}</h2>
-              <p className="text-muted-foreground text-lg md:text-xl mb-10 max-w-2xl mx-auto">{sportsSection.subtitle}</p>
+              <h2 className="font-heading text-5xl md:text-7xl font-black uppercase mb-4">
+                {sportsSection.title}
+              </h2>
+              <p className="text-muted-foreground text-lg md:text-xl mb-10 max-w-2xl mx-auto">
+                {sportsSection.subtitle}
+              </p>
               <Link
                 to="/sports"
                 className="inline-block px-8 py-4 bg-primary text-white font-heading font-bold text-lg uppercase tracking-wider hover:scale-105 hover:-rotate-1 transition-all duration-200"
@@ -353,8 +425,12 @@ const Index = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="px-6 py-8 md:px-10 md:py-10 lg:px-12">
             <ScrollReveal>
-              <h2 className="font-heading text-5xl md:text-7xl font-black uppercase mb-4 text-white text-center">{testimonialsText.title}</h2>
-              <p className="text-white font-bold text-lg mb-20 max-w-lg mx-auto text-center">{testimonialsText.subtitle}</p>
+              <h2 className="font-heading text-5xl md:text-7xl font-black uppercase mb-4 text-white text-center">
+                {testimonialsText.title}
+              </h2>
+              <p className="text-white font-bold text-lg mb-20 max-w-lg mx-auto text-center">
+                {testimonialsText.subtitle}
+              </p>
             </ScrollReveal>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
@@ -372,8 +448,9 @@ const Index = () => {
                     <span
                       className="absolute -top-5 left-6 font-heading text-8xl leading-none select-none pointer-events-none"
                       style={{
-                        color: i === 0 ? "#ab9bfa" : i === 1 ? "#f6a15c" : "#84a6ff",
-                        WebkitTextStroke: "2px white",
+                        color:
+                          i === 0 ? "#ab9bfa" : i === 1 ? "#f6a15c" : "#84a6ff",
+                        WebkitTextStroke: "2px white"
                       }}
                     >
                       &ldquo;
@@ -382,7 +459,9 @@ const Index = () => {
                       &ldquo;{testimonial.quote || ""}&rdquo;
                     </p>
                     <div className="flex items-center gap-3">
-                      <div className={`w-10 h-1 ${i === 0 ? 'bg-[#ab9bfa]' : i === 1 ? 'bg-[#f6a15c]' : 'bg-[#84a6ff]'}`} />
+                      <div
+                        className={`w-10 h-1 ${i === 0 ? "bg-[#ab9bfa]" : i === 1 ? "bg-[#f6a15c]" : "bg-[#84a6ff]"}`}
+                      />
                       <span className="font-heading font-bold uppercase text-sm tracking-wider text-foreground">
                         {testimonial.name}
                       </span>
@@ -395,7 +474,8 @@ const Index = () => {
         </div>
       </section>
 
-      {impactMetricsSection.isVisible && impactMetricsSection.items.length > 0 ? (
+      {impactMetricsSection.isVisible &&
+      impactMetricsSection.items.length > 0 ? (
         <section className="py-10 md:py-12 bg-white relative">
           <div className="w-full px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col items-center gap-5 md:flex-row md:flex-nowrap md:justify-center md:items-stretch md:gap-6">
@@ -450,14 +530,17 @@ const Index = () => {
             </ScrollReveal>
 
             <ScrollReveal direction="right">
-              <p className="font-body font-bold uppercase tracking-[0.2em] text-accent text-sm mb-4">Featured Service</p>
+              <p className="font-body font-bold uppercase tracking-[0.2em] text-accent text-sm mb-4">
+                Featured Service
+              </p>
               <h2 className="font-heading text-5xl md:text-6xl font-black uppercase leading-[0.9] mb-6">
                 Every Kid Deserves a Second Serve
               </h2>
               <p className="text-muted-foreground text-lg mb-6 leading-relaxed">
-                Second Serve is a service from our partner Rally Forward NYC, and it also inspires a Together Tennis
-                initiative where we collect quality used equipment that would otherwise be thrown away and donate it
-                back into the community.
+                Second Serve is a service from our partner Rally Forward NYC,
+                and it also inspires a Together Tennis initiative where we
+                collect quality used equipment that would otherwise be thrown
+                away and donate it back into the community.
               </p>
               <Link
                 to="/sports/tennis"
@@ -466,8 +549,8 @@ const Index = () => {
                 Learn More
               </Link>
             </ScrollReveal>
-            </div>
           </div>
+        </div>
       </section>
 
       {/* LOCATION */}
@@ -475,12 +558,17 @@ const Index = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <ScrollReveal>
             <h2 className="font-heading text-5xl md:text-7xl font-black uppercase mb-4 text-center">
-              <span className="mr-2 inline-block text-[0.9em] normal-case align-[0.02em] md:mr-3">📍</span>
+              <span className="mr-2 inline-block text-[0.9em] normal-case align-[0.02em] md:mr-3">
+                📍
+              </span>
               Main Location
-              <span className="ml-2 inline-block text-[0.9em] normal-case align-[0.02em] md:ml-3">📍</span>
+              <span className="ml-2 inline-block text-[0.9em] normal-case align-[0.02em] md:ml-3">
+                📍
+              </span>
             </h2>
             <p className="text-muted-foreground text-lg mb-12 text-center">
-              Based in New York City, serving communities across the five boroughs.
+              Based in New York City, serving communities across the five
+              boroughs.
             </p>
           </ScrollReveal>
 
@@ -496,18 +584,28 @@ const Index = () => {
             <div className="mt-16 md:mt-20">
               <ScrollReveal>
                 <h3 className="font-heading text-5xl md:text-7xl font-black uppercase mb-4 text-center">
-                  {otherLocationsSection.title?.trim().toLowerCase() === "other locations" ? (
+                  {otherLocationsSection.title?.trim().toLowerCase() ===
+                  "other locations" ? (
                     <>
-                      <span className="mr-2 inline-block text-[0.9em] normal-case align-[0.02em] md:mr-3">🌍</span>
-                      <span className="brush-underline inline-block">Other</span> Locations
+                      <span className="mr-2 inline-block text-[0.9em] normal-case align-[0.02em] md:mr-3">
+                        🌍
+                      </span>
+                      <span className="brush-underline inline-block">
+                        Other
+                      </span>{" "}
+                      Locations
                     </>
                   ) : (
                     <span className="inline-block">
-                      <span className="mr-2 inline-block text-[0.9em] normal-case align-[0.02em] md:mr-3">🌍</span>
+                      <span className="mr-2 inline-block text-[0.9em] normal-case align-[0.02em] md:mr-3">
+                        🌍
+                      </span>
                       {otherLocationsSection.title || "Other Locations"}
                     </span>
                   )}
-                  <span className="ml-2 inline-block text-[0.9em] normal-case align-[0.02em] md:ml-3">🌎</span>
+                  <span className="ml-2 inline-block text-[0.9em] normal-case align-[0.02em] md:ml-3">
+                    🌎
+                  </span>
                 </h3>
               </ScrollReveal>
 
@@ -548,7 +646,8 @@ const Index = () => {
               <span className="text-white">Donate Today.</span>
             </h2>
             <p className="text-white font-bold text-lg mb-8 max-w-lg mx-auto font-body">
-              Your contribution puts a racket, a ball, or a dream in a kid&apos;s hands. Every dollar counts.
+              Your contribution puts a racket, a ball, or a dream in a
+              kid&apos;s hands. Every dollar counts.
             </p>
             <Link
               to="/get-involved"

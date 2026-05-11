@@ -29,7 +29,9 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const { siteText } = useEditableContent();
-  const navItems = siteText?.navItems?.length ? siteText.navItems : defaultNavItems;
+  const navItems = siteText?.navItems?.length
+    ? siteText.navItems
+    : defaultNavItems;
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-primary border-b border-primary/80">

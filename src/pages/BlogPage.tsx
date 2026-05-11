@@ -10,13 +10,15 @@ const formatDate = (value: string) =>
   new Date(value).toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
-    year: "numeric",
+    year: "numeric"
   });
 
 const BlogPage = () => {
   const { blogPosts, refreshContent, isLoadingContent } = useEditableContent();
   const featured = blogPosts.find((post) => post.featured) ?? blogPosts[0];
-  const posts = featured ? blogPosts.filter((post) => post.slug !== featured.slug) : blogPosts;
+  const posts = featured
+    ? blogPosts.filter((post) => post.slug !== featured.slug)
+    : blogPosts;
 
   useEffect(() => {
     const intervalId = window.setInterval(() => {
@@ -37,7 +39,8 @@ const BlogPage = () => {
                 <span className="sm:whitespace-nowrap">Blog</span>
               </h1>
               <p className="text-white font-bold text-lg md:text-xl max-w-2xl mx-auto font-body">
-                Stories, updates, and moments from Together Sports, all in one place on the site.
+                Stories, updates, and moments from Together Sports, all in one
+                place on the site.
               </p>
             </div>
           </div>
@@ -45,7 +48,9 @@ const BlogPage = () => {
         <section className="py-16 md:py-18">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="border border-border bg-card p-8 md:p-12">
-              <p className="text-muted-foreground text-lg">Loading latest stories...</p>
+              <p className="text-muted-foreground text-lg">
+                Loading latest stories...
+              </p>
             </div>
           </div>
         </section>
@@ -73,7 +78,8 @@ const BlogPage = () => {
               <span className="sm:whitespace-nowrap">Blog</span>
             </h1>
             <p className="text-white font-bold text-lg md:text-xl max-w-2xl mx-auto font-body">
-              Stories, updates, and moments from Together Sports, all in one place on the site.
+              Stories, updates, and moments from Together Sports, all in one
+              place on the site.
             </p>
           </motion.div>
         </div>
@@ -109,7 +115,9 @@ const BlogPage = () => {
                       <h2 className="font-heading text-2xl sm:text-3xl md:text-6xl font-black uppercase text-white mb-4">
                         {featured.title}
                       </h2>
-                      <p className="text-white/75 text-lg md:text-xl max-w-2xl">{featured.excerpt}</p>
+                      <p className="text-white/75 text-lg md:text-xl max-w-2xl">
+                        {featured.excerpt}
+                      </p>
                       <p className="text-white/50 text-sm mt-4 font-body uppercase tracking-[0.18em]">
                         {formatDate(featured.publishedAt)}
                       </p>
@@ -125,8 +133,15 @@ const BlogPage = () => {
               {posts.length ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {posts.map((post, i) => (
-                    <ScrollReveal key={post.slug} delay={i * 0.1} direction={i % 2 === 0 ? "left" : "right"}>
-                      <Link to={`/blog/${post.slug}`} className="group block border border-border bg-card overflow-hidden">
+                    <ScrollReveal
+                      key={post.slug}
+                      delay={i * 0.1}
+                      direction={i % 2 === 0 ? "left" : "right"}
+                    >
+                      <Link
+                        to={`/blog/${post.slug}`}
+                        className="group block border border-border bg-card overflow-hidden"
+                      >
                         <div className="relative min-h-[240px] sm:min-h-[280px]">
                           {post.image ? (
                             <img
@@ -151,7 +166,9 @@ const BlogPage = () => {
                               <h3 className="font-heading text-2xl md:text-3xl font-black uppercase text-white mb-3">
                                 {post.title}
                               </h3>
-                              <p className="text-white/70 text-sm md:text-base max-w-xl">{post.excerpt}</p>
+                              <p className="text-white/70 text-sm md:text-base max-w-xl">
+                                {post.excerpt}
+                              </p>
                             </div>
                           </div>
                         </div>
@@ -162,10 +179,12 @@ const BlogPage = () => {
               ) : (
                 <ScrollReveal>
                   <div className="border border-border bg-card p-8 md:p-12">
-                    <h2 className="font-heading text-4xl md:text-5xl font-black uppercase mb-4">More Stories Are On The Way</h2>
+                    <h2 className="font-heading text-4xl md:text-5xl font-black uppercase mb-4">
+                      More Stories Are On The Way
+                    </h2>
                     <p className="text-muted-foreground text-lg max-w-2xl">
-                      New stories, updates, and community moments will be shared here soon. Check back for the latest
-                      from Together Sports.
+                      New stories, updates, and community moments will be shared
+                      here soon. Check back for the latest from Together Sports.
                     </p>
                   </div>
                 </ScrollReveal>
@@ -178,10 +197,15 @@ const BlogPage = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <ScrollReveal>
               <div className="border border-border bg-card p-8 md:p-12">
-                <p className="font-body font-bold uppercase tracking-[0.3em] text-accent text-sm mb-4">Blog</p>
-                <h2 className="font-heading text-4xl md:text-5xl font-black uppercase mb-4">Stories Are Coming Soon</h2>
+                <p className="font-body font-bold uppercase tracking-[0.3em] text-accent text-sm mb-4">
+                  Blog
+                </p>
+                <h2 className="font-heading text-4xl md:text-5xl font-black uppercase mb-4">
+                  Stories Are Coming Soon
+                </h2>
                 <p className="text-muted-foreground text-lg max-w-2xl">
-                  Fresh stories and updates will appear here soon. Visit again to see what Together Sports has been up to.
+                  Fresh stories and updates will appear here soon. Visit again
+                  to see what Together Sports has been up to.
                 </p>
               </div>
             </ScrollReveal>

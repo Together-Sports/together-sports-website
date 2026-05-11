@@ -72,23 +72,30 @@ const PartnersPage = () => {
               {
                 title: "Community Reach",
                 desc: "Your brand connects with hundreds of families across local sports programs, events, and social media.",
-                titleColor: "#84a6ff",
+                titleColor: "#84a6ff"
               },
               {
                 title: "Shared Values",
                 desc: "Align with a mission that champions teamwork, inclusivity, and youth development through sport.",
-                titleColor: "#ab9bfa",
+                titleColor: "#ab9bfa"
               },
               {
                 title: "Digital Feature",
                 desc: "Featured on our website and social media so supporters can see the organizations helping our mission grow.",
-                titleColor: "#f6a15c",
-              },
+                titleColor: "#f6a15c"
+              }
             ].map((item, i) => (
               <ScrollReveal key={item.title} delay={i * 0.15} direction="up">
                 <div className="p-8 md:p-8 bg-background border border-border hover:border-accent transition-colors duration-300">
-                  <h3 className="font-heading text-3xl font-black uppercase mb-3" style={{ color: item.titleColor }}>{item.title}</h3>
-                  <p className="text-muted-foreground leading-relaxed">{item.desc}</p>
+                  <h3
+                    className="font-heading text-3xl font-black uppercase mb-3"
+                    style={{ color: item.titleColor }}
+                  >
+                    {item.title}
+                  </h3>
+                  <p className="text-muted-foreground leading-relaxed">
+                    {item.desc}
+                  </p>
                 </div>
               </ScrollReveal>
             ))}
@@ -105,12 +112,16 @@ const PartnersPage = () => {
                 Get{" "}
                 <span className="relative inline-block">
                   <span className="relative z-10">Involved</span>
-                  <span aria-hidden className="absolute inset-x-0 -bottom-1 h-2 rounded-sm -skew-x-12 bg-[#f6a15c]" />
+                  <span
+                    aria-hidden
+                    className="absolute inset-x-0 -bottom-1 h-2 rounded-sm -skew-x-12 bg-[#f6a15c]"
+                  />
                 </span>
               </h2>
               <p className="text-lg leading-relaxed mb-6 text-[#8496c6]">
-                Interested in supporting Together Sports? Head to our Get Involved page to explore
-                ways to partner, volunteer, and help us create more opportunities for youth.
+                Interested in supporting Together Sports? Head to our Get
+                Involved page to explore ways to partner, volunteer, and help us
+                create more opportunities for youth.
               </p>
               <Link
                 to="/get-involved"
@@ -121,15 +132,23 @@ const PartnersPage = () => {
             </ScrollReveal>
             <ScrollReveal direction="right">
               <div className="p-8 md:p-9 bg-white border border-border scrapbook-rotate-2">
-                <p className="font-body font-bold uppercase tracking-[0.3em] text-accent text-sm mb-4">What You Get</p>
+                <p className="font-body font-bold uppercase tracking-[0.3em] text-accent text-sm mb-4">
+                  What You Get
+                </p>
                 {[
                   "Positive community impact and youth development",
                   "Featured on our website & social media",
                   "Meaningful volunteer opportunities for staff and students",
-                  "Opportunities to collaborate on programming and events",
+                  "Opportunities to collaborate on programming and events"
                 ].map((perk, index) => (
-                  <div key={perk} className="flex items-center gap-3 py-3 border-b border-border last:border-0">
-                    <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: partnerPerkColors[index] }} />
+                  <div
+                    key={perk}
+                    className="flex items-center gap-3 py-3 border-b border-border last:border-0"
+                  >
+                    <span
+                      className="w-2 h-2 rounded-full shrink-0"
+                      style={{ backgroundColor: partnerPerkColors[index] }}
+                    />
                     <span className="font-body text-foreground">{perk}</span>
                   </div>
                 ))}
