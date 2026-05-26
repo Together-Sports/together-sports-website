@@ -173,6 +173,8 @@ const SportDetailPage = () => {
     }))
     .filter((video) => video.youtubeUrl)
     .slice(0, 2);
+  const showUnavailableSessions =
+    isTennis && !sessionsLoading && (sessionsError !== null || tennisSessions.length === 0);
 
   useEffect(() => {
     if (!isTennis) {
@@ -197,12 +199,18 @@ const SportDetailPage = () => {
             }
 
             const apiSessions = await apiResponse.json();
+            if (!Array.isArray(apiSessions) || apiSessions.length === 0) {
+              throw new Error("Unable to load tennis sessions.");
+            }
             setTennisSessions(apiSessions);
             return;
           } catch {
             const fallbackSessions = await fetchUstaSessionsDirect(
               abortController.signal
             );
+            if (fallbackSessions.length === 0) {
+              throw new Error("Unable to load tennis sessions.");
+            }
             setTennisSessions(fallbackSessions);
             return;
           }
@@ -211,6 +219,9 @@ const SportDetailPage = () => {
         const directSessions = await fetchUstaSessionsDirect(
           abortController.signal
         );
+        if (directSessions.length === 0) {
+          throw new Error("Unable to load tennis sessions.");
+        }
         setTennisSessions(directSessions);
       } catch {
         if (!abortController.signal.aborted) {
@@ -337,10 +348,10 @@ const SportDetailPage = () => {
                   <div className="border border-border bg-card p-6 font-body text-lg text-foreground">
                     Loading live USTA sessions...
                   </div>
-                ) : sessionsError ? (
+                ) : showUnavailableSessions ? (
                   <div className="space-y-4">
                     <div className="border border-border bg-card p-6 font-body text-lg text-foreground">
-                      {sessionsError}
+                      Live USTA sessions are unavailable right now.
                     </div>
                     <a
                       href="https://playtennis.usta.com/togethertennis/Coaching"
@@ -454,6 +465,8 @@ const SportDetailPage = () => {
               {isTennis ? (
                 <a
                   href="https://playtennis.usta.com/togethertennis/Coaching"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="inline-block bg-primary px-8 py-4 font-heading font-bold uppercase tracking-wider text-white transition-all duration-200 hover:scale-105"
                 >
                   USTA Registration →
@@ -462,7 +475,7 @@ const SportDetailPage = () => {
                 <a
                   href="https://forms.gle/3eQTjDbrti2ghwW17"
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   className="inline-block bg-primary px-8 py-4 font-heading font-bold uppercase tracking-wider text-white transition-all duration-200 hover:scale-105"
                 >
                   Join Waitlist →

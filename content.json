@@ -1,0 +1,580 @@
+{
+   "partners":[
+      {
+         "id":"partner-1",
+         "href":"https://www.instagram.com/rallyforwardnyc/",
+         "logo":"media:partner-1",
+         "name":"Rally Forward NYC"
+      },
+      {
+         "id":"partner-4",
+         "href":"https://www.instagram.com/ballbackproject/",
+         "logo":"media:partner-4",
+         "name":"Ball Back Project"
+      },
+      {
+         "id":"partner-1775257422154-26lfij",
+         "href":"https://www.instagram.com/align.gsoc/",
+         "logo":"https://mifoypysqezmialwxgxd.supabase.co/storage/v1/object/public/site-media/admin/1775257528914-screenshot-2026-04-03-at-7-05-11-pm.webp",
+         "name":"ALIGN GSOC"
+      },
+      {
+         "id":"partner-1777931537425-0uw38e",
+         "href":"https://www.henrystreet.org/",
+         "logo":"https://mifoypysqezmialwxgxd.supabase.co/storage/v1/object/public/site-media/admin/1777931567301-intranet-logo-hss.webp",
+         "name":"Henry Street"
+      },
+      {
+         "id":"partner-1779749601100-o24f37",
+         "href":"https://stemise.org",
+         "logo":"media:partner-3",
+         "name":"STEMise"
+      },
+      {
+         "id":"partner-1779749633325-5dqhha",
+         "href":"https://nextstepsjournal.org",
+         "logo":"media:partner-2",
+         "name":"Partner Name"
+      },
+      {
+         "id":"partner-1779749706059-v4i793",
+         "href":"https://up2us.org",
+         "logo":"https://mifoypysqezmialwxgxd.supabase.co/storage/v1/object/public/site-media/admin/1779749751358-logo-square.webp",
+         "name":"Up2Us Sports"
+      },
+      {
+         "id":"partner-1779749790428-ize8w0",
+         "href":"https://coachacrossamerica.org/",
+         "logo":"https://mifoypysqezmialwxgxd.supabase.co/storage/v1/object/public/site-media/admin/1779749847705-channels4-profile.webp",
+         "name":"Coach Across America"
+      }
+   ],
+   "siteText":{
+      "navItems":[
+         {
+            "label":"Home",
+            "path":"/",
+            "dropdown":[
+               {
+                  "label":"Tennis",
+                  "path":"/sports/tennis",
+                  "color":"#87cb4a"
+               },
+               {
+                  "label":"Basketball",
+                  "path":"/sports/basketball",
+                  "color":"#f6a15c"
+               },
+               {
+                  "label":"Football",
+                  "path":"/sports/football",
+                  "color":"#84a6ff"
+               },
+               {
+                  "label":"Soccer",
+                  "path":"/sports/soccer",
+                  "color":"#39b870"
+               },
+               {
+                  "label":"Golf",
+                  "path":"/sports/golf",
+                  "color":"#ab9bfa"
+               }
+            ]
+         },
+         {
+            "label":"Sports",
+            "path":"/sports"
+         },
+         {
+            "label":"Team",
+            "path":"/team"
+         },
+         {
+            "label":"Experiences",
+            "path":"/experiences"
+         },
+         {
+            "label":"Blog",
+            "path":"/blog"
+         },
+         {
+            "label":"Contact",
+            "path":"/contact"
+         },
+         {
+            "label":"Partners",
+            "path":"/partners"
+         }
+      ],
+      "hero":{
+         "lines":[
+            "Play Loud.",
+            "Build Strong."
+         ],
+         "subtitle":"Together Sports is a 501(c)(3) nonprofit empowering youth through sports, mentorship, and community one game at a time.",
+         "ctaPrimary":"Our Sports",
+         "ctaSecondary":"Donate Now"
+      },
+      "mission":[
+         "Together Sports is a nonprofit dedicated to building stronger communities through athletics. We provide accessible sports programs and create opportunities for youth to connect, grow, and thrive.",
+         "We believe every kid deserves a chance to play. Through free sports programs, mentorship, and community building, we're creating the next generation of leaders — on and off the field.",
+         "From tennis courts to basketball hoops, from football fields to golf courses — we meet kids where they are and take them where they want to go."
+      ],
+      "values":[
+         {
+            "title":"Access",
+            "desc":"Every kid plays, regardless of background or income.",
+            "bg":"#f6a15c"
+         },
+         {
+            "title":"Growth",
+            "desc":"Sports build character, discipline, and confidence.",
+            "bg":"#87cb4a"
+         },
+         {
+            "title":"Community",
+            "desc":"We rise together — athletes, mentors, families.",
+            "bg":"#ab9bfa"
+         }
+      ],
+      "sportsSection":{
+         "title":"Our Sports",
+         "subtitle":"Explore all four Together Sports programs in one place."
+      },
+      "testimonials":{
+         "title":"Testimonials",
+         "subtitle":"The little stories that show the big picture: connection, encouragement, and growth."
+      }
+   },
+   "blogPosts":[
+      {
+         "tag":"",
+         "slug":"together-sports-joins-align-gsoc",
+         "image":"https://substackcdn.com/image/fetch/$s_!TSyi!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fd4ad1407-75ea-484b-b692-a037d7a18ed7_646x610.png",
+         "title":"Together Sports Joins ALIGN GSOC: Building Global Impact Through Collaboration ",
+         "author":"Together Sports",
+         "excerpt":"At Together Sports, our mission has always been simple: expand access to sports for those who need it most.",
+         "featured":false,
+         "sourceUrl":"https://togethersports.substack.com/p/together-sports-joins-align-gsoc",
+         "contentHtml":"<p>At Together Sports, our mission has always been simple: expand access to sports for those who need it most. What started as a local initiative has grown into something much bigger: a movement focused on inclusion, opportunity, and community.</p><p><strong>That&#8217;s why we&#8217;re excited to share that Together Sports is now part of <a href=\"https://www.instagram.com/align.gsoc/\">ALIGN GSOC</a> (Global Student Organizations Conference).</strong></p><p>ALIGN GSOC brings together student-led organizations from around the world to collaborate, scale impact, and build meaningful partnerships. It&#8217;s not just about sharing ideas &#8212; it&#8217;s about turning those ideas into real, measurable change.</p><p>For Together Sports, this is a natural next step.</p><p>We&#8217;ve seen firsthand how powerful sports can be in underserved communities &#8212; building confidence, fostering connection, and creating opportunities where there were none. But the challenges we&#8217;re tackling aren&#8217;t limited to one city or one country. They&#8217;re global.</p><p>Through ALIGN GSOC, we&#8217;ll be able to:</p><ul><li><p>Connect with other student leaders working on real-world problems</p></li><li><p>Share our model for expanding access to sports</p></li><li><p>Learn from organizations across education, STEM, health, and social impact</p></li><li><p>Build partnerships that help us scale Together Sports beyond our current reach</p></li></ul><p>This opportunity comes at a key moment for us. As we expand into new locations and explore new sports, collaboration becomes essential. Being part of a global network allows us to grow smarter, faster, and with greater impact.</p><p>Most importantly, it reinforces something we&#8217;ve believed from the start:</p><p>Real change happens when people build together.</p><p>We&#8217;re proud to be part of ALIGN GSOC and excited for what&#8217;s ahead.</p><div class=\"captioned-image-container\"><figure><a class=\"image-link image2 is-viewable-img\" target=\"_blank\" href=\"https://substackcdn.com/image/fetch/$s_!TSyi!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fd4ad1407-75ea-484b-b692-a037d7a18ed7_646x610.png\" data-component-name=\"Image2ToDOM\"><div class=\"image2-inset\"><picture><source type=\"image/webp\" srcset=\"https://substackcdn.com/image/fetch/$s_!TSyi!,w_424,c_limit,f_webp,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fd4ad1407-75ea-484b-b692-a037d7a18ed7_646x610.png 424w, https://substackcdn.com/image/fetch/$s_!TSyi!,w_848,c_limit,f_webp,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fd4ad1407-75ea-484b-b692-a037d7a18ed7_646x610.png 848w, https://substackcdn.com/image/fetch/$s_!TSyi!,w_1272,c_limit,f_webp,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fd4ad1407-75ea-484b-b692-a037d7a18ed7_646x610.png 1272w, https://substackcdn.com/image/fetch/$s_!TSyi!,w_1456,c_limit,f_webp,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fd4ad1407-75ea-484b-b692-a037d7a18ed7_646x610.png 1456w\" sizes=\"100vw\"><img src=\"https://substackcdn.com/image/fetch/$s_!TSyi!,w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fd4ad1407-75ea-484b-b692-a037d7a18ed7_646x610.png\" width=\"284\" height=\"268.1733746130031\" data-attrs=\"{\"src\":\"https://substack-post-media.s3.amazonaws.com/public/images/d4ad1407-75ea-484b-b692-a037d7a18ed7_646x610.png\",\"srcNoWatermark\":null,\"fullscreen\":null,\"imageSize\":null,\"height\":610,\"width\":646,\"resizeWidth\":284,\"bytes\":151725,\"alt\":null,\"title\":null,\"type\":\"image/png\",\"href\":null,\"belowTheFold\":true,\"topImage\":false,\"internalRedirect\":\"https://togethersports.substack.com/i/193123195?img=https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fd4ad1407-75ea-484b-b692-a037d7a18ed7_646x610.png\",\"isProcessing\":false,\"align\":null,\"offset\":false}\" class=\"sizing-normal\" alt=\"\" srcset=\"https://substackcdn.com/image/fetch/$s_!TSyi!,w_424,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fd4ad1407-75ea-484b-b692-a037d7a18ed7_646x610.png 424w, https://substackcdn.com/image/fetch/$s_!TSyi!,w_848,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fd4ad1407-75ea-484b-b692-a037d7a18ed7_646x610.png 848w, https://substackcdn.com/image/fetch/$s_!TSyi!,w_1272,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fd4ad1407-75ea-484b-b692-a037d7a18ed7_646x610.png 1272w, https://substackcdn.com/image/fetch/$s_!TSyi!,w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fd4ad1407-75ea-484b-b692-a037d7a18ed7_646x610.png 1456w\" sizes=\"100vw\" loading=\"lazy\"></picture><div class=\"image-link-expand\"><div class=\"pencraft pc-display-flex pc-gap-8 pc-reset\"><button tabindex=\"0\" type=\"button\" class=\"pencraft pc-reset pencraft icon-container restack-image\"><svg role=\"img\" width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\" stroke-width=\"1.5\" stroke=\"var(--color-fg-primary)\" stroke-linecap=\"round\" stroke-linejoin=\"round\" xmlns=\"http://www.w3.org/2000/svg\"><g><title></title><path d=\"M2.53001 7.81595C3.49179 4.73911 6.43281 2.5 9.91173 2.5C13.1684 2.5 15.9537 4.46214 17.0852 7.23684L17.6179 8.67647M17.6179 8.67647L18.5002 4.26471M17.6179 8.67647L13.6473 6.91176M17.4995 12.1841C16.5378 15.2609 13.5967 17.5 10.1178 17.5C6.86118 17.5 4.07589 15.5379 2.94432 12.7632L2.41165 11.3235M2.41165 11.3235L1.5293 15.7353M2.41165 11.3235L6.38224 13.0882\"></path></g></svg></button><button tabindex=\"0\" type=\"button\" class=\"pencraft pc-reset pencraft icon-container view-image\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-maximize2 lucide-maximize-2\"><polyline points=\"15 3 21 3 21 9\"></polyline><polyline points=\"9 21 3 21 3 15\"></polyline><line x1=\"21\" x2=\"14\" y1=\"3\" y2=\"10\"></line><line x1=\"3\" x2=\"10\" y1=\"21\" y2=\"14\"></line></svg></button></div></div></div></a></figure></div><p></p>",
+         "publishedAt":"Fri, 03 Apr 2026 23:14:31 GMT"
+      },
+      {
+         "tag":"",
+         "slug":"lesson-with-theo",
+         "image":"https://substackcdn.com/image/fetch/$s_!Ax51!,w_256,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F598a2bd9-401a-4fba-8b63-94a3c80513c5_144x144.png",
+         "title":"Lesson with Theo! ",
+         "author":"Together Sports",
+         "excerpt":"",
+         "featured":false,
+         "sourceUrl":"https://togethersports.substack.com/p/lesson-with-theo",
+         "contentHtml":"<p></p>",
+         "publishedAt":"Fri, 13 Mar 2026 15:50:59 GMT"
+      },
+      {
+         "tag":"",
+         "slug":"test",
+         "image":"https://substackcdn.com/image/fetch/$s_!Ax51!,w_256,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F598a2bd9-401a-4fba-8b63-94a3c80513c5_144x144.png",
+         "title":"Sunday's Lesson with Hailey and Alex!",
+         "author":"Together Sports",
+         "excerpt":"March 1, 2026",
+         "featured":true,
+         "sourceUrl":"https://togethersports.substack.com/p/test",
+         "contentHtml":"<p></p>",
+         "publishedAt":"Fri, 06 Mar 2026 21:01:19 GMT"
+      }
+   ],
+   "experiences":[
+      {
+         "id":"quote-1",
+         "age":"Parent",
+         "name":"Leigh H",
+         "type":"parent",
+         "image":"",
+         "quote":"My 4-year-old had her first tennis lesson with Coach Harry, and it could not have gone better. He met her where she was, encouraging, kind, and full of energy. Together Tennis makes tennis feel welcoming for families at every level.",
+         "sport":"Tennis"
+      },
+      {
+         "id":"quote-2",
+         "age":"Parent",
+         "name":"Michael B",
+         "type":"parent",
+         "image":"",
+         "quote":"Zoe had a great experience practicing tennis with Harry. He did an excellent job teaching her techniques to improve her game. I would highly recommend Harry to any students who are looking to become better tennis players.",
+         "sport":"Tennis"
+      },
+      {
+         "id":"quote-3",
+         "age":"Parent",
+         "name":"Rachel L",
+         "type":"parent",
+         "image":"",
+         "quote":"Theo has always been quite shy, especially in new environments where he would normally stay close to me. Seeing him open up with you has been truly special, thank you for helping him come out of his shell!",
+         "sport":"Tennis"
+      },
+      {
+         "id":"photo-1",
+         "type":"photo",
+         "image":"media:img-0903",
+         "caption":"Hailey and Alex were a blast to coach.  Just one of those really fun sessions."
+      },
+      {
+         "id":"photo-2",
+         "type":"photo",
+         "image":"media:img-3782",
+         "caption":"Such a fun session with Kiersten. She kept getting better and better the whole time."
+      },
+      {
+         "id":"photo-4",
+         "type":"photo",
+         "image":"media:hero-sports",
+         "caption":"Theo tried it for the first time today and was into it right away."
+      },
+      {
+         "id":"quote-1777518853471-o7hd09",
+         "age":"Parent",
+         "name":"Daniel B",
+         "type":"parent",
+         "image":"",
+         "quote":"We had a great session with Harry, Sheldon, and Jonah. They made my 6-year-old daughter feel completely at ease right away, which isn’t always easy. They kept things fun while still teaching real skills, and she stayed engaged the whole time. It was a really positive experience for both of us.",
+         "sport":"Tennis"
+      },
+      {
+         "id":"parent-1777518903586-sijwse",
+         "age":"Parent",
+         "name":"James S",
+         "type":"parent",
+         "image":"",
+         "quote":"Tiam has been an incredible coach. He’s patient, encouraging, and knows exactly how to connect while still pushing for improvement. Every lesson feels structured and productive, but also enjoyable. We’ve seen real progress and wouldn’t want to work with anyone else.\n\n",
+         "sport":"Basketball"
+      },
+      {
+         "id":"quote-1777519082185-kf07k3",
+         "age":"Parent",
+         "name":"Marcus D",
+         "type":"parent",
+         "image":"",
+         "quote":"From the first session, Charlie just got it. He meets kids where they are and builds them up step by step. My son used to be hesitant, and now he’s confident, focused, and actually excited to practice on his own. That shift has been huge for us.",
+         "sport":"Football"
+      },
+      {
+         "id":"parent-1777519083115-qpuok1",
+         "age":"Parent",
+         "name":"Daniela R",
+         "type":"parent",
+         "image":"",
+         "quote":"What really stands out about Gabriel and Zachary is how organized and intentional they are. Every session has a purpose, but it never feels forced. They keep it positive and motivating. You can see the improvement week to week, and the kids genuinely enjoy being there",
+         "sport":"Soccer"
+      },
+      {
+         "id":"parent-1777519083385-n8ev44",
+         "age":"Parent",
+         "name":"Louis M",
+         "type":"parent",
+         "image":"",
+         "quote":"Solomon has a calm, patient way of teaching that makes a big difference. He breaks things down simply and never rushes, which helped my child stay confident instead of frustrated. It’s been great watching their skills and love for such a hard sport grow.",
+         "sport":"Golf"
+      },
+      {
+         "id":"photo-1777519361242-msi4ak",
+         "type":"photo",
+         "image":"https://mifoypysqezmialwxgxd.supabase.co/storage/v1/object/public/site-media/admin/1777519395791-img-2579.webp",
+         "caption":"Ella brought great excitement and focus today. Really proud of her progress!"
+      },
+      {
+         "id":"photo-1777519759750-efj5kd",
+         "type":"photo",
+         "image":"https://mifoypysqezmialwxgxd.supabase.co/storage/v1/object/public/site-media/admin/1777519813763-img-3767.webp",
+         "caption":"Julian’s first time playing today. Lots of Yu-Gi-Oh talk and a lot of fun."
+      },
+      {
+         "id":"photo-1777519760110-cnmlcf",
+         "type":"photo",
+         "image":"https://mifoypysqezmialwxgxd.supabase.co/storage/v1/object/public/site-media/admin/1777519880640-img-0380.webp",
+         "caption":"Zoe came in already strong. Just building on it and keeping it fun."
+      }
+   ],
+   "teamSections":[
+      {
+         "id":"founder",
+         "color":"#87cb4a",
+         "title":"Founder",
+         "people":[
+            {
+               "id":"founder-1",
+               "alt":"Founder placeholder",
+               "name":"Harry Honig",
+               "role":"Founder, Executive Director & Head Coach",
+               "image":"https://mifoypysqezmialwxgxd.supabase.co/storage/v1/object/public/site-media/admin/1773416467403-img-3782.webp",
+               "location":"New York City",
+               "description":"Harry founded Together Sports to expand access to sports for underserved youth. As Executive Director and Head Coach, he oversees the program, manages the coaching team and volunteers, organizes training sessions, and works directly with athletes to build skills, confidence, and a positive team environment.",
+               "socialLinks":[
+                  {
+                     "id":"social-1773268798094-h1i50b",
+                     "href":"https://www.linkedin.com/in/harry-honig-56b3b6303/",
+                     "platform":"linkedin"
+                  }
+               ]
+            }
+         ]
+      },
+      {
+         "id":"coaches",
+         "color":"#f6a15c",
+         "title":"Coaches",
+         "people":[
+            {
+               "id":"coach-2",
+               "alt":"Coach placeholder",
+               "name":"Jonah Angrist",
+               "role":"Assistant Coach — Instruction & Skill Development",
+               "image":"https://mifoypysqezmialwxgxd.supabase.co/storage/v1/object/public/site-media/admin/1773420518507-screenshot-2026-03-13-at-12-48-11-pm.webp",
+               "location":"New York City",
+               "description":"Jonah focuses on teaching fundamentals during sessions, leading drills, demonstrating techniques, and helping players develop their skills in a structured and engaging environment."
+            },
+            {
+               "id":"coach-3",
+               "alt":"Coach placeholder",
+               "name":"Sheldon Heyman",
+               "role":"Assistant Coach — Player Development & Confidence",
+               "image":"https://mifoypysqezmialwxgxd.supabase.co/storage/v1/object/public/site-media/admin/1773420582026-screenshot-2026-03-13-at-12-49-10-pm.webp",
+               "location":"New York City",
+               "description":"Sheldon helps players build fundamental skills while boosting confidence on and off the court. He assists with drills, instruction, and creating a supportive environment where athletes feel encouraged to improve."
+            },
+            {
+               "id":"person-1773199056001-zjvbp7",
+               "alt":"Team member",
+               "name":"Solomon Heyman",
+               "role":"Assistant Coach — Outreach & Program Development",
+               "image":"https://mifoypysqezmialwxgxd.supabase.co/storage/v1/object/public/site-media/admin/1773246516731-screenshot-2026-03-11-at-12-28-14-pm.webp",
+               "location":"New York City",
+               "description":"Solomon supports program growth through outreach, partnerships, and expanding into new sports. He also helps organize sessions and manage logistics to keep programs running smoothly.",
+               "socialLinks":[
+                  
+               ]
+            }
+         ]
+      },
+      {
+         "id":"section-1773416594873-4rxfih",
+         "color":"#4f74d6",
+         "title":"Staff",
+         "people":[
+            {
+               "id":"person-1773416606376-lwyjxf",
+               "alt":"Team member",
+               "name":"Tory Doft",
+               "role":"Social Media Manager",
+               "image":"https://mifoypysqezmialwxgxd.supabase.co/storage/v1/object/public/site-media/admin/1773596112697-screenshot-2026-03-15-at-1-34-38-pm.webp",
+               "location":"New York City",
+               "description":"Runs and manages Together Sports’ social media platforms, creating content and sharing updates to promote programs and engage the community.",
+               "socialLinks":[
+                  {
+                     "id":"social-1773416621126-3tn9q4",
+                     "href":"https://www.linkedin.com/in/victoria-doft-b825253a4/",
+                     "platform":"linkedin"
+                  }
+               ]
+            },
+            {
+               "id":"person-1773441319468-aty1rr",
+               "alt":"Team member",
+               "name":"Soumil Voona",
+               "role":"Technology Lead",
+               "image":"https://mifoypysqezmialwxgxd.supabase.co/storage/v1/object/public/site-media/admin/1775255192637-screenshot-2026-04-03-at-6-26-01-pm.webp",
+               "location":"Irving, TX",
+               "description":"",
+               "socialLinks":[
+                  {
+                     "id":"social-1773441351695-6mbyh0",
+                     "href":"https://www.linkedin.com/in/soumil-voona/",
+                     "platform":"linkedin"
+                  }
+               ]
+            },
+            {
+               "id":"person-1774198238398-e3nngr",
+               "alt":"Team member",
+               "name":"Akshath Sundar",
+               "role":"Texas Chapter Founder",
+               "image":"https://mifoypysqezmialwxgxd.supabase.co/storage/v1/object/public/site-media/admin/1774198253163-screenshot-2026-03-22-at-12-50-02-pm.webp",
+               "location":"Frisco, TX",
+               "description":"",
+               "socialLinks":[
+                  {
+                     "id":"social-1774198283189-6k5vy2",
+                     "href":"https://www.linkedin.com/in/akshath-sundar-0377a4378/",
+                     "platform":"linkedin"
+                  }
+               ]
+            },
+            {
+               "id":"person-1775252763573-qzoa70",
+               "alt":"Team member",
+               "name":"Divyam Gupta",
+               "role":"Basketball Lead",
+               "image":"https://mifoypysqezmialwxgxd.supabase.co/storage/v1/object/public/site-media/admin/1775254901646-screenshot-2026-04-03-at-6-21-17-pm.webp",
+               "location":"San Ramon, CA",
+               "description":"",
+               "socialLinks":[
+                  
+               ]
+            },
+            {
+               "id":"person-1775252971883-awyxkp",
+               "alt":"Team member",
+               "name":"Tiam Zabeti",
+               "role":"Ohio Chapter Founder",
+               "image":"https://mifoypysqezmialwxgxd.supabase.co/storage/v1/object/public/site-media/admin/1775701641879-screenshot-2026-04-08-at-10-26-51-pm.webp",
+               "location":"Cincinnati, OH",
+               "description":"",
+               "socialLinks":[
+                  
+               ]
+            },
+            {
+               "id":"person-1775253163116-696ff9",
+               "alt":"Team member",
+               "name":"Abie Honig",
+               "role":"Marketing Lead",
+               "image":"",
+               "location":"New York City",
+               "description":"",
+               "socialLinks":[
+                  
+               ]
+            }
+         ]
+      }
+   ],
+   "sportDescriptions":[
+      {
+         "id":"tennis",
+         "name":"Tennis",
+         "tagline":"Every serve is a fresh start.",
+         "description":"Our tennis program provides free coaching, equipment, and court time to youth aged 8-18. From beginners to competitive players, we build skills and confidence through structured lessons and match play.",
+         "schedule":[
+            "Monday & Wednesday: 4:00-6:00 PM",
+            "Saturday: 9:00 AM-12:00 PM",
+            "Summer Intensive: June-August"
+         ]
+      },
+      {
+         "id":"basketball",
+         "name":"Basketball",
+         "tagline":"The court is where leaders are made.",
+         "description":"Our basketball program teaches fundamentals, teamwork, and game strategy. Open to all skill levels, we focus on building confidence through competitive play and mentorship.",
+         "schedule":[
+            "Tuesday & Thursday: 4:00-6:00 PM",
+            "Saturday: 1:00-4:00 PM"
+         ]
+      },
+      {
+         "id":"football",
+         "name":"Football",
+         "tagline":"Every play counts. Every player matters.",
+         "description":"Our football program emphasizes discipline, teamwork, and sportsmanship. We provide equipment and coaching for flag and tackle football across multiple age groups.",
+         "schedule":[
+            "Monday & Wednesday: 4:30-6:30 PM",
+            "Saturday: 10:00 AM-1:00 PM"
+         ]
+      },
+      {
+         "id":"soccer",
+         "name":"Soccer",
+         "tagline":"One touch can change the game.",
+         "description":"Our soccer program builds confidence, agility, and team-first habits through skill work, small-sided games, and supportive coaching for every level.",
+         "schedule":[
+            "Tuesday & Thursday: 4:30-6:30 PM",
+            "Saturday: 9:00 AM-12:00 PM"
+         ]
+      },
+      {
+         "id":"golf",
+         "name":"Golf",
+         "tagline":"The long game starts here.",
+         "description":"Our golf program introduces youth to the sport of patience and precision. With access to courses and professional instruction, we open doors that many thought were closed.",
+         "schedule":[
+            "Wednesday: 3:30-5:30 PM",
+            "Saturday: 8:00-11:00 AM"
+         ]
+      }
+   ],
+   "tennisLessonVideos":[
+      {
+         "id":"lesson-video-1773254729308-gzdruj",
+         "title":"Lesson Video",
+         "youtubeUrl":""
+      }
+   ],
+   "impactMetricsSection":{
+      "items":[
+         {
+            "id":"metric-equipment",
+            "color":"#ab9bfa",
+            "title":"People Reached",
+            "value":"1800+"
+         },
+         {
+            "id":"metric-communities",
+            "color":"#f6a15c",
+            "title":"Partner Organizations",
+            "value":"8+"
+         },
+         {
+            "id":"metric-youth",
+            "color":"#87cb4a",
+            "title":"Equipment Donated",
+            "value":"75+ "
+         },
+         {
+            "id":"metric-free",
+            "color":"#84a6ff",
+            "title":"Volunteer Hours",
+            "value":"600+ "
+         }
+      ],
+      "isVisible":true
+   },
+   "otherLocationsSection":{
+      "items":[
+         {
+            "id":"location-1773877257250-ogswz4",
+            "name":"Texas",
+            "embedUrl":"https://www.google.com/maps?q=Texas&output=embed"
+         },
+         {
+            "id":"location-1773877275930-oc6k37",
+            "name":"Florida",
+            "embedUrl":"https://www.google.com/maps?q=Florida&output=embed"
+         },
+         {
+            "id":"location-1775252564532-g9eo9d",
+            "name":"California ",
+            "embedUrl":"https://www.google.com/maps?q=California&output=embed"
+         },
+         {
+            "id":"location-1775252578786-0e8tcp",
+            "name":"India",
+            "embedUrl":"https://www.google.com/maps?q=India&output=embed"
+         },
+         {
+            "id":"location-1775252590913-48xit4",
+            "name":"New Jersey",
+            "embedUrl":"https://www.google.com/maps?q=NewJersey&output=embed"
+         },
+         {
+            "id":"location-1775252601963-ud3fv4",
+            "name":"Ohio",
+            "embedUrl":"https://www.google.com/maps?q=Ohio&output=embed"
+         },
+         {
+            "id":"location-1779726866938-ttt2bs",
+            "name":"Thailand",
+            "embedUrl":"https://www.google.com/maps?q=Thailand&output=embed"
+         }
+      ],
+      "title":"Other Locations"
+   }
+}

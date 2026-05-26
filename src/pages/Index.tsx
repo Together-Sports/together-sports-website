@@ -90,6 +90,42 @@ const sportsCtaSpins = [
   }
 ];
 
+const resolveValueCardAppearance = (bg?: string) => {
+  const fallbackClass = "bg-[#87cb4a]";
+  const token = bg?.trim() ?? "";
+  const normalizedToken = token.toLowerCase();
+
+  const knownColorMap: Record<string, { className: string; textClass: string }> = {
+    "#f6a15c": { className: "bg-[#f6a15c]", textClass: "text-white" },
+    "#87cb4a": { className: "bg-[#87cb4a]", textClass: "text-white" },
+    "#ab9bfa": { className: "bg-[#ab9bfa]", textClass: "text-white" },
+    "#84a6ff": { className: "bg-[#84a6ff]", textClass: "text-white" },
+    white: { className: "bg-white", textClass: "text-foreground" },
+    "#fff": { className: "bg-white", textClass: "text-foreground" },
+    "#ffffff": { className: "bg-white", textClass: "text-foreground" }
+  };
+
+  const knownColor = knownColorMap[normalizedToken];
+  if (knownColor) {
+    return knownColor;
+  }
+
+  if (!token) {
+    return { className: fallbackClass, textClass: "text-white" };
+  }
+
+  if (token.startsWith("bg-")) {
+    const usesLightBackground = /white|slate-50|stone-50|zinc-50|neutral-50|gray-50|amber-50|yellow-50|lime-50|emerald-50|cyan-50|sky-50|blue-50|indigo-50|violet-50|purple-50|fuchsia-50|pink-50|rose-50/i.test(token);
+
+    return {
+      className: token,
+      textClass: usesLightBackground ? "text-foreground" : "text-white"
+    };
+  }
+
+  return { className: fallbackClass, textClass: "text-white" };
+};
+
 const MapEmbedCard = ({
   embedUrl,
   title,
@@ -348,20 +384,24 @@ const Index = () => {
             </ScrollReveal>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-8">
-              {values.map((value, index) => (
-                <ScrollReveal key={value.title} delay={index * 0.12}>
-                  <div
-                    className={`group border-2 border-transparent p-8 md:p-10 transition-all duration-200 hover:scale-105 ${value.bg ?? "bg-[#87cb4a]"}`}
-                  >
-                    <h4 className="font-heading text-3xl md:text-4xl font-black uppercase mb-4 text-white">
-                      {value.title}
-                    </h4>
-                    <p className="text-lg md:text-xl leading-relaxed text-white">
-                      {value.desc}
-                    </p>
-                  </div>
-                </ScrollReveal>
-              ))}
+              {values.map((value, index) => {
+                const appearance = resolveValueCardAppearance(value.bg);
+
+                return (
+                  <ScrollReveal key={value.title} delay={index * 0.12}>
+                    <div
+                      className={`group border-2 border-transparent p-8 md:p-10 transition-all duration-200 hover:scale-105 ${appearance.className}`}
+                    >
+                      <h4 className={`font-heading text-3xl md:text-4xl font-black uppercase mb-4 ${appearance.textClass}`}>
+                        {value.title}
+                      </h4>
+                      <p className={`text-lg md:text-xl leading-relaxed ${appearance.textClass}`}>
+                        {value.desc}
+                      </p>
+                    </div>
+                  </ScrollReveal>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -542,12 +582,14 @@ const Index = () => {
                 collect quality used equipment that would otherwise be thrown
                 away and donate it back into the community.
               </p>
-              <Link
-                to="/sports/tennis"
+              <a
+                href="https://www.instagram.com/rallyforwardnyc?igsh=c3dpbGNpeWZnOXRj"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-block px-8 py-4 bg-primary text-white font-heading font-bold text-lg uppercase tracking-wider hover:scale-105 hover:-rotate-1 transition-all duration-200"
               >
                 Learn More
-              </Link>
+              </a>
             </ScrollReveal>
           </div>
         </div>

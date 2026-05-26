@@ -322,6 +322,13 @@ export const EditableContentProvider = ({
 
     nextContent = await withLiveBlogPosts(nextContent);
 
+    // If the live content in Supabase is missing sport descriptions,
+    // fall back to the local seed so detail pages (e.g. /sports/tennis)
+    // still render on the deployed site.
+    if (!Array.isArray(nextContent.sportDescriptions) || nextContent.sportDescriptions.length === 0) {
+      nextContent.sportDescriptions = defaultContent.sportDescriptions;
+    }
+
     applyContent(nextContent);
     setLastSavedSnapshot(createSerializedSnapshot(nextContent));
     setIsLoadingContent(false);
