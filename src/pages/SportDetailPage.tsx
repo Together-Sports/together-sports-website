@@ -174,7 +174,9 @@ const SportDetailPage = () => {
     .filter((video) => video.youtubeUrl)
     .slice(0, 2);
   const showUnavailableSessions =
-    isTennis && !sessionsLoading && (sessionsError !== null || tennisSessions.length === 0);
+    isTennis &&
+    !sessionsLoading &&
+    (sessionsError !== null || tennisSessions.length === 0);
 
   useEffect(() => {
     if (!isTennis) {
