@@ -1,6 +1,8 @@
 import { useRef, useState, type ChangeEvent, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import {
+  ArrowDown,
+  ArrowUp,
   Download,
   FileText,
   Images,
@@ -521,6 +523,27 @@ const AdminPage = () => {
     setExperiences((current) =>
       current.map((item) => (item.id === id ? next : item))
     );
+  };
+
+  const moveExperience = (id: string, direction: -1 | 1) => {
+    setExperiences((current) => {
+      const index = current.findIndex((item) => item.id === id);
+
+      if (index < 0) {
+        return current;
+      }
+
+      const nextIndex = index + direction;
+
+      if (nextIndex < 0 || nextIndex >= current.length) {
+        return current;
+      }
+
+      const next = [...current];
+      const [moved] = next.splice(index, 1);
+      next.splice(nextIndex, 0, moved);
+      return next;
+    });
   };
 
   const updateBlogPost = (
@@ -1617,7 +1640,7 @@ const AdminPage = () => {
             </ScrollReveal>
 
             <div className="space-y-6">
-              {experiences.map((item) => (
+              {experiences.map((item, index) => (
                 <EditorCard key={item.id}>
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <div>
@@ -1629,17 +1652,37 @@ const AdminPage = () => {
                       </p>
                       <p className="text-muted-foreground text-sm">{item.id}</p>
                     </div>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setExperiences((current) =>
-                          current.filter((entry) => entry.id !== item.id)
-                        )
-                      }
-                      className="px-4 py-2 border border-border bg-white text-foreground font-heading font-bold uppercase text-xs tracking-wider"
-                    >
-                      Remove
-                    </button>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => moveExperience(item.id, -1)}
+                        disabled={index === 0}
+                        className="px-3 py-2 border border-border bg-white text-foreground font-heading font-bold uppercase text-xs tracking-wider inline-flex items-center gap-2 disabled:opacity-50"
+                      >
+                        <ArrowUp size={14} />
+                        Up
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => moveExperience(item.id, 1)}
+                        disabled={index === experiences.length - 1}
+                        className="px-3 py-2 border border-border bg-white text-foreground font-heading font-bold uppercase text-xs tracking-wider inline-flex items-center gap-2 disabled:opacity-50"
+                      >
+                        <ArrowDown size={14} />
+                        Down
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setExperiences((current) =>
+                            current.filter((entry) => entry.id !== item.id)
+                          )
+                        }
+                        className="px-4 py-2 border border-border bg-white text-foreground font-heading font-bold uppercase text-xs tracking-wider"
+                      >
+                        Remove
+                      </button>
+                    </div>
                   </div>
 
                   <TestimonialFields
