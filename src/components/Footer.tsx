@@ -11,12 +11,6 @@ const InstagramIcon = (props: SocialIconProps) => (
   </svg>
 );
 
-const TikTokIcon = (props: SocialIconProps) => (
-  <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" {...props}>
-    <path d="M9.75 0h2.165c.17 1.47 1.005 2.64 2.335 3.36v2.203a5.45 5.45 0 0 1-2.321-.697v5.062c0 2.68-2.117 4.572-4.566 4.572-2.598 0-4.933-1.987-4.933-4.817 0-2.988 2.58-4.92 5.205-4.836v2.287c-1.313-.04-2.666.656-2.666 2.26 0 1.46 1.2 2.215 2.1 2.215.86 0 2.11-.55 2.11-2.145z" />
-  </svg>
-);
-
 const LinkedInIcon = (props: SocialIconProps) => (
   <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" {...props}>
     <path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854zM4.943 13.5V6.169H2.542V13.5zm-1.2-8.333c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248S2.4 3.21 2.4 3.919c0 .694.521 1.248 1.327 1.248zm2.649 8.333h2.401V9.407c0-.219.016-.438.081-.594.176-.438.577-.891 1.25-.891.881 0 1.233.672 1.233 1.656V13.5h2.401V9.297c0-2.252-1.201-3.3-2.804-3.3-1.292 0-1.862.711-2.183 1.21h.016v-1.04H6.392c.03.688 0 7.333 0 7.333" />
@@ -69,11 +63,6 @@ const socialLinks = [
     href: "https://www.instagram.com/togethertennis/",
     label: "Instagram",
     Icon: InstagramIcon
-  },
-  {
-    href: "https://www.tiktok.com/@together_sports",
-    label: "TikTok",
-    Icon: TikTokIcon
   },
   {
     href: "https://www.linkedin.com/company/108267093/",

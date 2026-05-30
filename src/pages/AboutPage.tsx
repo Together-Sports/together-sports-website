@@ -274,7 +274,7 @@ const AboutPage = () => {
                       <ScrollReveal
                         key={`${section.title}-${person.name}-${personIndex}`}
                         delay={sectionIndex * 0.05 + personIndex * 0.1}
-                        direction={personIndex % 2 === 0 ? "left" : "right"}
+                        direction="up"
                       >
                         <TeamCard
                           person={person}
