@@ -4,10 +4,14 @@ import Footer from "./Footer";
 import { useEditableContent } from "@/lib/editable-content";
 
 const Layout = () => {
-  const { isAuthenticated, authLoading } = useEditableContent();
+  const { isAuthenticated, authLoading, isLoadingContent } = useEditableContent();
   const isLocalViteDev =
     import.meta.env.DEV && typeof window !== "undefined" && window.location.port === "8081";
   const showEditModeButton = isLocalViteDev || (!authLoading && isAuthenticated);
+
+  if (isLoadingContent) {
+    return <div className="min-h-screen bg-background" />;
+  }
 
   return (
     <div className="min-h-screen flex flex-col">

@@ -193,7 +193,7 @@ const Index = () => {
     ? siteText.mission
     : [
         "Together Sports is a nonprofit dedicated to building stronger communities through athletics. We provide accessible sports programs and create opportunities for youth to connect, grow, and thrive.",
-        "We believe every kid deserves a chance to play. Through free sports programs, mentorship, and community building, we\'re creating the next generation of leaders — on and off the field.",
+        "We believe every kid deserves a chance to play. Through free sports programs, mentorship, and community building, we're creating the next generation of leaders — on and off the field.",
         "From tennis courts to basketball hoops, from football fields to golf courses — we meet kids where they are and take them where they want to go."
       ];
   const values = siteText?.values?.length
@@ -527,12 +527,12 @@ const Index = () => {
       {impactMetricsSection.isVisible &&
       impactMetricsSection.items.length > 0 ? (
         <section className="py-10 md:py-12 bg-white relative">
-          <div className="w-full px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col items-center gap-5 md:flex-row md:flex-nowrap md:justify-center md:items-stretch md:gap-6">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
               {impactMetricsSection.items.map((item, index) => (
                 <ScrollReveal key={item.id} delay={index * 0.08}>
                   <div
-                    className="flex h-full min-h-[220px] w-full max-w-[360px] flex-col justify-between bg-white border-4 px-6 py-7 text-center md:min-h-[240px] md:w-[220px] md:max-w-none md:px-6 md:py-8 lg:w-[240px] lg:px-6 xl:w-[260px] xl:px-7"
+                    className="flex h-full min-h-[220px] w-full flex-col justify-between bg-white border-4 px-6 py-7 text-center md:min-h-[240px] md:px-6 md:py-8 lg:px-6 xl:px-7"
                     style={{ borderColor: item.color }}
                   >
                     <p
