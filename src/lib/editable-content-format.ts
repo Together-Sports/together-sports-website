@@ -60,6 +60,11 @@ export type SiteText = {
   values: SiteValue[];
   sportsSection: { title: string; subtitle: string };
   testimonials: { title: string; subtitle: string };
+  heroImage1?: string;
+  heroImage2?: string;
+  heroImage3?: string;
+  missionImage?: string;
+  secondServeImage?: string;
 };
 
 export type EditableContentState = {
@@ -161,13 +166,25 @@ export const serializeEditableContentState = (
   sportDescriptions: Array.isArray(content.sportDescriptions)
     ? content.sportDescriptions.map((item) => ({ ...item }))
     : [],
-  siteText: content.siteText ? { ...content.siteText } : {
+  siteText: content.siteText ? {
+    ...content.siteText,
+    heroImage1: toPortableMediaValue(content.siteText.heroImage1),
+    heroImage2: toPortableMediaValue(content.siteText.heroImage2),
+    heroImage3: toPortableMediaValue(content.siteText.heroImage3),
+    missionImage: toPortableMediaValue(content.siteText.missionImage),
+    secondServeImage: toPortableMediaValue(content.siteText.secondServeImage)
+  } : {
     navItems: [],
     hero: { lines: [], subtitle: "", ctaPrimary: "", ctaSecondary: "" },
     mission: [],
     values: [],
     sportsSection: { title: "Our Sports", subtitle: "" },
-    testimonials: { title: "Testimonials", subtitle: "" }
+    testimonials: { title: "Testimonials", subtitle: "" },
+    heroImage1: "",
+    heroImage2: "",
+    heroImage3: "",
+    missionImage: "",
+    secondServeImage: ""
   },
 });
 
@@ -238,7 +255,12 @@ export const hydrateEditableContentState = (
             : { title: "Our Sports", subtitle: "" },
           testimonials: isPlainObject((content.siteText as any).testimonials)
             ? { ...((content.siteText as any).testimonials) }
-            : { title: "Testimonials", subtitle: "" }
+            : { title: "Testimonials", subtitle: "" },
+          heroImage1: fromPortableMediaValue((content.siteText as any).heroImage1),
+          heroImage2: fromPortableMediaValue((content.siteText as any).heroImage2),
+          heroImage3: fromPortableMediaValue((content.siteText as any).heroImage3),
+          missionImage: fromPortableMediaValue((content.siteText as any).missionImage),
+          secondServeImage: fromPortableMediaValue((content.siteText as any).secondServeImage)
         }
       : {
           navItems: [],
@@ -246,7 +268,12 @@ export const hydrateEditableContentState = (
           mission: [],
           values: [],
           sportsSection: { title: "Our Sports", subtitle: "" },
-          testimonials: { title: "Testimonials", subtitle: "" }
+          testimonials: { title: "Testimonials", subtitle: "" },
+          heroImage1: "",
+          heroImage2: "",
+          heroImage3: "",
+          missionImage: "",
+          secondServeImage: ""
         },
 });
 

@@ -1555,6 +1555,75 @@ const AdminPage = () => {
                   ))}
                 </div>
               </EditorCard>
+
+              <EditorCard>
+                <p className="font-heading text-2xl font-black uppercase">
+                  Homepage Photos
+                </p>
+                <p className="text-muted-foreground text-sm">
+                  Change the photos displayed on the home page.
+                </p>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
+                  <ImageField
+                    label="Top Left Hero Photo (Action Moment)"
+                    value={siteText?.heroImage1 || ""}
+                    onChange={(value) =>
+                      setSiteText((current) => ({
+                        ...current,
+                        heroImage1: value
+                      }))
+                    }
+                    onUpload={uploadImage}
+                  />
+                  <ImageField
+                    label="Middle Right Hero Photo (Community Moment)"
+                    value={siteText?.heroImage2 || ""}
+                    onChange={(value) =>
+                      setSiteText((current) => ({
+                        ...current,
+                        heroImage2: value
+                      }))
+                    }
+                    onUpload={uploadImage}
+                  />
+                  <ImageField
+                    label="Bottom Left Hero Photo (Team Moment)"
+                    value={siteText?.heroImage3 || ""}
+                    onChange={(value) =>
+                      setSiteText((current) => ({
+                        ...current,
+                        heroImage3: value
+                      }))
+                    }
+                    onUpload={uploadImage}
+                  />
+                  <ImageField
+                    label="Mission Section Photo"
+                    value={siteText?.missionImage || ""}
+                    onChange={(value) =>
+                      setSiteText((current) => ({
+                        ...current,
+                        missionImage: value
+                      }))
+                    }
+                    onUpload={uploadImage}
+                  />
+                  <div className="md:col-span-2">
+                    <ImageField
+                      label="Second Serve Section Photo"
+                      value={siteText?.secondServeImage || ""}
+                      onChange={(value) =>
+                        setSiteText((current) => ({
+                          ...current,
+                          secondServeImage: value
+                        }))
+                      }
+                      onUpload={uploadImage}
+                    />
+                  </div>
+                </div>
+              </EditorCard>
             </div>
           </TabsContent>
 

@@ -177,9 +177,13 @@ const MapEmbedCard = ({
 );
 
 const Index = () => {
-  const { experiences, impactMetricsSection, otherLocationsSection } =
+  const { experiences, impactMetricsSection, otherLocationsSection, siteText } =
     useEditableContent();
-  const { siteText } = useEditableContent();
+  const resolvedHeroImage1 = siteText?.heroImage1 || image0903;
+  const resolvedHeroImage2 = siteText?.heroImage2 || heroImage;
+  const resolvedHeroImage3 = siteText?.heroImage3 || image3782;
+  const resolvedMissionImage = siteText?.missionImage || communityImg;
+  const resolvedSecondServeImage = siteText?.secondServeImage || secondServe;
   const featuredTestimonials = experiences
     .filter((item) => item.type === "quote" || item.type === "parent")
     .slice(0, 3);
@@ -314,7 +318,7 @@ const Index = () => {
             >
               <div className="absolute left-10 -top-6 w-[68%] h-[40%] overflow-hidden border-[10px] border-white bg-white scrapbook-rotate-2 z-10">
                 <img
-                  src={image0903}
+                  src={resolvedHeroImage1}
                   alt="Together Sports action moment"
                   loading="eager"
                   decoding="async"
@@ -324,7 +328,7 @@ const Index = () => {
               </div>
               <div className="absolute right-2 top-[22%] w-[82%] h-[46%] overflow-hidden border-[12px] border-white bg-white scrapbook-rotate-1 z-10">
                 <img
-                  src={heroImage}
+                  src={resolvedHeroImage2}
                   alt="Together Sports community moment"
                   loading="eager"
                   decoding="async"
@@ -334,7 +338,7 @@ const Index = () => {
               </div>
               <div className="absolute left-[-2%] bottom-[2%] w-[74%] h-[42%] overflow-hidden border-[10px] border-white bg-white scrapbook-rotate-2 z-20">
                 <img
-                  src={image3782}
+                  src={resolvedHeroImage3}
                   alt="Together Sports team moment"
                   loading="eager"
                   decoding="async"
@@ -368,7 +372,7 @@ const Index = () => {
             <ScrollReveal direction="left">
               <div className="scrapbook-rotate-2">
                 <img
-                  src={communityImg}
+                  src={resolvedMissionImage}
                   alt="Together Sports community"
                   loading="lazy"
                   decoding="async"
@@ -560,7 +564,7 @@ const Index = () => {
               <div className="relative">
                 <div className="scrapbook-rotate-1">
                   <img
-                    src={secondServe}
+                    src={resolvedSecondServeImage}
                     alt="Second Serve service"
                     loading="lazy"
                     decoding="async"

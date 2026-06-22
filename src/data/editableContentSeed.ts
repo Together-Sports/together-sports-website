@@ -317,7 +317,12 @@ const editableContentSeed: PortableEditableContentState = {
       { "title": "Community", "desc": "We rise together — athletes, mentors, families.", "bg": "#ab9bfa" }
     ],
     "sportsSection": { "title": "Our Sports", "subtitle": "Explore all four Together Sports programs in one place." },
-    "testimonials": { "title": "Testimonials", "subtitle": "The little stories that show the big picture: connection, encouragement, and growth." }
+    "testimonials": { "title": "Testimonials", "subtitle": "The little stories that show the big picture: connection, encouragement, and growth." },
+    "heroImage1": "media:img-0903",
+    "heroImage2": "media:hero-sports",
+    "heroImage3": "media:img-3782",
+    "missionImage": "media:community",
+    "secondServeImage": "media:second-serve"
   }
 };
 
