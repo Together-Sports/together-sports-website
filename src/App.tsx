@@ -9,21 +9,19 @@ import ScrollToTop from "./components/ScrollToTop";
 import Seo from "./components/Seo";
 import Layout from "./components/Layout";
 import Index from "./pages/Index";
-
-const AboutPage = lazy(() => import("./pages/AboutPage"));
-const SportsPage = lazy(() => import("./pages/SportsPage"));
-const SportDetailPage = lazy(() => import("./pages/SportDetailPage"));
-const BlogPage = lazy(() => import("./pages/BlogPage"));
-const BlogPostPage = lazy(() => import("./pages/BlogPostPage"));
-const ExperiencesPage = lazy(() => import("./pages/ExperiencesPage"));
-const GetInvolvedPage = lazy(() => import("./pages/GetInvolvedPage"));
-const ContactPage = lazy(() => import("./pages/ContactPage"));
-const PartnersPage = lazy(() => import("./pages/PartnersPage"));
-const AdminPage = lazy(() => import("./pages/AdminPage"));
-const NotFound = lazy(() => import("./pages/NotFound"));
+import AboutPage from "./pages/AboutPage";
+import SportsPage from "./pages/SportsPage";
+import SportDetailPage from "./pages/SportDetailPage";
+import BlogPage from "./pages/BlogPage";
+import BlogPostPage from "./pages/BlogPostPage";
+import ExperiencesPage from "./pages/ExperiencesPage";
+import GetInvolvedPage from "./pages/GetInvolvedPage";
+import ContactPage from "./pages/ContactPage";
+import PartnersPage from "./pages/PartnersPage";
+import AdminPage from "./pages/AdminPage";
+import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
-const RouteFallback = <div className="min-h-screen bg-background" aria-hidden="true" />;
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -34,25 +32,23 @@ const App = () => (
         <BrowserRouter>
           <ScrollToTop />
           <Seo />
-          <Suspense fallback={RouteFallback}>
-            <Routes>
-              <Route element={<Layout />}>
-                <Route path="/" element={<Index />} />
-                <Route path="/team" element={<AboutPage />} />
-                <Route path="/about" element={<Navigate to="/team" replace />} />
-                <Route path="/sports" element={<SportsPage />} />
-                <Route path="/sports/:sport" element={<SportDetailPage />} />
-                <Route path="/blog" element={<BlogPage />} />
-                <Route path="/blog/:slug" element={<BlogPostPage />} />
-                <Route path="/experiences" element={<ExperiencesPage />} />
-                <Route path="/get-involved" element={<GetInvolvedPage />} />
-                <Route path="/contact" element={<ContactPage />} />
-                <Route path="/partners" element={<PartnersPage />} />
-              </Route>
-              <Route path="/admin" element={<AdminPage />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </Suspense>
+          <Routes>
+            <Route element={<Layout />}>
+              <Route path="/" element={<Index />} />
+              <Route path="/team" element={<AboutPage />} />
+              <Route path="/about" element={<Navigate to="/team" replace />} />
+              <Route path="/sports" element={<SportsPage />} />
+              <Route path="/sports/:sport" element={<SportDetailPage />} />
+              <Route path="/blog" element={<BlogPage />} />
+              <Route path="/blog/:slug" element={<BlogPostPage />} />
+              <Route path="/experiences" element={<ExperiencesPage />} />
+              <Route path="/get-involved" element={<GetInvolvedPage />} />
+              <Route path="/contact" element={<ContactPage />} />
+              <Route path="/partners" element={<PartnersPage />} />
+            </Route>
+            <Route path="/admin" element={<AdminPage />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
         </BrowserRouter>
       </TooltipProvider>
     </EditableContentProvider>

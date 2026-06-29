@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import headerLogo from "@/assets/headerlogo.svg";
@@ -28,10 +28,15 @@ const defaultNavItems = [
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const location = useLocation();
   const { siteText } = useEditableContent();
   const navItems = siteText?.navItems?.length
     ? siteText.navItems
     : defaultNavItems;
+
+  useEffect(() => {
+    setIsOpen(false);
+  }, [location.pathname]);
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-primary border-b border-primary/80">
