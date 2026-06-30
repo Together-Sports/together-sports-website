@@ -601,6 +601,40 @@ const AdminPage = () => {
     );
   };
 
+  const moveTeamSection = (id: string, direction: -1 | 1) => {
+    setTeamSections((current) => {
+      const index = current.findIndex((item) => item.id === id);
+      if (index < 0) return current;
+      const nextIndex = index + direction;
+      if (nextIndex < 0 || nextIndex >= current.length) return current;
+      const next = [...current];
+      const [moved] = next.splice(index, 1);
+      next.splice(nextIndex, 0, moved);
+      return next;
+    });
+  };
+
+  const moveTeamPerson = (
+    sectionId: string,
+    personId: string,
+    direction: -1 | 1
+  ) => {
+    setTeamSections((current) =>
+      current.map((section) => {
+        if (section.id !== sectionId) return section;
+        const index = section.people.findIndex((item) => item.id === personId);
+        if (index < 0) return section;
+        const nextIndex = index + direction;
+        if (nextIndex < 0 || nextIndex >= section.people.length) return section;
+        const nextPeople = [...section.people];
+        const [moved] = nextPeople.splice(index, 1);
+        nextPeople.splice(nextIndex, 0, moved);
+        return { ...section, people: nextPeople };
+      })
+    );
+  };
+
+
   const updateTennisLessonVideo = (id: string, next: TennisLessonVideo) => {
     setTennisLessonVideos((current) =>
       current.map((item) => (item.id === id ? next : item))
@@ -2208,7 +2242,7 @@ const AdminPage = () => {
                   + Add Category
                 </button>
               </div>
-              {teamSections.map((section) => (
+              {teamSections.map((section, index) => (
                 <EditorCard key={section.id}>
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <div>
@@ -2219,17 +2253,37 @@ const AdminPage = () => {
                         {section.id}
                       </p>
                     </div>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setTeamSections((current) =>
-                          current.filter((item) => item.id !== section.id)
-                        )
-                      }
-                      className="px-4 py-2 border border-border bg-white text-foreground font-heading font-bold uppercase text-xs tracking-wider"
-                    >
-                      Remove Category
-                    </button>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => moveTeamSection(section.id, -1)}
+                        disabled={index === 0}
+                        className="px-3 py-2 border border-border bg-white text-foreground font-heading font-bold uppercase text-xs tracking-wider inline-flex items-center gap-2 disabled:opacity-50"
+                      >
+                        <ArrowUp size={14} />
+                        Up
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => moveTeamSection(section.id, 1)}
+                        disabled={index === teamSections.length - 1}
+                        className="px-3 py-2 border border-border bg-white text-foreground font-heading font-bold uppercase text-xs tracking-wider inline-flex items-center gap-2 disabled:opacity-50"
+                      >
+                        <ArrowDown size={14} />
+                        Down
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setTeamSections((current) =>
+                            current.filter((item) => item.id !== section.id)
+                          )
+                        }
+                        className="px-4 py-2 border border-border bg-white text-foreground font-heading font-bold uppercase text-xs tracking-wider"
+                      >
+                        Remove Category
+                      </button>
+                    </div>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -2264,7 +2318,7 @@ const AdminPage = () => {
                   </div>
 
                   <div className="space-y-5">
-                    {section.people.map((person) => (
+                    {section.people.map((person, personIndex) => (
                       <div
                         key={person.id}
                         className="border border-border bg-white p-5 space-y-4"
@@ -2273,20 +2327,40 @@ const AdminPage = () => {
                           <p className="font-heading text-xl font-black uppercase">
                             {person.name}
                           </p>
-                          <button
-                            type="button"
-                            onClick={() =>
-                              updateSection(section.id, {
-                                ...section,
-                                people: section.people.filter(
-                                  (item) => item.id !== person.id
-                                )
-                              })
-                            }
-                            className="px-4 py-2 border border-border bg-card text-foreground font-heading font-bold uppercase text-xs tracking-wider"
-                          >
-                            Remove Card
-                          </button>
+                          <div className="flex flex-wrap items-center gap-2">
+                            <button
+                              type="button"
+                              onClick={() => moveTeamPerson(section.id, person.id, -1)}
+                              disabled={personIndex === 0}
+                              className="px-3 py-2 border border-border bg-card text-foreground font-heading font-bold uppercase text-xs tracking-wider inline-flex items-center gap-2 disabled:opacity-50"
+                            >
+                              <ArrowUp size={14} />
+                              Up
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => moveTeamPerson(section.id, person.id, 1)}
+                              disabled={personIndex === section.people.length - 1}
+                              className="px-3 py-2 border border-border bg-card text-foreground font-heading font-bold uppercase text-xs tracking-wider inline-flex items-center gap-2 disabled:opacity-50"
+                            >
+                              <ArrowDown size={14} />
+                              Down
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() =>
+                                updateSection(section.id, {
+                                  ...section,
+                                  people: section.people.filter(
+                                    (item) => item.id !== person.id
+                                  )
+                                })
+                              }
+                              className="px-4 py-2 border border-border bg-card text-foreground font-heading font-bold uppercase text-xs tracking-wider"
+                            >
+                              Remove Card
+                            </button>
+                          </div>
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
