@@ -4,10 +4,11 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { EditableContentProvider } from "@/lib/editable-content";
+import { EditableContentProvider, useEditableContent } from "@/lib/editable-content";
 import ScrollToTop from "./components/ScrollToTop";
 import Seo from "./components/Seo";
 import Layout from "./components/Layout";
+import SiteLoadingScreen from "./components/SiteLoadingScreen";
 import Index from "./pages/Index";
 import AboutPage from "./pages/AboutPage";
 import SportsPage from "./pages/SportsPage";
@@ -23,34 +24,46 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
+const AppRoutes = () => {
+  const { isLoadingContent } = useEditableContent();
+
+  if (isLoadingContent) {
+    return <SiteLoadingScreen />;
+  }
+
+  return (
+    <TooltipProvider>
+      <Toaster />
+      <Sonner />
+      <BrowserRouter>
+        <ScrollToTop />
+        <Seo />
+        <Routes>
+          <Route element={<Layout />}>
+            <Route path="/" element={<Index />} />
+            <Route path="/team" element={<AboutPage />} />
+            <Route path="/about" element={<Navigate to="/team" replace />} />
+            <Route path="/sports" element={<SportsPage />} />
+            <Route path="/sports/:sport" element={<SportDetailPage />} />
+            <Route path="/blog" element={<BlogPage />} />
+            <Route path="/blog/:slug" element={<BlogPostPage />} />
+            <Route path="/experiences" element={<ExperiencesPage />} />
+            <Route path="/get-involved" element={<GetInvolvedPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/partners" element={<PartnersPage />} />
+          </Route>
+          <Route path="/admin" element={<AdminPage />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </TooltipProvider>
+  );
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <EditableContentProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <ScrollToTop />
-          <Seo />
-          <Routes>
-            <Route element={<Layout />}>
-              <Route path="/" element={<Index />} />
-              <Route path="/team" element={<AboutPage />} />
-              <Route path="/about" element={<Navigate to="/team" replace />} />
-              <Route path="/sports" element={<SportsPage />} />
-              <Route path="/sports/:sport" element={<SportDetailPage />} />
-              <Route path="/blog" element={<BlogPage />} />
-              <Route path="/blog/:slug" element={<BlogPostPage />} />
-              <Route path="/experiences" element={<ExperiencesPage />} />
-              <Route path="/get-involved" element={<GetInvolvedPage />} />
-              <Route path="/contact" element={<ContactPage />} />
-              <Route path="/partners" element={<PartnersPage />} />
-            </Route>
-            <Route path="/admin" element={<AdminPage />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
+      <AppRoutes />
     </EditableContentProvider>
   </QueryClientProvider>
 );
