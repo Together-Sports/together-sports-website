@@ -536,7 +536,7 @@ const Index = () => {
               {impactMetricsSection.items.map((item, index) => (
                 <ScrollReveal key={item.id} delay={index * 0.08}>
                   <div
-                    className="flex h-full min-h-[220px] w-full flex-col justify-between bg-white border-4 px-6 py-7 text-center md:min-h-[240px] md:px-6 md:py-8 lg:px-6 xl:px-7"
+                    className="flex h-full min-h-[220px] w-full flex-col justify-center items-center gap-3 bg-white border-4 px-6 py-7 text-center md:min-h-[240px] md:px-6 md:py-8 lg:px-6 xl:px-7"
                     style={{ borderColor: item.color }}
                   >
                     <p
