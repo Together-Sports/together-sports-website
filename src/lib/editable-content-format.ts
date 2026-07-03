@@ -33,12 +33,23 @@ export type OtherLocationsSection = {
   items: OtherLocation[];
 };
 
+export type SportSession = {
+  id: string;
+  title: string;
+  dateLabel: string;
+  timeLabel: string;
+  location: string;
+  spotsLabel: string;
+  signupUrl: string;
+};
+
 export type SportDescription = {
   id: string;
   name: string;
   tagline: string;
   description: string;
   schedule: string[];
+  sessions?: SportSession[];
 };
 
 export type SiteNavItem = {
@@ -164,7 +175,12 @@ export const serializeEditableContentState = (
       : [],
   },
   sportDescriptions: Array.isArray(content.sportDescriptions)
-    ? content.sportDescriptions.map((item) => ({ ...item }))
+    ? content.sportDescriptions.map((item) => ({
+        ...item,
+        sessions: Array.isArray(item.sessions)
+          ? item.sessions.map((session) => ({ ...session }))
+          : [],
+      }))
     : [],
   siteText: content.siteText ? {
     ...content.siteText,
@@ -233,7 +249,12 @@ export const hydrateEditableContentState = (
           items: [],
         },
   sportDescriptions: Array.isArray(content.sportDescriptions)
-    ? content.sportDescriptions.map((item) => ({ ...item }))
+    ? content.sportDescriptions.map((item) => ({
+        ...item,
+        sessions: Array.isArray(item.sessions)
+          ? item.sessions.map((session) => ({ ...session }))
+          : [],
+      }))
     : [],
   siteText:
     content.siteText && isPlainObject(content.siteText)

@@ -166,6 +166,9 @@ const SportDetailPage = () => {
   const isTennis = sport === "tennis";
   const theme = sportTheme[sport || "tennis"] ?? sportTheme.tennis;
   const aboutAccentClass = isTennis ? "brush-underline" : theme.accentText;
+  const upcomingSessions = (sportDescription?.sessions ?? []).filter(
+    (session) => session.title.trim()
+  );
   const validTennisLessonVideos = tennisLessonVideos
     .map((video) => ({
       ...video,
@@ -286,6 +289,87 @@ const SportDetailPage = () => {
           </ScrollReveal>
         </div>
       </section>
+
+      {upcomingSessions.length > 0 ? (
+        <section className="bg-card py-16 md:py-24 scratchy-overlay">
+          <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+            <ScrollReveal>
+              <h2 className="mb-8 font-heading text-4xl font-black uppercase md:text-5xl">
+                Upcoming <span className={aboutAccentClass}>Sessions</span>
+              </h2>
+              <div className="space-y-4">
+                {upcomingSessions.map((session) => (
+                  <div
+                    key={session.id}
+                    className="border-2 border-border bg-background p-6 md:p-8"
+                  >
+                    <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+                      <div className="min-w-0">
+                        <h3 className="mb-3 font-heading text-3xl font-black uppercase text-foreground md:text-4xl">
+                          {session.title}
+                        </h3>
+                        <div className="grid grid-cols-1 gap-x-10 gap-y-3 text-foreground sm:grid-cols-2">
+                          {session.dateLabel.trim() ? (
+                            <div>
+                              <p className="mb-1 font-body text-xs font-bold uppercase tracking-[0.16em] text-muted-foreground">
+                                Date
+                              </p>
+                              <p className="text-lg">{session.dateLabel}</p>
+                            </div>
+                          ) : null}
+                          {session.timeLabel.trim() ? (
+                            <div>
+                              <p className="mb-1 font-body text-xs font-bold uppercase tracking-[0.16em] text-muted-foreground">
+                                Time
+                              </p>
+                              <p className="text-lg">{session.timeLabel}</p>
+                            </div>
+                          ) : null}
+                          {session.location.trim() ? (
+                            <div>
+                              <p className="mb-1 font-body text-xs font-bold uppercase tracking-[0.16em] text-muted-foreground">
+                                Location
+                              </p>
+                              <p className="text-lg">{session.location}</p>
+                            </div>
+                          ) : null}
+                          {session.spotsLabel.trim() ? (
+                            <div>
+                              <p className="mb-1 font-body text-xs font-bold uppercase tracking-[0.16em] text-muted-foreground">
+                                Availability
+                              </p>
+                              <p className="text-lg">{session.spotsLabel}</p>
+                            </div>
+                          ) : null}
+                        </div>
+                      </div>
+                      <div className="shrink-0">
+                        {session.signupUrl.trim() ? (
+                          <a
+                            href={session.signupUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-block bg-primary px-8 py-4 font-heading font-bold uppercase tracking-wider text-white transition-all duration-200 hover:scale-105"
+                          >
+                            Sign Up →
+                          </a>
+                        ) : (
+                          <Link
+                            to="/contact"
+                            className="inline-block bg-accent px-8 py-4 font-heading font-bold uppercase tracking-wider text-white transition-all duration-200 hover:scale-105"
+                          >
+                            Contact to Join
+                          </Link>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </ScrollReveal>
+          </div>
+        </section>
+      ) : null}
 
       {isTennis ? (
         <>

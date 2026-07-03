@@ -25,7 +25,8 @@ import type { TeamPerson, TeamSection, TeamSocialPlatform } from "@/data/team";
 import type {
   OtherLocation,
   TennisLessonVideo,
-  SportDescription
+  SportDescription,
+  SportSession
 } from "@/lib/editable-content-format";
 import { useEditableContent } from "@/lib/editable-content";
 import { normalizeYouTubeEmbedUrl } from "@/lib/youtube";
@@ -671,6 +672,19 @@ const AdminPage = () => {
     setSportDescriptions((current) =>
       current.map((item) => (item.id === id ? next : item))
     );
+  };
+
+  const updateSportSession = (
+    sport: SportDescription,
+    sessionId: string,
+    patch: Partial<SportSession>
+  ) => {
+    updateSportDescription(sport.id, {
+      ...sport,
+      sessions: (sport.sessions ?? []).map((session) =>
+        session.id === sessionId ? { ...session, ...patch } : session
+      )
+    });
   };
 
   const hasInvalidTennisLessonVideos = tennisLessonVideos.some(
@@ -1806,8 +1820,9 @@ const AdminPage = () => {
                     Sports Content
                   </p>
                   <p className="text-muted-foreground text-sm">
-                    Edit sport descriptions, taglines, and schedules. Changes
-                    appear on the sport detail pages.
+                    Edit sport descriptions, taglines, schedules, and upcoming
+                    sessions with sign-ups. Changes appear on the sport detail
+                    pages.
                   </p>
                 </div>
               </div>
@@ -1959,7 +1974,8 @@ const AdminPage = () => {
                     Sport Descriptions
                   </p>
                   <p className="text-muted-foreground text-sm">
-                    Edit each sport's tagline, description, and schedule times.
+                    Edit each sport's tagline, description, schedule times, and
+                    upcoming sessions with sign-up links.
                   </p>
                 </div>
               </div>
@@ -2050,6 +2066,149 @@ const AdminPage = () => {
                             className="px-4 py-2 border border-border bg-white text-foreground font-heading font-bold uppercase text-xs tracking-wider"
                           >
                             + Add Time
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2 md:col-span-2">
+                        <p className={labelClass}>Upcoming Sessions</p>
+                        <p className="text-muted-foreground text-xs">
+                          Sessions appear on the {sport.name} page with a sign-up
+                          button. Paste a Google Form (or any sign-up page) link
+                          for each session — if left empty, the button links to
+                          the contact page instead.
+                        </p>
+                        <div className="space-y-3">
+                          {(sport.sessions ?? []).map((session, index) => (
+                            <div
+                              key={session.id}
+                              className="border border-border bg-card p-4 space-y-3"
+                            >
+                              <div className="flex items-center justify-between gap-2">
+                                <p className="font-heading font-bold uppercase text-sm tracking-wider">
+                                  Session {index + 1}
+                                </p>
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    updateSportDescription(sport.id, {
+                                      ...sport,
+                                      sessions: (sport.sessions ?? []).filter(
+                                        (entry) => entry.id !== session.id
+                                      )
+                                    })
+                                  }
+                                  className="px-4 py-2 border border-border bg-white text-foreground font-heading font-bold uppercase text-xs tracking-wider whitespace-nowrap"
+                                >
+                                  Remove
+                                </button>
+                              </div>
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                <div className="space-y-1 md:col-span-2">
+                                  <p className={labelClass}>Title</p>
+                                  <input
+                                    className={inputClass}
+                                    value={session.title}
+                                    onChange={(event) =>
+                                      updateSportSession(sport, session.id, {
+                                        title: event.target.value
+                                      })
+                                    }
+                                    placeholder="e.g., Saturday Youth Clinic"
+                                  />
+                                </div>
+                                <div className="space-y-1">
+                                  <p className={labelClass}>Date</p>
+                                  <input
+                                    className={inputClass}
+                                    value={session.dateLabel}
+                                    onChange={(event) =>
+                                      updateSportSession(sport, session.id, {
+                                        dateLabel: event.target.value
+                                      })
+                                    }
+                                    placeholder="e.g., Saturday, July 12"
+                                  />
+                                </div>
+                                <div className="space-y-1">
+                                  <p className={labelClass}>Time</p>
+                                  <input
+                                    className={inputClass}
+                                    value={session.timeLabel}
+                                    onChange={(event) =>
+                                      updateSportSession(sport, session.id, {
+                                        timeLabel: event.target.value
+                                      })
+                                    }
+                                    placeholder="e.g., 10:00 AM - 12:00 PM"
+                                  />
+                                </div>
+                                <div className="space-y-1">
+                                  <p className={labelClass}>Location</p>
+                                  <input
+                                    className={inputClass}
+                                    value={session.location}
+                                    onChange={(event) =>
+                                      updateSportSession(sport, session.id, {
+                                        location: event.target.value
+                                      })
+                                    }
+                                    placeholder="e.g., Riverside Park Courts"
+                                  />
+                                </div>
+                                <div className="space-y-1">
+                                  <p className={labelClass}>
+                                    Availability (optional)
+                                  </p>
+                                  <input
+                                    className={inputClass}
+                                    value={session.spotsLabel}
+                                    onChange={(event) =>
+                                      updateSportSession(sport, session.id, {
+                                        spotsLabel: event.target.value
+                                      })
+                                    }
+                                    placeholder="e.g., 8 spots left"
+                                  />
+                                </div>
+                                <div className="space-y-1 md:col-span-2">
+                                  <p className={labelClass}>Sign-Up Link</p>
+                                  <input
+                                    className={inputClass}
+                                    value={session.signupUrl}
+                                    onChange={(event) =>
+                                      updateSportSession(sport, session.id, {
+                                        signupUrl: event.target.value
+                                      })
+                                    }
+                                    placeholder="https://forms.gle/..."
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                          <button
+                            type="button"
+                            onClick={() =>
+                              updateSportDescription(sport.id, {
+                                ...sport,
+                                sessions: [
+                                  ...(sport.sessions ?? []),
+                                  {
+                                    id: createId("session"),
+                                    title: "",
+                                    dateLabel: "",
+                                    timeLabel: "",
+                                    location: "",
+                                    spotsLabel: "",
+                                    signupUrl: ""
+                                  }
+                                ]
+                              })
+                            }
+                            className="px-4 py-2 border border-border bg-white text-foreground font-heading font-bold uppercase text-xs tracking-wider"
+                          >
+                            + Add Session
                           </button>
                         </div>
                       </div>
