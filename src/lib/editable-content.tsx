@@ -397,18 +397,33 @@ export const EditableContentProvider = ({
   useEffect(() => {
     let active = true;
 
-    readLiveContent().catch((error) => {
-      console.error(error);
-
+    // Safety valve: never let a slow/hung network request block the initial
+    // render indefinitely. If live content hasn't resolved shortly, reveal
+    // the bundled seed content so the site still becomes visible.
+    const fallbackTimer = window.setTimeout(() => {
       if (active) {
-        applyContent(defaultContent);
-        setLastSavedSnapshot(defaultSnapshot);
         setIsLoadingContent(false);
       }
-    });
+    }, 2500);
+
+    readLiveContent()
+      .catch((error) => {
+        console.error(error);
+
+        if (active) {
+          applyContent(defaultContent);
+          setLastSavedSnapshot(defaultSnapshot);
+        }
+      })
+      .finally(() => {
+        if (active) {
+          setIsLoadingContent(false);
+        }
+      });
 
     return () => {
       active = false;
+      window.clearTimeout(fallbackTimer);
     };
   }, []);
 
