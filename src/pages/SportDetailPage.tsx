@@ -265,7 +265,7 @@ const SportDetailPage = () => {
         {theme.shapeClassNames.map((shapeClassName, index) => (
           <div key={`${sport}-shape-${index}`} className={shapeClassName} />
         ))}
-        <div className="relative z-10 mx-auto w-full max-w-7xl px-4 pb-20 pt-20 sm:px-6 lg:px-8 md:pt-28 md:pb-24">
+        <div className="relative z-10 mx-auto w-full max-w-7xl px-4 pb-14 pt-14 sm:px-6 lg:px-8 md:pt-28 md:pb-24">
           <div className="max-w-3xl">
             <h1 className="mb-4 font-heading text-5xl font-black uppercase leading-[0.95] text-white md:text-7xl">
               {data.name}
@@ -277,7 +277,7 @@ const SportDetailPage = () => {
         </div>
       </section>
 
-      <section className="py-16 md:py-24">
+      <section className="py-12 md:py-24">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal>
             <h2 className="mb-6 font-heading text-4xl font-black uppercase md:text-5xl">
@@ -291,7 +291,7 @@ const SportDetailPage = () => {
       </section>
 
       {upcomingSessions.length > 0 ? (
-        <section className="bg-card py-16 md:py-24 scratchy-overlay">
+        <section className="bg-card py-12 md:py-24 scratchy-overlay">
           <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
             <ScrollReveal>
               <h2 className="mb-8 font-heading text-4xl font-black uppercase md:text-5xl">
@@ -374,7 +374,7 @@ const SportDetailPage = () => {
       {isTennis ? (
         <>
           {validTennisLessonVideos.length > 0 ? (
-            <section className="bg-card py-16 md:py-24 scratchy-overlay">
+            <section className="bg-card py-12 md:py-24 scratchy-overlay">
               <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
                 <ScrollReveal>
                   <h2 className="mb-8 font-heading text-4xl font-black uppercase md:text-5xl">
@@ -416,7 +416,7 @@ const SportDetailPage = () => {
             </section>
           ) : null}
 
-          <section className="py-16 md:py-24">
+          <section className="py-12 md:py-24">
             <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
               <ScrollReveal>
                 <h2 className="mb-8 font-heading text-4xl font-black uppercase md:text-5xl">
@@ -533,7 +533,7 @@ const SportDetailPage = () => {
         </>
       ) : null}
 
-      <section className="bg-card py-16 md:py-24 scratchy-overlay">
+      <section className="bg-card py-12 md:py-24 scratchy-overlay">
         <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
           <ScrollReveal direction="scale">
             <h2 className="mb-4 font-heading text-4xl font-black uppercase md:text-5xl">

@@ -10,7 +10,7 @@ type PageHeroProps = {
 const PageHero = ({ eyebrow, title, description }: PageHeroProps) => {
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-[#84a6ff]/18 via-background to-[#4f74d6]/12">
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-20 md:pt-28 md:pb-24">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-14 md:pt-28 md:pb-24">
         <motion.div
           initial={{ opacity: 0, y: 28 }}
           animate={{ opacity: 1, y: 0 }}
