@@ -10,11 +10,11 @@ const PartnersPage = () => {
   return (
     <div className="overflow-hidden">
       {/* INFINITE CAROUSEL */}
-      <section className="pb-32 md:pb-28 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 md:pt-28 mb-24 md:mb-20">
+      <section className="pb-16 md:pb-28 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 md:pt-28 mb-14 md:mb-20">
           <ScrollReveal>
             <div className="text-center">
-              <h2 className="font-heading text-6xl md:text-[5.25rem] font-black uppercase text-foreground">
+              <h2 className="font-heading text-5xl sm:text-6xl md:text-[5.25rem] font-black uppercase text-foreground">
                 Meet Our Partners
               </h2>
             </div>
@@ -59,10 +59,10 @@ const PartnersPage = () => {
       </section>
 
       {/* Why Partner */}
-      <section className="py-20 md:py-20 bg-accent scratchy-overlay">
+      <section className="py-14 md:py-20 bg-accent scratchy-overlay">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <ScrollReveal>
-            <h2 className="font-heading text-5xl md:text-7xl font-black uppercase mb-12 text-white text-center">
+            <h2 className="font-heading text-5xl md:text-7xl font-black uppercase mb-8 md:mb-12 text-white text-center">
               Why Partner With Us?
             </h2>
           </ScrollReveal>
@@ -104,7 +104,7 @@ const PartnersPage = () => {
       </section>
 
       {/* CTA */}
-      <section className="py-20 md:py-20">
+      <section className="py-14 md:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-10 items-center">
             <ScrollReveal direction="left">

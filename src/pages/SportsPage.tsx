@@ -33,7 +33,7 @@ const SportsPage = () => {
         <div className="absolute right-8 top-12 h-12 w-12 bg-white/10 scrapbook-rotate-1 sm:h-16 sm:w-16" />
         <div className="absolute right-[16%] top-28 hidden h-24 w-24 rounded-full bg-white/10 md:block" />
         <div className="absolute right-12 bottom-10 h-16 w-16 rotate-45 bg-white/10 sm:h-24 sm:w-24" />
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-20 md:pt-28 md:pb-24">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-14 md:pt-28 md:pb-24">
           <motion.div
             initial={{ opacity: 0, y: 28 }}
             animate={{ opacity: 1, y: 0 }}
@@ -52,9 +52,9 @@ const SportsPage = () => {
         </div>
       </section>
 
-      <section className="py-16 md:py-20 bg-white relative">
+      <section className="py-12 md:py-20 bg-white relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12 items-center">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8 md:gap-12 items-center">
             {sports.map((sport, i) => (
               <ScrollReveal
                 key={sport.name}
@@ -70,7 +70,7 @@ const SportsPage = () => {
                     alt={sport.name}
                     loading="eager"
                     decoding="async"
-                    className="w-full max-w-[18rem] md:max-w-[22rem] h-auto object-contain transition-transform duration-300 group-hover:scale-[1.04]"
+                    className="w-full max-w-[13rem] sm:max-w-[18rem] md:max-w-[22rem] h-auto object-contain transition-transform duration-300 group-hover:scale-[1.04]"
                   />
                 </Link>
               </ScrollReveal>
@@ -78,7 +78,7 @@ const SportsPage = () => {
           </div>
 
           <ScrollReveal>
-            <div className="mt-12 md:mt-14 text-center">
+            <div className="mt-8 md:mt-14 text-center">
               <p className="text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto">
                 Each program is designed to build skills, character, and
                 community.

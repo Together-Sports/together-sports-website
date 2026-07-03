@@ -212,7 +212,7 @@ const AboutPage = () => {
         <div className="absolute left-[18%] top-24 hidden h-12 w-12 rotate-45 bg-white/10 sm:block" />
         <div className="absolute right-4 top-10 h-10 w-10 bg-white/10 scrapbook-rotate-2 sm:right-12 sm:top-12 sm:h-16 sm:w-16" />
         <div className="absolute left-10 bottom-8 h-8 w-8 bg-white/10 scrapbook-rotate-3 sm:left-16 sm:h-10 sm:w-10" />
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-20 md:pt-28 md:pb-16">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-14 md:pt-28 md:pb-16">
           <motion.div
             initial={{ opacity: 0, y: 28 }}
             animate={{ opacity: 1, y: 0 }}

@@ -26,7 +26,7 @@ const BlogPostPage = () => {
 
   if (isLoadingContent) {
     return (
-      <section className="py-24 md:py-32">
+      <section className="py-14 md:py-32">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="font-heading text-5xl md:text-7xl font-black uppercase mb-6">
             Loading Post
@@ -41,7 +41,7 @@ const BlogPostPage = () => {
 
   if (!post) {
     return (
-      <section className="py-24 md:py-32">
+      <section className="py-14 md:py-32">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <p className="font-body font-bold uppercase tracking-[0.3em] text-accent text-sm mb-4">
             Blog
@@ -64,7 +64,7 @@ const BlogPostPage = () => {
   }
 
   return (
-    <article className="py-24 md:py-32">
+    <article className="py-14 md:py-32">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <Link
           to="/blog"
@@ -73,7 +73,7 @@ const BlogPostPage = () => {
           Back to Blog
         </Link>
 
-        <header className="mb-12">
+        <header className="mb-8 md:mb-12">
           <p className="font-body font-bold uppercase tracking-[0.3em] text-accent text-sm mb-4">
             {post.tag?.trim() || "Together Sports"}
           </p>
@@ -87,7 +87,7 @@ const BlogPostPage = () => {
         </header>
 
         {post.image ? (
-          <div className="mb-12 overflow-hidden border border-border bg-card">
+          <div className="mb-8 md:mb-12 overflow-hidden border border-border bg-card">
             <img
               src={post.image}
               alt={post.title}

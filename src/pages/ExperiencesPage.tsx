@@ -31,7 +31,7 @@ const renderStars = (rating?: number) => {
 const QuoteCard = ({ item, index }: { item: Experience; index: number }) => {
   return (
     <ScrollReveal direction="up" delay={index * 0.1}>
-      <div className="h-full p-8 bg-background border border-border hover:border-accent transition-colors duration-300 text-center">
+      <div className="h-full p-6 md:p-8 bg-background border border-border hover:border-accent transition-colors duration-300 text-center">
         <p
           className={`font-heading font-bold uppercase text-sm mb-4 ${sportAccent[item.sport || ""] || "text-accent"}`}
         >
@@ -140,7 +140,7 @@ const ExperiencesPage = () => {
         <div className="absolute right-6 top-10 h-12 w-12 rotate-45 bg-white/10 sm:right-10 sm:h-20 sm:w-20 md:h-24 md:w-24" />
         <div className="absolute right-[22%] top-28 hidden h-12 w-12 rounded-full bg-white/10 sm:block" />
         <div className="absolute right-12 bottom-8 hidden h-0 w-0 border-l-[22px] border-r-[22px] border-b-[38px] border-l-transparent border-r-transparent border-b-white/10 md:block" />
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-20 md:pt-28 md:pb-24">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-14 md:pt-28 md:pb-24">
           <motion.div
             initial={{ opacity: 0, y: 28 }}
             animate={{ opacity: 1, y: 0 }}
@@ -161,10 +161,10 @@ const ExperiencesPage = () => {
       </section>
 
       {photos.length > 0 ? (
-        <section className="pt-20 pb-12 md:pt-28 md:pb-16 bg-white">
+        <section className="pt-14 pb-10 md:pt-28 md:pb-16 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <ScrollReveal>
-              <h2 className="font-heading text-5xl md:text-7xl font-black uppercase mb-12 text-center">
+              <h2 className="font-heading text-5xl md:text-7xl font-black uppercase mb-8 md:mb-12 text-center">
                 Moments Captured
               </h2>
             </ScrollReveal>
@@ -178,10 +178,10 @@ const ExperiencesPage = () => {
       ) : null}
 
       {parentQuotes.length > 0 ? (
-        <section className="py-20 md:py-28 bg-white">
+        <section className="py-14 md:py-28 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <ScrollReveal>
-              <h2 className="font-heading text-5xl md:text-7xl font-black uppercase mb-12 text-center">
+              <h2 className="font-heading text-5xl md:text-7xl font-black uppercase mb-8 md:mb-12 text-center">
                 Parents Speak
               </h2>
             </ScrollReveal>
