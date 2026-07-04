@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { MapPin } from "lucide-react";
 import ScrollReveal from "@/components/ScrollReveal";
@@ -5,11 +6,90 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselPrevious,
-  CarouselNext
+  type CarouselApi
 } from "@/components/ui/carousel";
 import { useEditableContent } from "@/lib/editable-content";
 import type { Experience } from "@/data/experiences";
+
+const AUTOPLAY_INTERVAL_MS = 4000;
+
+const AutoPhotoCarousel = ({
+  images,
+  altPrefix
+}: {
+  images: string[];
+  altPrefix: string;
+}) => {
+  const [api, setApi] = useState<CarouselApi>();
+  const [current, setCurrent] = useState(0);
+  const [paused, setPaused] = useState(false);
+
+  useEffect(() => {
+    if (!api) {
+      return;
+    }
+
+    const onSelect = () => setCurrent(api.selectedScrollSnap());
+    onSelect();
+    api.on("select", onSelect);
+
+    return () => {
+      api.off("select", onSelect);
+    };
+  }, [api]);
+
+  useEffect(() => {
+    if (!api || paused) {
+      return;
+    }
+
+    const interval = setInterval(() => {
+      api.scrollNext();
+    }, AUTOPLAY_INTERVAL_MS);
+
+    return () => clearInterval(interval);
+  }, [api, current, paused]);
+
+  return (
+    <div
+      className="relative"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
+      <Carousel opts={{ loop: true }} setApi={setApi}>
+        <CarouselContent className="flex">
+          {images.map((src, idx) => (
+            <CarouselItem key={idx} className="h-[300px] md:h-[350px]">
+              <img
+                src={src}
+                alt={`${altPrefix} ${idx + 1}`}
+                className="w-full h-full object-cover"
+                loading="lazy"
+                decoding="async"
+              />
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+      </Carousel>
+
+      {images.length > 1 ? (
+        <div className="absolute inset-x-0 bottom-3 flex justify-center gap-1.5">
+          {images.map((_, idx) => (
+            <button
+              key={idx}
+              type="button"
+              aria-label={`Go to photo ${idx + 1}`}
+              onClick={() => api?.scrollTo(idx)}
+              className={`h-1.5 rounded-full transition-all duration-200 ${
+                idx === current ? "w-5 bg-white" : "w-1.5 bg-white/60"
+              }`}
+            />
+          ))}
+        </div>
+      ) : null}
+    </div>
+  );
+};
 
 const sportAccent: Record<string, string> = {
   Tennis: "text-[hsl(var(--sport-tennis))]",
@@ -64,25 +144,10 @@ const PhotoCard = ({ item, index }: { item: Experience; index: number }) => {
     <ScrollReveal direction="scale" delay={index * 0.12}>
       <div className="text-center">
         {item.images && item.images.length > 1 ? (
-          <div className="relative">
-            <Carousel className="">
-              <CarouselContent className="flex">
-                {item.images.map((src, idx) => (
-                  <CarouselItem key={idx} className="h-[300px] md:h-[350px]">
-                    <img
-                      src={src}
-                      alt={item.caption || `Experience photo ${idx + 1}`}
-                      className="w-full h-full object-cover"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious className="" />
-              <CarouselNext className="" />
-            </Carousel>
-          </div>
+          <AutoPhotoCarousel
+            images={item.images}
+            altPrefix={item.caption || "Experience photo"}
+          />
         ) : (
           <img
             src={item.image || ""}
