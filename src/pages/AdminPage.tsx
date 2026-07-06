@@ -582,14 +582,6 @@ const AdminPage = () => {
   };
 
   const handleSave = async () => {
-    if (
-      !window.confirm(
-        "Save these changes live? This will update the deployed site content after save."
-      )
-    ) {
-      return;
-    }
-
     try {
       await saveContent();
       setStatusMessage("Live content saved to Supabase.");
