@@ -9,6 +9,7 @@ import {
   type CarouselApi
 } from "@/components/ui/carousel";
 import { useEditableContent } from "@/lib/editable-content";
+import { imgProps } from "@/lib/image-position";
 import type { Experience } from "@/data/experiences";
 
 const AUTOPLAY_INTERVAL_MS = 4000;
@@ -61,7 +62,7 @@ const AutoPhotoCarousel = ({
           {images.map((src, idx) => (
             <CarouselItem key={idx} className="h-[300px] md:h-[350px]">
               <img
-                src={src}
+                {...imgProps(src)}
                 alt={`${altPrefix} ${idx + 1}`}
                 className="w-full h-full object-cover"
                 loading="lazy"
@@ -150,7 +151,7 @@ const PhotoCard = ({ item, index }: { item: Experience; index: number }) => {
           />
         ) : (
           <img
-            src={item.image || ""}
+            {...imgProps(item.image)}
             alt={item.caption || "Experience photo"}
             className="w-full h-[300px] md:h-[350px] object-cover"
             loading="lazy"

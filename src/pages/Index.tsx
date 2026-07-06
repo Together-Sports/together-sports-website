@@ -12,6 +12,7 @@ import basketSpin from "@/assets/BASKETSPIN.svg";
 import footballSpin from "@/assets/FOOTBALLSPIN.svg";
 import golfSpin from "@/assets/GOLFSPIN.svg";
 import { useEditableContent } from "@/lib/editable-content";
+import { imgProps } from "@/lib/image-position";
 
 const heroSpins = [
   {
@@ -179,11 +180,13 @@ const MapEmbedCard = ({
 const Index = () => {
   const { experiences, impactMetricsSection, otherLocationsSection, siteText } =
     useEditableContent();
-  const resolvedHeroImage1 = siteText?.heroImage1 || image0903;
-  const resolvedHeroImage2 = siteText?.heroImage2 || heroImage;
-  const resolvedHeroImage3 = siteText?.heroImage3 || image3782;
-  const resolvedMissionImage = siteText?.missionImage || communityImg;
-  const resolvedSecondServeImage = siteText?.secondServeImage || secondServe;
+  const resolvedHeroImage1 = imgProps(siteText?.heroImage1 || image0903);
+  const resolvedHeroImage2 = imgProps(siteText?.heroImage2 || heroImage);
+  const resolvedHeroImage3 = imgProps(siteText?.heroImage3 || image3782);
+  const resolvedMissionImage = imgProps(siteText?.missionImage || communityImg);
+  const resolvedSecondServeImage = imgProps(
+    siteText?.secondServeImage || secondServe
+  );
   const featuredTestimonials = experiences
     .filter((item) => item.type === "quote" || item.type === "parent")
     .slice(0, 3);
@@ -318,7 +321,7 @@ const Index = () => {
             >
               <div className="absolute left-10 -top-6 w-[68%] h-[40%] overflow-hidden border-[10px] border-white bg-white scrapbook-rotate-2 z-10">
                 <img
-                  src={resolvedHeroImage1}
+                  {...resolvedHeroImage1}
                   alt="Together Sports action moment"
                   loading="eager"
                   decoding="async"
@@ -328,7 +331,7 @@ const Index = () => {
               </div>
               <div className="absolute right-2 top-[22%] w-[82%] h-[46%] overflow-hidden border-[12px] border-white bg-white scrapbook-rotate-1 z-10">
                 <img
-                  src={resolvedHeroImage2}
+                  {...resolvedHeroImage2}
                   alt="Together Sports community moment"
                   loading="eager"
                   decoding="async"
@@ -338,7 +341,7 @@ const Index = () => {
               </div>
               <div className="absolute left-[-2%] bottom-[2%] w-[74%] h-[42%] overflow-hidden border-[10px] border-white bg-white scrapbook-rotate-2 z-20">
                 <img
-                  src={resolvedHeroImage3}
+                  {...resolvedHeroImage3}
                   alt="Together Sports team moment"
                   loading="eager"
                   decoding="async"
@@ -372,7 +375,7 @@ const Index = () => {
             <ScrollReveal direction="left">
               <div className="scrapbook-rotate-2">
                 <img
-                  src={resolvedMissionImage}
+                  {...resolvedMissionImage}
                   alt="Together Sports community"
                   loading="lazy"
                   decoding="async"
@@ -564,7 +567,7 @@ const Index = () => {
               <div className="relative">
                 <div className="scrapbook-rotate-1">
                   <img
-                    src={resolvedSecondServeImage}
+                    {...resolvedSecondServeImage}
                     alt="Second Serve service"
                     loading="lazy"
                     decoding="async"

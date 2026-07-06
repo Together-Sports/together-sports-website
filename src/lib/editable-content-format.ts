@@ -99,9 +99,19 @@ export type EditableContentExportFile = {
 };
 
 const MEDIA_PREFIX = "media:";
+const POSITION_MARKER = "#pos=";
 
 const mediaIdBySrc = new Map(mediaLibrary.map((item) => [item.src, item.id]));
 const mediaSrcById = new Map(mediaLibrary.map((item) => [item.id, item.src]));
+
+// Image values may carry an inline focal point ("...#pos=x,y"); split it off
+// before mapping the base src to/from a media id and re-attach it after.
+const splitPositionFragment = (value: string): [string, string] => {
+  const markerIndex = value.indexOf(POSITION_MARKER);
+  return markerIndex === -1
+    ? [value, ""]
+    : [value.slice(0, markerIndex), value.slice(markerIndex)];
+};
 
 const isPlainObject = (value: unknown): value is Record<string, unknown> =>
   typeof value === "object" && value !== null && !Array.isArray(value);
@@ -119,8 +129,9 @@ const toPortableMediaValue = (value: string | undefined) => {
     return value ?? "";
   }
 
-  const mediaId = mediaIdBySrc.get(value);
-  return mediaId ? `${MEDIA_PREFIX}${mediaId}` : value;
+  const [base, fragment] = splitPositionFragment(value);
+  const mediaId = mediaIdBySrc.get(base);
+  return mediaId ? `${MEDIA_PREFIX}${mediaId}${fragment}` : value;
 };
 
 const fromPortableMediaValue = (value: string | undefined) => {
@@ -128,12 +139,15 @@ const fromPortableMediaValue = (value: string | undefined) => {
     return value ?? "";
   }
 
-  if (!value.startsWith(MEDIA_PREFIX)) {
+  const [base, fragment] = splitPositionFragment(value);
+
+  if (!base.startsWith(MEDIA_PREFIX)) {
     return value;
   }
 
-  const mediaId = value.slice(MEDIA_PREFIX.length);
-  return mediaSrcById.get(mediaId) ?? value;
+  const mediaId = base.slice(MEDIA_PREFIX.length);
+  const src = mediaSrcById.get(mediaId);
+  return src ? `${src}${fragment}` : value;
 };
 
 export const serializeEditableContentState = (

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import ScrollReveal from "@/components/ScrollReveal";
 import { motion } from "framer-motion";
 import { useEditableContent } from "@/lib/editable-content";
+import { imgProps } from "@/lib/image-position";
 import type { TeamPerson, TeamSocialPlatform } from "@/data/team";
 
 const InstagramIcon = ({ className }: { className?: string }) => (
@@ -99,7 +100,7 @@ const TeamCard = ({
   return (
     <div className="flex h-full flex-col bg-white border border-border overflow-hidden">
       <img
-        src={person.image}
+        {...imgProps(person.image)}
         alt={person.alt}
         loading="lazy"
         decoding="async"

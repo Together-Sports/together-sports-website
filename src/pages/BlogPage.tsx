@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import ScrollReveal from "@/components/ScrollReveal";
 import { useEditableContent } from "@/lib/editable-content";
+import { imgProps } from "@/lib/image-position";
 
 const BLOG_REFRESH_INTERVAL_MS = 5 * 60 * 1000;
 
@@ -96,7 +97,7 @@ const BlogPage = () => {
                 >
                   {featured.image ? (
                     <img
-                      src={featured.image}
+                      {...imgProps(featured.image)}
                       alt={featured.title}
                       loading="eager"
                       decoding="async"
@@ -145,7 +146,7 @@ const BlogPage = () => {
                         <div className="relative min-h-[240px] sm:min-h-[280px]">
                           {post.image ? (
                             <img
-                              src={post.image}
+                              {...imgProps(post.image)}
                               alt={post.title}
                               loading="lazy"
                               decoding="async"

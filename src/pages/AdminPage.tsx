@@ -29,6 +29,11 @@ import type {
   SportSession
 } from "@/lib/editable-content-format";
 import { useEditableContent } from "@/lib/editable-content";
+import {
+  imageObjectPosition,
+  splitImageValue,
+  withImagePosition
+} from "@/lib/image-position";
 import { normalizeYouTubeEmbedUrl } from "@/lib/youtube";
 
 const inputClass =
@@ -57,6 +62,12 @@ const EditorCard = ({ children }: { children: ReactNode }) => (
   </div>
 );
 
+const FRAMING_PREVIEWS = [
+  { label: "Square", boxClass: "aspect-square" },
+  { label: "Wide", boxClass: "aspect-video" },
+  { label: "Tall", boxClass: "aspect-[3/4]" }
+];
+
 const ImageField = ({
   label,
   value,
@@ -69,6 +80,10 @@ const ImageField = ({
   onUpload: (file: File) => Promise<string>;
 }) => {
   const [isUploading, setIsUploading] = useState(false);
+  const [isAdjusting, setIsAdjusting] = useState(false);
+  const isDraggingRef = useRef(false);
+  const { src: baseSrc, position } = splitImageValue(value || "");
+  const positionStyle = imageObjectPosition(position);
 
   const handleFileSelect = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -93,21 +108,123 @@ const ImageField = ({
     }
   };
 
+  const applyFocalPoint = (clientX: number, clientY: number, target: HTMLElement) => {
+    const rect = target.getBoundingClientRect();
+
+    if (!rect.width || !rect.height) {
+      return;
+    }
+
+    onChange(
+      withImagePosition(baseSrc, {
+        x: ((clientX - rect.left) / rect.width) * 100,
+        y: ((clientY - rect.top) / rect.height) * 100
+      })
+    );
+  };
+
   return (
     <div className="space-y-3">
       <p className={labelClass}>{label}</p>
       <div className="w-full h-40 border border-border bg-white overflow-hidden flex items-center justify-center">
-        {value ? (
-          <img src={value} alt={label} className="w-full h-full object-cover" />
+        {baseSrc ? (
+          <img
+            src={baseSrc}
+            alt={label}
+            className="w-full h-full object-cover"
+            style={positionStyle}
+          />
         ) : (
           <span className="text-muted-foreground text-sm">
             No image selected
           </span>
         )}
       </div>
+      {baseSrc ? (
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setIsAdjusting((current) => !current)}
+            className="px-4 py-2 border border-border bg-white text-foreground font-heading font-bold uppercase text-xs tracking-wider"
+          >
+            {isAdjusting ? "Done Adjusting" : "Adjust Framing"}
+          </button>
+          {position ? (
+            <span className="text-xs text-muted-foreground font-body">
+              Focus: {position.x}% across, {position.y}% down
+            </span>
+          ) : null}
+        </div>
+      ) : null}
+      {baseSrc && isAdjusting ? (
+        <div className="border border-border bg-white p-3 space-y-3">
+          <p className="text-xs text-muted-foreground font-body">
+            Click or drag on the photo to pick its focal point — the spot that
+            stays in view when the image is cropped to fit a box. The previews
+            below show how it will be framed.
+          </p>
+          <div
+            className="relative w-full cursor-crosshair select-none touch-none"
+            onPointerDown={(event) => {
+              isDraggingRef.current = true;
+              event.currentTarget.setPointerCapture(event.pointerId);
+              applyFocalPoint(event.clientX, event.clientY, event.currentTarget);
+            }}
+            onPointerMove={(event) => {
+              if (isDraggingRef.current) {
+                applyFocalPoint(event.clientX, event.clientY, event.currentTarget);
+              }
+            }}
+            onPointerUp={() => {
+              isDraggingRef.current = false;
+            }}
+          >
+            <img
+              src={baseSrc}
+              alt={`${label} framing`}
+              className="w-full h-auto pointer-events-none"
+              draggable={false}
+            />
+            <div
+              className="absolute h-6 w-6 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white bg-primary/70 shadow-[0_0_0_2px_rgba(0,0,0,0.35)] pointer-events-none"
+              style={{
+                left: `${position?.x ?? 50}%`,
+                top: `${position?.y ?? 50}%`
+              }}
+            />
+          </div>
+          <div className="grid grid-cols-3 gap-3">
+            {FRAMING_PREVIEWS.map((preview) => (
+              <div key={preview.label} className="space-y-1">
+                <div
+                  className={`w-full overflow-hidden border border-border ${preview.boxClass}`}
+                >
+                  <img
+                    src={baseSrc}
+                    alt={`${label} ${preview.label} preview`}
+                    className="w-full h-full object-cover"
+                    style={positionStyle}
+                  />
+                </div>
+                <p className="text-center text-[10px] font-body font-bold uppercase tracking-[0.16em] text-muted-foreground">
+                  {preview.label}
+                </p>
+              </div>
+            ))}
+          </div>
+          <button
+            type="button"
+            onClick={() => onChange(baseSrc)}
+            disabled={!position}
+            className="px-4 py-2 border border-border bg-white text-foreground font-heading font-bold uppercase text-xs tracking-wider disabled:opacity-50"
+          >
+            Reset to Center
+          </button>
+        </div>
+      ) : null}
       <select
         className={inputClass}
-        value={mediaLibrary.some((item) => item.src === value) ? value : ""}
+        value={mediaLibrary.some((item) => item.src === baseSrc) ? baseSrc : ""}
         onChange={(event) => {
           if (event.target.value) {
             onChange(event.target.value);
@@ -123,7 +240,7 @@ const ImageField = ({
       </select>
       <input
         type="url"
-        value={value}
+        value={baseSrc}
         onChange={(event) => onChange(event.target.value)}
         placeholder="Paste an image URL or leave the selected asset path"
         className={inputClass}

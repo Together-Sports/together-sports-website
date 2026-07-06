@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useEditableContent } from "@/lib/editable-content";
+import { imgProps } from "@/lib/image-position";
 
 const BLOG_REFRESH_INTERVAL_MS = 5 * 60 * 1000;
 
@@ -89,7 +90,7 @@ const BlogPostPage = () => {
         {post.image ? (
           <div className="mb-8 md:mb-12 overflow-hidden border border-border bg-card">
             <img
-              src={post.image}
+              {...imgProps(post.image)}
               alt={post.title}
               loading="eager"
               decoding="async"
