@@ -262,6 +262,99 @@ const ImageField = ({
   );
 };
 
+const VideoField = ({
+  label,
+  description,
+  value,
+  onChange,
+  onUpload
+}: {
+  label: string;
+  description?: string;
+  value: string;
+  onChange: (value: string) => void;
+  onUpload: (file: File) => Promise<string>;
+}) => {
+  const [isUploading, setIsUploading] = useState(false);
+
+  const handleFileSelect = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    setIsUploading(true);
+
+    try {
+      const nextValue = await onUpload(file);
+      onChange(nextValue);
+      toast.success(`${file.name} uploaded.`);
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Unable to upload that video."
+      );
+    } finally {
+      setIsUploading(false);
+      event.target.value = "";
+    }
+  };
+
+  return (
+    <div className="space-y-3">
+      <p className={labelClass}>{label}</p>
+      {description ? (
+        <p className="text-xs text-muted-foreground font-body">{description}</p>
+      ) : null}
+      <div className="w-full h-40 border border-border bg-white overflow-hidden flex items-center justify-center">
+        {value ? (
+          <video
+            src={value}
+            controls
+            muted
+            playsInline
+            preload="metadata"
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <span className="text-muted-foreground text-sm">
+            No video selected
+          </span>
+        )}
+      </div>
+      <input
+        type="url"
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        placeholder="Paste an MP4 video URL"
+        className={inputClass}
+      />
+      <label className="block">
+        <span className="sr-only">Upload video file</span>
+        <input
+          type="file"
+          accept="video/mp4,video/webm,video/quicktime"
+          onChange={handleFileSelect}
+          className={inputClass}
+          disabled={isUploading}
+        />
+      </label>
+      {isUploading ? (
+        <p className="text-sm text-muted-foreground">Uploading video...</p>
+      ) : null}
+      {value ? (
+        <button
+          type="button"
+          onClick={() => onChange("")}
+          className="px-4 py-2 border border-border bg-white text-foreground font-heading font-bold uppercase text-xs tracking-wider"
+        >
+          Remove Video
+        </button>
+      ) : null}
+    </div>
+  );
+};
+
 const TestimonialFields = ({
   item,
   onChange,
@@ -1762,6 +1855,18 @@ const AdminPage = () => {
                       setSiteText((current) => ({
                         ...current,
                         missionImage: value
+                      }))
+                    }
+                    onUpload={uploadImage}
+                  />
+                  <VideoField
+                    label="Mission Section Video (Optional)"
+                    description="When a video is set, it plays automatically in place of the mission photo (shown straight, without the photo tilt). Remove the video to switch back to the photo."
+                    value={siteText?.missionVideo || ""}
+                    onChange={(value) =>
+                      setSiteText((current) => ({
+                        ...current,
+                        missionVideo: value
                       }))
                     }
                     onUpload={uploadImage}

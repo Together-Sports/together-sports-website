@@ -184,6 +184,7 @@ const Index = () => {
   const resolvedHeroImage2 = imgProps(siteText?.heroImage2 || heroImage);
   const resolvedHeroImage3 = imgProps(siteText?.heroImage3 || image3782);
   const resolvedMissionImage = imgProps(siteText?.missionImage || communityImg);
+  const missionVideo = siteText?.missionVideo?.trim() || "";
   const resolvedSecondServeImage = imgProps(
     siteText?.secondServeImage || secondServe
   );
@@ -373,15 +374,28 @@ const Index = () => {
             </ScrollReveal>
 
             <ScrollReveal direction="left">
-              <div className="scrapbook-rotate-2">
-                <img
-                  {...resolvedMissionImage}
-                  alt="Together Sports community"
-                  loading="lazy"
-                  decoding="async"
+              {missionVideo ? (
+                <video
+                  src={missionVideo}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="metadata"
+                  aria-label="Together Sports community video"
                   className="w-full h-[340px] md:h-[420px] object-cover"
                 />
-              </div>
+              ) : (
+                <div className="scrapbook-rotate-2">
+                  <img
+                    {...resolvedMissionImage}
+                    alt="Together Sports community"
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-[340px] md:h-[420px] object-cover"
+                  />
+                </div>
+              )}
             </ScrollReveal>
           </div>
 
