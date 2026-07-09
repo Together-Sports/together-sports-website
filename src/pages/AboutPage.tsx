@@ -105,10 +105,7 @@ const TeamCard = ({
         alt={person.alt}
         loading="lazy"
         decoding="async"
-        // Anchor headshots near the top of the photo so taller photos keep
-        // their natural space above the head instead of being center-cropped
-        // into it. A per-photo focal point set in the admin still wins.
-        style={{ objectPosition: "50% 12%", ...personImage.style }}
+        style={personImage.style}
         className={`w-full object-cover ${isFounder ? "h-[320px] md:h-[400px]" : "h-[320px] md:h-[310px]"}`}
       />
       <div

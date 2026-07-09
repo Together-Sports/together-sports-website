@@ -62,7 +62,8 @@ const EditorCard = ({ children }: { children: ReactNode }) => (
   </div>
 );
 
-const FRAMING_PREVIEWS = [
+const FRAMING_FRAMES = [
+  { label: "Headshot", boxClass: "aspect-[4/3]" },
   { label: "Square", boxClass: "aspect-square" },
   { label: "Wide", boxClass: "aspect-video" },
   { label: "Tall", boxClass: "aspect-[3/4]" }
@@ -81,7 +82,15 @@ const ImageField = ({
 }) => {
   const [isUploading, setIsUploading] = useState(false);
   const [isAdjusting, setIsAdjusting] = useState(false);
-  const isDraggingRef = useRef(false);
+  const [frame, setFrame] = useState(FRAMING_FRAMES[0]);
+  const frameRef = useRef<HTMLDivElement | null>(null);
+  const naturalSizeRef = useRef<{ width: number; height: number } | null>(null);
+  const dragRef = useRef<{
+    pointerX: number;
+    pointerY: number;
+    startX: number;
+    startY: number;
+  } | null>(null);
   const { src: baseSrc, position } = splitImageValue(value || "");
   const positionStyle = imageObjectPosition(position);
 
@@ -108,17 +117,27 @@ const ImageField = ({
     }
   };
 
-  const applyFocalPoint = (clientX: number, clientY: number, target: HTMLElement) => {
-    const rect = target.getBoundingClientRect();
+  const handleFrameDrag = (clientX: number, clientY: number) => {
+    const drag = dragRef.current;
+    const box = frameRef.current?.getBoundingClientRect();
+    const natural = naturalSizeRef.current;
 
-    if (!rect.width || !rect.height) {
+    if (!drag || !box?.width || !box?.height || !natural) {
       return;
     }
 
+    // object-cover math: how far the scaled image overflows the frame is
+    // exactly the range object-position can pan across.
+    const scale = Math.max(box.width / natural.width, box.height / natural.height);
+    const overflowX = natural.width * scale - box.width;
+    const overflowY = natural.height * scale - box.height;
+    const deltaX = clientX - drag.pointerX;
+    const deltaY = clientY - drag.pointerY;
+
     onChange(
       withImagePosition(baseSrc, {
-        x: ((clientX - rect.left) / rect.width) * 100,
-        y: ((clientY - rect.top) / rect.height) * 100
+        x: drag.startX - (overflowX > 0 ? (deltaX / overflowX) * 100 : 0),
+        y: drag.startY - (overflowY > 0 ? (deltaY / overflowY) * 100 : 0)
       })
     );
   };
@@ -151,7 +170,7 @@ const ImageField = ({
           </button>
           {position ? (
             <span className="text-xs text-muted-foreground font-body">
-              Focus: {position.x}% across, {position.y}% down
+              Adjusted ({position.x}% across, {position.y}% down)
             </span>
           ) : null}
         </div>
@@ -159,67 +178,77 @@ const ImageField = ({
       {baseSrc && isAdjusting ? (
         <div className="border border-border bg-white p-3 space-y-3">
           <p className="text-xs text-muted-foreground font-body">
-            Click or drag on the photo to pick its focal point — the spot that
-            stays in view when the image is cropped to fit a box. The previews
-            below show how it will be framed.
+            Drag the photo inside the frame to position it. The frame shows
+            exactly how the photo will be cropped on the site — pick the frame
+            shape closest to where this photo is used.
           </p>
+          <div className="flex flex-wrap gap-2">
+            {FRAMING_FRAMES.map((entry) => (
+              <button
+                key={entry.label}
+                type="button"
+                onClick={() => setFrame(entry)}
+                className={`px-3 py-1.5 border font-heading font-bold uppercase text-[11px] tracking-wider ${
+                  frame.label === entry.label
+                    ? "border-primary bg-primary text-white"
+                    : "border-border bg-white text-foreground"
+                }`}
+              >
+                {entry.label}
+              </button>
+            ))}
+          </div>
           <div
-            className="relative w-full cursor-crosshair select-none touch-none"
+            ref={frameRef}
+            className={`relative w-full overflow-hidden border-2 border-primary select-none touch-none cursor-grab active:cursor-grabbing ${frame.boxClass}`}
             onPointerDown={(event) => {
-              isDraggingRef.current = true;
               event.currentTarget.setPointerCapture(event.pointerId);
-              applyFocalPoint(event.clientX, event.clientY, event.currentTarget);
+              dragRef.current = {
+                pointerX: event.clientX,
+                pointerY: event.clientY,
+                startX: position?.x ?? 50,
+                startY: position?.y ?? 50
+              };
             }}
             onPointerMove={(event) => {
-              if (isDraggingRef.current) {
-                applyFocalPoint(event.clientX, event.clientY, event.currentTarget);
+              if (dragRef.current) {
+                handleFrameDrag(event.clientX, event.clientY);
               }
             }}
             onPointerUp={() => {
-              isDraggingRef.current = false;
+              dragRef.current = null;
+            }}
+            onPointerCancel={() => {
+              dragRef.current = null;
             }}
           >
             <img
               src={baseSrc}
               alt={`${label} framing`}
-              className="w-full h-auto pointer-events-none"
               draggable={false}
-            />
-            <div
-              className="absolute h-6 w-6 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white bg-primary/70 shadow-[0_0_0_2px_rgba(0,0,0,0.35)] pointer-events-none"
-              style={{
-                left: `${position?.x ?? 50}%`,
-                top: `${position?.y ?? 50}%`
+              onLoad={(event) => {
+                naturalSizeRef.current = {
+                  width: event.currentTarget.naturalWidth,
+                  height: event.currentTarget.naturalHeight
+                };
               }}
+              className="h-full w-full object-cover pointer-events-none"
+              style={positionStyle}
             />
           </div>
-          <div className="grid grid-cols-3 gap-3">
-            {FRAMING_PREVIEWS.map((preview) => (
-              <div key={preview.label} className="space-y-1">
-                <div
-                  className={`w-full overflow-hidden border border-border ${preview.boxClass}`}
-                >
-                  <img
-                    src={baseSrc}
-                    alt={`${label} ${preview.label} preview`}
-                    className="w-full h-full object-cover"
-                    style={positionStyle}
-                  />
-                </div>
-                <p className="text-center text-[10px] font-body font-bold uppercase tracking-[0.16em] text-muted-foreground">
-                  {preview.label}
-                </p>
-              </div>
-            ))}
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={() => onChange(baseSrc)}
+              disabled={!position}
+              className="px-4 py-2 border border-border bg-white text-foreground font-heading font-bold uppercase text-xs tracking-wider disabled:opacity-50"
+            >
+              Reset to Center
+            </button>
+            <span className="text-xs text-muted-foreground font-body">
+              Changes apply after you save live.
+            </span>
           </div>
-          <button
-            type="button"
-            onClick={() => onChange(baseSrc)}
-            disabled={!position}
-            className="px-4 py-2 border border-border bg-white text-foreground font-heading font-bold uppercase text-xs tracking-wider disabled:opacity-50"
-          >
-            Reset to Center
-          </button>
         </div>
       ) : null}
       <select
