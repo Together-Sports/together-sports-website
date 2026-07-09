@@ -817,6 +817,41 @@ const AdminPage = () => {
     });
   };
 
+  const movePersonToSection = (
+    fromSectionId: string,
+    personId: string,
+    toSectionId: string
+  ) => {
+    if (fromSectionId === toSectionId) {
+      return;
+    }
+
+    setTeamSections((current) => {
+      const person = current
+        .find((section) => section.id === fromSectionId)
+        ?.people.find((item) => item.id === personId);
+
+      if (!person || !current.some((section) => section.id === toSectionId)) {
+        return current;
+      }
+
+      return current.map((section) => {
+        if (section.id === fromSectionId) {
+          return {
+            ...section,
+            people: section.people.filter((item) => item.id !== personId)
+          };
+        }
+
+        if (section.id === toSectionId) {
+          return { ...section, people: [...section.people, person] };
+        }
+
+        return section;
+      });
+    });
+  };
+
   const moveTeamPerson = (
     sectionId: string,
     personId: string,
@@ -2747,6 +2782,39 @@ const AdminPage = () => {
                             {person.name}
                           </p>
                           <div className="flex flex-wrap items-center gap-2">
+                            {teamSections.length > 1 ? (
+                              <select
+                                value=""
+                                onChange={(event) => {
+                                  const targetId = event.target.value;
+                                  if (!targetId) {
+                                    return;
+                                  }
+                                  const target = teamSections.find(
+                                    (entry) => entry.id === targetId
+                                  );
+                                  movePersonToSection(
+                                    section.id,
+                                    person.id,
+                                    targetId
+                                  );
+                                  toast.success(
+                                    `${person.name || "Person"} moved to ${target?.title || "another section"}.`
+                                  );
+                                }}
+                                className="px-3 py-2 border border-border bg-card text-foreground font-heading font-bold uppercase text-xs tracking-wider"
+                                aria-label={`Move ${person.name || "person"} to another section`}
+                              >
+                                <option value="">Move To...</option>
+                                {teamSections
+                                  .filter((entry) => entry.id !== section.id)
+                                  .map((entry) => (
+                                    <option key={entry.id} value={entry.id}>
+                                      {entry.title || "Untitled section"}
+                                    </option>
+                                  ))}
+                              </select>
+                            ) : null}
                             <button
                               type="button"
                               onClick={() => moveTeamPerson(section.id, person.id, -1)}
