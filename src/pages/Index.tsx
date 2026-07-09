@@ -12,6 +12,7 @@ import spinBall from "@/assets/spinball.svg";
 import basketSpin from "@/assets/BASKETSPIN.svg";
 import footballSpin from "@/assets/FOOTBALLSPIN.svg";
 import golfSpin from "@/assets/GOLFSPIN.svg";
+import soccerSpin from "@/assets/SOCCERSPIN.svg";
 import { useEditableContent } from "@/lib/editable-content";
 import { imgProps } from "@/lib/image-position";
 
@@ -19,7 +20,7 @@ const heroSpins = [
   {
     image: spinBall,
     className:
-      "absolute bottom-10 left-12 z-0 w-44 sm:bottom-12 sm:left-16 sm:w-52 md:bottom-10 md:left-24 md:w-60 lg:bottom-12 lg:left-16 lg:w-[17rem]",
+      "absolute bottom-10 left-12 z-0 w-52 sm:bottom-12 sm:left-16 sm:w-60 md:bottom-10 md:left-24 md:w-72 lg:bottom-12 lg:left-16 lg:w-[20rem]",
     rotate: -360,
     duration: 24,
     delay: 0,
@@ -28,7 +29,7 @@ const heroSpins = [
   {
     image: golfSpin,
     className:
-      "absolute right-10 top-24 z-0 hidden w-24 sm:block sm:right-14 sm:top-28 sm:w-28 md:right-20 md:top-24 md:w-36 lg:right-28 lg:top-32 lg:w-40",
+      "absolute right-10 top-24 z-0 hidden w-28 sm:block sm:right-14 sm:top-28 sm:w-32 md:right-20 md:top-24 md:w-44 lg:right-28 lg:top-32 lg:w-48",
     rotate: 360,
     duration: 18,
     delay: 1.5,
@@ -37,7 +38,7 @@ const heroSpins = [
   {
     image: basketSpin,
     className:
-      "absolute left-[-8rem] top-10 z-0 hidden w-60 sm:block sm:left-[-9rem] sm:top-14 sm:w-72 md:left-[-10rem] md:top-16 md:w-80 lg:left-[-11rem] lg:top-18 lg:w-[26rem]",
+      "absolute left-[-8rem] top-10 z-0 hidden w-72 sm:block sm:left-[-9rem] sm:top-14 sm:w-80 md:left-[-10rem] md:top-16 md:w-96 lg:left-[-11rem] lg:top-18 lg:w-[29rem]",
     rotate: 360,
     duration: 28,
     delay: 3,
@@ -46,18 +47,28 @@ const heroSpins = [
   {
     image: footballSpin,
     className:
-      "absolute bottom-8 right-4 z-0 hidden w-56 sm:block sm:bottom-10 sm:right-6 sm:w-64 md:bottom-10 md:right-8 md:w-72 lg:bottom-12 lg:right-10 lg:w-[20rem]",
+      "absolute bottom-8 right-4 z-0 hidden w-64 sm:block sm:bottom-10 sm:right-6 sm:w-72 md:bottom-10 md:right-8 md:w-80 lg:bottom-12 lg:right-10 lg:w-[23rem]",
     rotate: 0,
     duration: 0,
     delay: 0,
     scaleX: -1
+  },
+  {
+    image: soccerSpin,
+    className:
+      "absolute left-[38%] top-4 z-0 hidden w-28 md:block md:w-32 lg:top-6 lg:w-36",
+    rotate: 360,
+    duration: 22,
+    delay: 0.8,
+    scaleX: 1
   }
 ];
 
 const sportsCtaSpins = [
   {
     image: spinBall,
-    className: "absolute left-20 top-1/2 hidden w-32 -translate-y-1/2 xl:block",
+    className:
+      "absolute left-16 top-[62%] hidden w-40 -translate-y-1/2 xl:block",
     rotate: -360,
     duration: 24,
     delay: 0,
@@ -66,7 +77,7 @@ const sportsCtaSpins = [
   {
     image: basketSpin,
     className:
-      "absolute left-[19%] top-1/2 hidden w-32 -translate-y-1/2 xl:block",
+      "absolute left-[17%] top-[32%] hidden w-40 -translate-y-1/2 xl:block",
     rotate: 360,
     duration: 28,
     delay: 1.5,
@@ -75,7 +86,7 @@ const sportsCtaSpins = [
   {
     image: golfSpin,
     className:
-      "absolute right-[19%] top-1/2 hidden w-32 -translate-y-1/2 xl:block",
+      "absolute right-[17%] top-[32%] hidden w-40 -translate-y-1/2 xl:block",
     rotate: 360,
     duration: 18,
     delay: 0.8,
@@ -84,11 +95,20 @@ const sportsCtaSpins = [
   {
     image: footballSpin,
     className:
-      "absolute right-20 top-1/2 hidden w-32 -translate-y-1/2 xl:block",
+      "absolute right-16 top-[62%] hidden w-40 -translate-y-1/2 xl:block",
     rotate: 360,
     duration: 30,
     delay: 2.2,
     scaleX: -1
+  },
+  {
+    image: soccerSpin,
+    className:
+      "absolute left-[8%] top-6 hidden w-28 xl:block",
+    rotate: 360,
+    duration: 22,
+    delay: 1.1,
+    scaleX: 1
   }
 ];
 
