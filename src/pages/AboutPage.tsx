@@ -64,6 +64,7 @@ const TeamCard = ({
   const cardRef = useRef<HTMLDivElement | null>(null);
   const descriptionRef = useRef<HTMLDivElement | null>(null);
   const [descriptionHeight, setDescriptionHeight] = useState(0);
+  const personImage = imgProps(person.image);
 
   useEffect(() => {
     if (!person.description || !descriptionRef.current) {
@@ -100,10 +101,14 @@ const TeamCard = ({
   return (
     <div className="flex h-full flex-col bg-white border border-border overflow-hidden">
       <img
-        {...imgProps(person.image)}
+        src={personImage.src}
         alt={person.alt}
         loading="lazy"
         decoding="async"
+        // Anchor headshots near the top of the photo so taller photos keep
+        // their natural space above the head instead of being center-cropped
+        // into it. A per-photo focal point set in the admin still wins.
+        style={{ objectPosition: "50% 12%", ...personImage.style }}
         className={`w-full object-cover ${isFounder ? "h-[320px] md:h-[400px]" : "h-[320px] md:h-[310px]"}`}
       />
       <div
