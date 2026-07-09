@@ -61,13 +61,13 @@ const Navbar = () => {
               fetchpriority="high"
               className="relative -translate-y-0.5 h-7 w-auto shrink-0 sm:h-8 md:h-10"
             />
-            <span className="flex items-center font-heading text-lg sm:text-2xl md:text-3xl font-black uppercase tracking-[0.08em] sm:tracking-wider leading-none text-[#ffffff]">
+            <span className="flex items-center font-heading text-lg sm:text-2xl md:text-2xl font-black uppercase tracking-[0.08em] sm:tracking-wider leading-none whitespace-nowrap text-[#ffffff]">
               Together Sports
             </span>
           </Link>
 
           {/* Desktop nav */}
-          <div className="ml-auto hidden lg:flex flex-1 items-center justify-end gap-2">
+          <div className="ml-auto hidden xl:flex flex-1 items-center justify-end gap-2">
             <div className="flex items-center gap-1">
               {navItems.map((item) => (
                 <div
@@ -80,7 +80,7 @@ const Navbar = () => {
                 >
                   <Link
                     to={item.path}
-                    className="px-3 py-2 text-sm font-[Montserrat] font-bold uppercase tracking-wider text-[#ffffff] transition-colors duration-200 hover:text-[#84a6ff]"
+                    className="px-2 py-2 text-sm font-[Montserrat] font-bold uppercase tracking-wider whitespace-nowrap text-[#ffffff] transition-colors duration-200 hover:text-[#84a6ff]"
                   >
                     {item.label}
                   </Link>
@@ -91,7 +91,7 @@ const Navbar = () => {
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -8, scale: 0.96 }}
                         transition={{ duration: 0.18, ease: "easeOut" }}
-                        className="absolute left-0 top-full mt-7 hidden w-56 border-2 border-primary bg-white shadow-lg lg:block"
+                        className="absolute left-0 top-full mt-7 hidden w-56 border-2 border-primary bg-white shadow-lg xl:block"
                       >
                         <div className="p-2 text-left">
                           {item.dropdown.map((subItem) => (
@@ -113,7 +113,7 @@ const Navbar = () => {
             </div>
             <Link
               to="/get-involved"
-              className="ml-4 inline-flex shrink-0 items-center justify-center rounded-sm bg-[#ffffff] px-5 py-3 text-sm font-[Montserrat] font-bold uppercase tracking-wider text-primary transition-transform duration-200 hover:scale-105"
+              className="ml-3 inline-flex shrink-0 items-center justify-center rounded-sm bg-[#ffffff] px-5 py-3 text-sm font-[Montserrat] font-bold uppercase tracking-wider text-primary transition-transform duration-200 hover:scale-105"
             >
               Get Involved
             </Link>
@@ -122,7 +122,7 @@ const Navbar = () => {
           {/* Mobile toggle */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="p-2 text-[#ffffff] lg:hidden"
+            className="p-2 text-[#ffffff] xl:hidden"
           >
             {isOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
@@ -136,7 +136,7 @@ const Navbar = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden bg-primary border-b border-primary/80 overflow-hidden"
+            className="xl:hidden bg-primary border-b border-primary/80 overflow-hidden"
           >
             <div className="space-y-1 px-4 py-4">
               {navItems.map((item) => (

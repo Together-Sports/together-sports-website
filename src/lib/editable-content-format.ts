@@ -78,6 +78,7 @@ export type SiteText = {
   missionImage?: string;
   missionVideo?: string;
   introVideo?: string;
+  textOverrides?: Record<string, string>;
   secondServeImage?: string;
 };
 
@@ -296,6 +297,13 @@ export const hydrateEditableContentState = (
           testimonials: isPlainObject((content.siteText as any).testimonials)
             ? { ...((content.siteText as any).testimonials) }
             : { title: "Testimonials", subtitle: "" },
+          textOverrides: isPlainObject((content.siteText as any).textOverrides)
+            ? Object.fromEntries(
+                Object.entries((content.siteText as any).textOverrides).filter(
+                  (entry): entry is [string, string] => typeof entry[1] === "string",
+                ),
+              )
+            : {},
           heroImage1: fromPortableMediaValue((content.siteText as any).heroImage1),
           heroImage2: fromPortableMediaValue((content.siteText as any).heroImage2),
           heroImage3: fromPortableMediaValue((content.siteText as any).heroImage3),

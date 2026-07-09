@@ -34,7 +34,7 @@ const formatSportName = (value: string) => {
 const getMetaForPath = (pathname: string, blogPosts: ReturnType<typeof useEditableContent>["blogPosts"]): MetaConfig => {
   if (pathname === "/") {
     return {
-      title: `${SITE_NAME} | Play Loud. Build Strong.`,
+      title: `${SITE_NAME} | Every Kid Plays. Every Kid Belongs.`,
       description:
         "Together Sports empowers youth through free sports programs, mentorship, and community building across tennis, basketball, football, and golf.",
     };

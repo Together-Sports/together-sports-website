@@ -15,6 +15,7 @@ import golfSpin from "@/assets/GOLFSPIN.svg";
 import soccerSpin from "@/assets/SOCCERSPIN.svg";
 import { useEditableContent } from "@/lib/editable-content";
 import { imgProps } from "@/lib/image-position";
+import { useSiteText } from "@/lib/use-site-text";
 
 const heroSpins = [
   {
@@ -271,6 +272,10 @@ const MapEmbedCard = ({
 const Index = () => {
   const { experiences, impactMetricsSection, otherLocationsSection, siteText } =
     useEditableContent();
+  const t = useSiteText();
+  const missionWords = t("home.missionHeading").split(" ");
+  const missionLast = missionWords.pop() ?? "";
+  const valuesWords = t("home.valuesHeading").split(" ");
   const resolvedHeroImage1 = imgProps(siteText?.heroImage1 || image0903);
   const resolvedHeroImage2 = imgProps(siteText?.heroImage2 || heroImage);
   const resolvedHeroImage3 = imgProps(siteText?.heroImage3 || image3782);
@@ -381,8 +386,8 @@ const Index = () => {
               className="max-w-2xl"
             >
               <h1 className="font-heading text-[clamp(2.5rem,10.5vw,3.75rem)] sm:text-7xl md:text-8xl lg:text-[6.4rem] xl:text-[7rem] font-black uppercase leading-[0.94] mb-6 sm:mb-8 text-foreground">
-                <span className="block whitespace-nowrap">{heroLines[0]}</span>
-                <span className="block whitespace-nowrap text-[#4f74d6]">
+                <span className="block text-balance">{heroLines[0]}</span>
+                <span className="block text-balance text-[#4f74d6]">
                   {heroLines[1] ?? ""}
                 </span>
               </h1>
@@ -452,7 +457,8 @@ const Index = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-center">
             <ScrollReveal direction="right">
               <h2 className="font-heading text-5xl md:text-7xl font-black uppercase mb-6 text-foreground">
-                Our <span className="brush-underline">Mission</span>
+                {missionWords.join(" ")}{missionWords.length ? " " : ""}
+                <span className="brush-underline">{missionLast}</span>
               </h2>
               {missionParagraphs.map((p, i) => (
                 <p
@@ -493,11 +499,18 @@ const Index = () => {
           <div className="mt-12 md:mt-20">
             <ScrollReveal>
               <h3 className="font-heading text-4xl md:text-6xl font-black uppercase mb-8 md:mb-12 text-foreground">
-                What{" "}
-                <span className="relative inline-block after:absolute after:bottom-[-4px] after:left-0 after:h-2 after:w-full after:skew-x-[-12deg] after:rounded-[2px] after:bg-[#87cb4a] after:content-['']">
-                  <span className="relative z-10">We</span>
-                </span>{" "}
-                Stand For
+                {valuesWords.map((word, wordIndex) => (
+                  <span key={`values-word-${wordIndex}`}>
+                    {wordIndex > 0 ? " " : ""}
+                    {wordIndex === 1 ? (
+                      <span className="relative inline-block after:absolute after:bottom-[-4px] after:left-0 after:h-2 after:w-full after:skew-x-[-12deg] after:rounded-[2px] after:bg-[#87cb4a] after:content-['']">
+                        <span className="relative z-10">{word}</span>
+                      </span>
+                    ) : (
+                      word
+                    )}
+                  </span>
+                ))}
               </h3>
             </ScrollReveal>
 
@@ -568,7 +581,7 @@ const Index = () => {
                 to="/sports"
                 className="inline-block px-8 py-4 bg-primary text-white font-heading font-bold text-lg uppercase tracking-wider hover:scale-105 hover:-rotate-1 transition-all duration-200"
               >
-                View All Sports
+                {t("home.sportsCtaButton")}
               </Link>
             </div>
           </ScrollReveal>
@@ -694,16 +707,13 @@ const Index = () => {
 
             <ScrollReveal direction="right">
               <p className="font-body font-bold uppercase tracking-[0.2em] text-accent text-sm mb-4">
-                Featured Service
+                {t("home.secondServeEyebrow")}
               </p>
               <h2 className="font-heading text-4xl sm:text-5xl md:text-6xl font-black uppercase leading-[0.9] mb-6">
-                Every Kid Deserves a Second Serve
+                {t("home.secondServeHeading")}
               </h2>
               <p className="text-muted-foreground text-lg mb-6 leading-relaxed">
-                Second Serve is a service from our partner Rally Forward NYC,
-                and it also inspires a Together Tennis initiative where we
-                collect quality used equipment that would otherwise be thrown
-                away and donate it back into the community.
+                {t("home.secondServeBody")}
               </p>
               <a
                 href="https://www.instagram.com/rallyforwardnyc?igsh=c3dpbGNpeWZnOXRj"
@@ -711,7 +721,7 @@ const Index = () => {
                 rel="noopener noreferrer"
                 className="inline-block px-8 py-4 bg-primary text-white font-heading font-bold text-lg uppercase tracking-wider hover:scale-105 hover:-rotate-1 transition-all duration-200"
               >
-                Learn More
+                {t("home.secondServeButton")}
               </a>
             </ScrollReveal>
           </div>
@@ -726,14 +736,13 @@ const Index = () => {
               <span className="mr-2 inline-block text-[0.9em] normal-case align-[0.02em] md:mr-3">
                 📍
               </span>
-              Main Location
+              {t("home.locationHeading")}
               <span className="ml-2 inline-block text-[0.9em] normal-case align-[0.02em] md:ml-3">
                 📍
               </span>
             </h2>
             <p className="text-muted-foreground text-lg mb-8 md:mb-12 text-center">
-              Based in New York City, serving communities across the five
-              boroughs.
+              {t("home.locationSubtitle")}
             </p>
           </ScrollReveal>
 

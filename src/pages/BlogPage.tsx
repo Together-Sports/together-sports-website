@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import ScrollReveal from "@/components/ScrollReveal";
 import { useEditableContent } from "@/lib/editable-content";
 import { imgProps } from "@/lib/image-position";
+import { useSiteText } from "@/lib/use-site-text";
 
 const BLOG_REFRESH_INTERVAL_MS = 5 * 60 * 1000;
 
@@ -15,6 +16,7 @@ const formatDate = (value: string) =>
   });
 
 const BlogPage = () => {
+  const t = useSiteText();
   const { blogPosts, refreshContent, isLoadingContent } = useEditableContent();
   const featured = blogPosts.find((post) => post.featured) ?? blogPosts[0];
   const posts = featured
@@ -75,12 +77,10 @@ const BlogPage = () => {
             className="max-w-3xl mx-auto text-center"
           >
             <h1 className="font-heading text-5xl sm:text-6xl md:text-[5.25rem] font-black uppercase leading-[0.95] mb-4 text-white">
-              <span className="sm:whitespace-nowrap">The </span>
-              <span className="sm:whitespace-nowrap">Blog</span>
+              <span className="text-balance">{t("blog.heroTitle")}</span>
             </h1>
             <p className="text-white font-bold text-lg md:text-xl max-w-2xl mx-auto font-body">
-              Stories, updates, and moments from Together Sports, all in one
-              place on the site.
+              {t("blog.heroSubtitle")}
             </p>
           </motion.div>
         </div>

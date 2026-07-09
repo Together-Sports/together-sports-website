@@ -11,11 +11,13 @@ import {
   contactTopicOptions,
   type ContactFormValues,
 } from "@/lib/contact-form";
+import { useSiteText } from "@/lib/use-site-text";
 
 const fieldClass =
   "w-full p-4 bg-card border border-border text-foreground font-body placeholder:text-muted-foreground focus:border-[#f6a15c] focus:outline-none";
 
 const ContactPage = () => {
+  const t = useSiteText();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const {
     register,
@@ -82,12 +84,10 @@ const ContactPage = () => {
             className="max-w-3xl mx-auto text-center"
           >
             <h1 className="font-heading text-5xl sm:text-6xl md:text-[5.25rem] font-black uppercase leading-[0.95] mb-4 text-white">
-              <span className="sm:whitespace-nowrap">Contact </span>
-              <span className="sm:whitespace-nowrap">Us</span>
+              <span className="text-balance">{t("contact.heroTitle")}</span>
             </h1>
             <p className="text-white font-bold text-lg md:text-xl max-w-2xl mx-auto font-body">
-              Questions, partnerships, volunteering, or support requests, reach out and we will point you in the right
-              direction.
+              {t("contact.heroSubtitle")}
             </p>
           </motion.div>
         </div>

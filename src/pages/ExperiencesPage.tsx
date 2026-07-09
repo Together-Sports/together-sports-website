@@ -4,6 +4,7 @@ import { MapPin } from "lucide-react";
 import ScrollReveal from "@/components/ScrollReveal";
 import { useEditableContent } from "@/lib/editable-content";
 import type { Experience } from "@/data/experiences";
+import { useSiteText } from "@/lib/use-site-text";
 
 const sportAccent: Record<string, string> = {
   Tennis: "text-[hsl(var(--sport-tennis))]",
@@ -54,6 +55,7 @@ const QuoteCard = ({ item, index }: { item: Experience; index: number }) => {
 };
 
 const ExperiencesPage = () => {
+  const t = useSiteText();
   const { experiences } = useEditableContent();
   const athleteQuotes = experiences.filter((e) => e.type === "quote");
   const parentQuotes = experiences.filter((e) => e.type === "parent");
@@ -74,12 +76,10 @@ const ExperiencesPage = () => {
             className="max-w-3xl mx-auto text-center"
           >
             <h1 className="font-heading text-5xl sm:text-6xl md:text-[5.25rem] font-black uppercase leading-[0.95] mb-4 text-white">
-              <span className="sm:whitespace-nowrap">Our </span>
-              <span className="sm:whitespace-nowrap">Experiences</span>
+              <span className="text-balance">{t("experiences.heroTitle")}</span>
             </h1>
             <p className="text-white font-bold text-lg md:text-xl max-w-2xl mx-auto font-body">
-              Hear from the athletes, families, and coaches who make Together
-              Sports what it is — in their own words.
+              {t("experiences.heroSubtitle")}
             </p>
           </motion.div>
         </div>
@@ -90,7 +90,7 @@ const ExperiencesPage = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <ScrollReveal>
               <h2 className="font-heading text-5xl md:text-7xl font-black uppercase mb-8 md:mb-12 text-center">
-                Parents Speak
+                {t("experiences.parentsHeading")}
               </h2>
             </ScrollReveal>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -107,7 +107,7 @@ const ExperiencesPage = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <ScrollReveal>
               <h2 className="font-heading text-5xl md:text-7xl font-black uppercase mb-8 md:mb-12 text-center">
-                Athletes Speak
+                {t("experiences.athletesHeading")}
               </h2>
             </ScrollReveal>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -123,18 +123,16 @@ const ExperiencesPage = () => {
         <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
           <ScrollReveal direction="scale">
             <h2 className="mb-4 font-heading text-4xl md:text-5xl font-black uppercase">
-              See the <span className="text-[#87cb4a]">Moments</span> Behind the
-              Words
+              {t("experiences.ctaHeading")}
             </h2>
             <p className="mx-auto mb-8 max-w-md text-lg text-muted-foreground">
-              Browse photos and videos from sessions, events, and communities
-              across Together Sports.
+              {t("experiences.ctaBody")}
             </p>
             <Link
               to="/moments"
               className="inline-block bg-accent px-8 py-4 font-heading font-bold uppercase tracking-wider text-white transition-all duration-200 hover:scale-105"
             >
-              View Moments Captured →
+              {t("experiences.ctaButton")}
             </Link>
           </ScrollReveal>
         </div>

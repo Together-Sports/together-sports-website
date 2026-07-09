@@ -8,6 +8,7 @@ import {
   type LucideIcon
 } from "lucide-react";
 import { useLocation } from "react-router-dom";
+import { useSiteText } from "@/lib/use-site-text";
 
 const getInvolvedItems: {
   title: string;
@@ -48,6 +49,13 @@ const getInvolvedItems: {
 ];
 
 const GetInvolvedPage = () => {
+  const t = useSiteText();
+  const cards = getInvolvedItems.map((item, index) => ({
+    ...item,
+    title: t(`getInvolved.card${index + 1}Title`),
+    desc: t(`getInvolved.card${index + 1}Body`),
+    cta: t(`getInvolved.card${index + 1}Button`)
+  }));
   const location = useLocation();
   const showDonationSuccess =
     new URLSearchParams(window.location.search).get("donation") === "success";
@@ -75,12 +83,12 @@ const GetInvolvedPage = () => {
           <div className="relative z-10 w-full max-w-6xl">
             <div className="mb-10 text-center md:mb-12">
               <h1 className="font-heading text-5xl sm:text-6xl md:text-[5.25rem] font-black uppercase leading-[0.95] text-white">
-                Get Involved
+                {t("getInvolved.heroTitle")}
               </h1>
             </div>
 
             <div className="grid grid-cols-1 items-stretch gap-6 md:grid-cols-3 md:gap-8">
-              {getInvolvedItems.map((item, i) => (
+              {cards.map((item, i) => (
                 <ScrollReveal key={item.title} delay={i * 0.15} direction="up">
                   <div className="flex h-full min-h-[400px] flex-col bg-white p-8 md:min-h-[500px] md:p-10">
                     <div className="mb-6">

@@ -29,6 +29,7 @@ import type {
   SportSession
 } from "@/lib/editable-content-format";
 import { useEditableContent } from "@/lib/editable-content";
+import { TEXT_FIELDS, TEXT_PAGES } from "@/lib/text-registry";
 import {
   imageObjectPosition,
   splitImageValue,
@@ -1217,7 +1218,83 @@ const AdminPage = () => {
               <Users size={16} className="mr-2" />
               Team
             </TabsTrigger>
+            <TabsTrigger
+              value="pagetext"
+              className="px-4 py-3 data-[state=active]:bg-primary data-[state=active]:text-white"
+            >
+              <FileText size={16} className="mr-2" />
+              Page Text
+            </TabsTrigger>
           </TabsList>
+
+          <TabsContent value="pagetext">
+            <div className="space-y-6">
+              <EditorCard>
+                <p className="font-heading text-2xl font-black uppercase">
+                  Page Text
+                </p>
+                <p className="text-muted-foreground text-sm">
+                  Edit headings, subtitles, and button labels across every
+                  page. Leave a field empty to use the site's default text
+                  (shown as the placeholder).
+                </p>
+              </EditorCard>
+              {TEXT_PAGES.map((pageName) => (
+                <EditorCard key={pageName}>
+                  <p className="font-heading text-2xl font-black uppercase">
+                    {pageName}
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {TEXT_FIELDS.filter(
+                      (field) => field.page === pageName
+                    ).map((field) => (
+                      <div
+                        key={field.key}
+                        className={
+                          field.multiline
+                            ? "space-y-2 md:col-span-2"
+                            : "space-y-2"
+                        }
+                      >
+                        <p className={labelClass}>{field.label}</p>
+                        {field.multiline ? (
+                          <textarea
+                            className={textareaClass}
+                            value={siteText?.textOverrides?.[field.key] ?? ""}
+                            onChange={(event) =>
+                              setSiteText((current) => ({
+                                ...current,
+                                textOverrides: {
+                                  ...(current.textOverrides || {}),
+                                  [field.key]: event.target.value
+                                }
+                              }))
+                            }
+                            placeholder={field.fallback}
+                          />
+                        ) : (
+                          <input
+                            className={inputClass}
+                            value={siteText?.textOverrides?.[field.key] ?? ""}
+                            onChange={(event) =>
+                              setSiteText((current) => ({
+                                ...current,
+                                textOverrides: {
+                                  ...(current.textOverrides || {}),
+                                  [field.key]: event.target.value
+                                }
+                              }))
+                            }
+                            placeholder={field.fallback}
+                          />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </EditorCard>
+              ))}
+            </div>
+          </TabsContent>
 
           <TabsContent value="site">
             <div className="space-y-6">

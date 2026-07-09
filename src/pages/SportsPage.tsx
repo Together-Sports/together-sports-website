@@ -6,6 +6,7 @@ import togetherBasketball from "@/assets/TogetherBB.webp";
 import togetherFootball from "@/assets/TogetherFB.webp";
 import togetherGolf from "@/assets/TogetherGolf.webp";
 import togetherSoccer from "@/assets/TogetherSoccer.webp";
+import { useSiteText } from "@/lib/use-site-text";
 
 const sports = [
   { name: "Together Tennis", image: togetherTennis, path: "/sports/tennis" },
@@ -24,6 +25,7 @@ const sports = [
 ];
 
 const SportsPage = () => {
+  const t = useSiteText();
   return (
     <div className="overflow-hidden">
       <section className="relative overflow-hidden bg-primary">
@@ -41,12 +43,10 @@ const SportsPage = () => {
             className="max-w-3xl mx-auto text-center"
           >
             <h1 className="font-heading text-5xl sm:text-6xl md:text-[5.25rem] font-black uppercase leading-[0.95] mb-4 text-white">
-              <span className="sm:whitespace-nowrap">Our </span>
-              <span className="sm:whitespace-nowrap">Sports</span>
+              <span className="text-balance">{t("sports.heroTitle")}</span>
             </h1>
             <p className="text-white font-bold text-lg md:text-xl max-w-2xl mx-auto font-body">
-              Five sports. One mission. Building the next generation of leaders
-              through access, mentorship, and play.
+              {t("sports.heroSubtitle")}
             </p>
           </motion.div>
         </div>
@@ -80,8 +80,7 @@ const SportsPage = () => {
           <ScrollReveal>
             <div className="mt-8 md:mt-14 text-center">
               <p className="text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto">
-                Each program is designed to build skills, character, and
-                community.
+                {t("sports.footnote")}
               </p>
             </div>
           </ScrollReveal>

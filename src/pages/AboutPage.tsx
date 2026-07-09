@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { useEditableContent } from "@/lib/editable-content";
 import { imgProps } from "@/lib/image-position";
 import type { TeamPerson, TeamSocialPlatform } from "@/data/team";
+import { useSiteText } from "@/lib/use-site-text";
 
 const InstagramIcon = ({ className }: { className?: string }) => (
   <svg
@@ -191,6 +192,7 @@ const TeamCard = ({
 };
 
 const AboutPage = () => {
+  const t = useSiteText();
   const { teamSections } = useEditableContent();
   const [canHover, setCanHover] = useState(false);
 
@@ -223,13 +225,10 @@ const AboutPage = () => {
             className="max-w-3xl mx-auto text-center"
           >
             <h1 className="font-heading text-5xl sm:text-6xl md:text-[5.25rem] font-black uppercase leading-[0.95] mb-4 text-white">
-              <span className="sm:whitespace-nowrap">Meet The </span>
-              <span className="sm:whitespace-nowrap">Team</span>
+              <span className="text-balance">{t("team.heroTitle")}</span>
             </h1>
             <p className="text-white font-bold text-lg md:text-xl max-w-2xl mx-auto font-body">
-              The people behind Together Sports are coaches, mentors, athletes,
-              and community builders creating spaces where young people can grow
-              through sport.
+              {t("team.heroSubtitle")}
             </p>
           </motion.div>
         </div>
@@ -298,7 +297,7 @@ const AboutPage = () => {
                   to="/contact"
                   className="inline-block px-8 py-4 bg-primary text-white font-heading font-bold text-lg uppercase tracking-wider hover:scale-105 hover:rotate-1 transition-all duration-200"
                 >
-                  Get in Touch
+                  {t("team.ctaButton")}
                 </Link>
               </div>
             </ScrollReveal>
