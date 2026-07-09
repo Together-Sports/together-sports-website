@@ -20,6 +20,7 @@ const defaultNavItems = [
   { label: "Sports", path: "/sports" },
   { label: "Team", path: "/team" },
   { label: "Experiences", path: "/experiences" },
+  { label: "Moments", path: "/moments" },
   { label: "Blog", path: "/blog" },
   { label: "Contact", path: "/contact" },
   { label: "Partners", path: "/partners" }
@@ -30,9 +31,18 @@ const Navbar = () => {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const location = useLocation();
   const { siteText } = useEditableContent();
-  const navItems = siteText?.navItems?.length
+  const storedNavItems = siteText?.navItems?.length
     ? siteText.navItems
     : defaultNavItems;
+  // Saved nav menus from before the Moments page existed won't include it —
+  // slot it in after Experiences so the new page is reachable either way.
+  const navItems = storedNavItems.some((item) => item.path === "/moments")
+    ? storedNavItems
+    : storedNavItems.flatMap((item) =>
+        item.path === "/experiences"
+          ? [item, { label: "Moments", path: "/moments" }]
+          : [item]
+      );
 
   useEffect(() => {
     setIsOpen(false);

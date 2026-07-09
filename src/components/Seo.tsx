@@ -60,7 +60,15 @@ const getMetaForPath = (pathname: string, blogPosts: ReturnType<typeof useEditab
     return {
       title: `Our Experiences | ${SITE_NAME}`,
       description:
-        "Read athlete and parent testimonials, explore photos, and watch moments from Together Sports programs and community experiences.",
+        "Read athlete and parent testimonials about Together Sports programs, coaches, and community experiences.",
+    };
+  }
+
+  if (pathname === "/moments") {
+    return {
+      title: `Moments Captured | ${SITE_NAME}`,
+      description:
+        "Browse photos and videos from Together Sports sessions, events, and communities.",
     };
   }
 
@@ -218,6 +226,7 @@ const Seo = () => {
         `${origin}/sports`,
         `${origin}/team`,
         `${origin}/experiences`,
+        `${origin}/moments`,
         `${origin}/blog`,
         `${origin}/partners`,
         `${origin}/contact`,

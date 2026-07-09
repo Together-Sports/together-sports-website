@@ -17,6 +17,7 @@ import SportDetailPage from "./pages/SportDetailPage";
 import BlogPage from "./pages/BlogPage";
 import BlogPostPage from "./pages/BlogPostPage";
 import ExperiencesPage from "./pages/ExperiencesPage";
+import MomentsPage from "./pages/MomentsPage";
 import GetInvolvedPage from "./pages/GetInvolvedPage";
 import ContactPage from "./pages/ContactPage";
 import PartnersPage from "./pages/PartnersPage";
@@ -50,6 +51,7 @@ const AppRoutes = () => {
             <Route path="/blog" element={<BlogPage />} />
             <Route path="/blog/:slug" element={<BlogPostPage />} />
             <Route path="/experiences" element={<ExperiencesPage />} />
+            <Route path="/moments" element={<MomentsPage />} />
             <Route path="/get-involved" element={<GetInvolvedPage />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/partners" element={<PartnersPage />} />

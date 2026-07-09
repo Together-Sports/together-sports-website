@@ -1,96 +1,9 @@
-import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { MapPin } from "lucide-react";
 import ScrollReveal from "@/components/ScrollReveal";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  type CarouselApi
-} from "@/components/ui/carousel";
 import { useEditableContent } from "@/lib/editable-content";
-import { imgProps } from "@/lib/image-position";
 import type { Experience } from "@/data/experiences";
-
-const AUTOPLAY_INTERVAL_MS = 4000;
-
-const AutoPhotoCarousel = ({
-  images,
-  altPrefix
-}: {
-  images: string[];
-  altPrefix: string;
-}) => {
-  const [api, setApi] = useState<CarouselApi>();
-  const [current, setCurrent] = useState(0);
-  const [paused, setPaused] = useState(false);
-
-  useEffect(() => {
-    if (!api) {
-      return;
-    }
-
-    const onSelect = () => setCurrent(api.selectedScrollSnap());
-    onSelect();
-    api.on("select", onSelect);
-
-    return () => {
-      api.off("select", onSelect);
-    };
-  }, [api]);
-
-  useEffect(() => {
-    if (!api || paused) {
-      return;
-    }
-
-    const interval = setInterval(() => {
-      api.scrollNext();
-    }, AUTOPLAY_INTERVAL_MS);
-
-    return () => clearInterval(interval);
-  }, [api, current, paused]);
-
-  return (
-    <div
-      className="relative"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-    >
-      <Carousel opts={{ loop: true }} setApi={setApi}>
-        <CarouselContent className="flex">
-          {images.map((src, idx) => (
-            <CarouselItem key={idx} className="h-[300px] md:h-[350px]">
-              <img
-                {...imgProps(src)}
-                alt={`${altPrefix} ${idx + 1}`}
-                className="w-full h-full object-cover"
-                loading="lazy"
-                decoding="async"
-              />
-            </CarouselItem>
-          ))}
-        </CarouselContent>
-      </Carousel>
-
-      {images.length > 1 ? (
-        <div className="absolute inset-x-0 bottom-3 flex justify-center gap-1.5">
-          {images.map((_, idx) => (
-            <button
-              key={idx}
-              type="button"
-              aria-label={`Go to photo ${idx + 1}`}
-              onClick={() => api?.scrollTo(idx)}
-              className={`h-1.5 rounded-full transition-all duration-200 ${
-                idx === current ? "w-5 bg-white" : "w-1.5 bg-white/60"
-              }`}
-            />
-          ))}
-        </div>
-      ) : null}
-    </div>
-  );
-};
 
 const sportAccent: Record<string, string> = {
   Tennis: "text-[hsl(var(--sport-tennis))]",
@@ -140,63 +53,10 @@ const QuoteCard = ({ item, index }: { item: Experience; index: number }) => {
   );
 };
 
-const PhotoCard = ({ item, index }: { item: Experience; index: number }) => {
-  return (
-    <ScrollReveal direction="scale" delay={index * 0.12}>
-      <div className="text-center">
-        {item.images && item.images.length > 1 ? (
-          <AutoPhotoCarousel
-            images={item.images}
-            altPrefix={item.caption || "Experience photo"}
-          />
-        ) : (
-          <img
-            {...imgProps(item.image)}
-            alt={item.caption || "Experience photo"}
-            className="w-full h-[300px] md:h-[350px] object-cover"
-            loading="lazy"
-            decoding="async"
-          />
-        )}
-
-        {item.caption ? (
-          <p className="mt-3 text-muted-foreground text-sm font-body italic">
-            {item.caption}
-          </p>
-        ) : null}
-      </div>
-    </ScrollReveal>
-  );
-};
-
-const VideoCard = ({ item, index }: { item: Experience; index: number }) => (
-  <ScrollReveal direction="up" delay={index * 0.15}>
-    <div className="border border-border bg-background overflow-hidden">
-      <div className="relative w-full aspect-video">
-        <iframe
-          src={item.videoUrl}
-          title={item.videoTitle || "Video"}
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-          className="absolute inset-0 w-full h-full"
-        />
-      </div>
-      {item.videoTitle ? (
-        <div className="p-4 text-center">
-          <p className="font-heading font-bold uppercase text-sm">
-            {item.videoTitle}
-          </p>
-        </div>
-      ) : null}
-    </div>
-  </ScrollReveal>
-);
-
 const ExperiencesPage = () => {
   const { experiences } = useEditableContent();
-  const quotes = experiences.filter((e) => e.type === "quote");
+  const athleteQuotes = experiences.filter((e) => e.type === "quote");
   const parentQuotes = experiences.filter((e) => e.type === "parent");
-  const photos = experiences.filter((e) => e.type === "photo" && e.image);
 
   return (
     <div className="overflow-hidden">
@@ -219,32 +79,14 @@ const ExperiencesPage = () => {
             </h1>
             <p className="text-white font-bold text-lg md:text-xl max-w-2xl mx-auto font-body">
               Hear from the athletes, families, and coaches who make Together
-              Sports what it is. These are their words, their moments, and their
-              stories.
+              Sports what it is — in their own words.
             </p>
           </motion.div>
         </div>
       </section>
 
-      {photos.length > 0 ? (
-        <section className="pt-14 pb-10 md:pt-28 md:pb-16 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <ScrollReveal>
-              <h2 className="font-heading text-5xl md:text-7xl font-black uppercase mb-8 md:mb-12 text-center">
-                Moments Captured
-              </h2>
-            </ScrollReveal>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {photos.map((p, i) => (
-                <PhotoCard key={p.id} item={p} index={i} />
-              ))}
-            </div>
-          </div>
-        </section>
-      ) : null}
-
       {parentQuotes.length > 0 ? (
-        <section className="py-14 md:py-28 bg-white">
+        <section className="pt-14 pb-8 md:pt-28 md:pb-14 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <ScrollReveal>
               <h2 className="font-heading text-5xl md:text-7xl font-black uppercase mb-8 md:mb-12 text-center">
@@ -259,6 +101,44 @@ const ExperiencesPage = () => {
           </div>
         </section>
       ) : null}
+
+      {athleteQuotes.length > 0 ? (
+        <section className="py-14 md:py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <ScrollReveal>
+              <h2 className="font-heading text-5xl md:text-7xl font-black uppercase mb-8 md:mb-12 text-center">
+                Athletes Speak
+              </h2>
+            </ScrollReveal>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {athleteQuotes.map((q, i) => (
+                <QuoteCard key={q.id} item={q} index={i} />
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
+
+      <section className="bg-card py-14 md:py-20 scratchy-overlay">
+        <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
+          <ScrollReveal direction="scale">
+            <h2 className="mb-4 font-heading text-4xl md:text-5xl font-black uppercase">
+              See the <span className="text-[#87cb4a]">Moments</span> Behind the
+              Words
+            </h2>
+            <p className="mx-auto mb-8 max-w-md text-lg text-muted-foreground">
+              Browse photos and videos from sessions, events, and communities
+              across Together Sports.
+            </p>
+            <Link
+              to="/moments"
+              className="inline-block bg-accent px-8 py-4 font-heading font-bold uppercase tracking-wider text-white transition-all duration-200 hover:scale-105"
+            >
+              View Moments Captured →
+            </Link>
+          </ScrollReveal>
+        </div>
+      </section>
     </div>
   );
 };

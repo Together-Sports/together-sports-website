@@ -37,6 +37,7 @@ const staticRoutes = [
   "/sports/golf",
   "/team",
   "/experiences",
+  "/moments",
   "/blog",
   "/partners",
   "/contact",
