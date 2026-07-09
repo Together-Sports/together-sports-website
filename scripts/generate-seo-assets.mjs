@@ -7,7 +7,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, "..");
 const publicDir = path.join(rootDir, "public");
 const blogPostsFile = path.join(rootDir, "src", "data", "blogPosts.ts");
-const headerLogoFile = path.join(publicDir, "headerlogo.svg");
+const iconSourceFile = path.join(publicDir, "SPORTSTOGETHERHANDLOGO.png");
 
 const normalizeSiteUrl = (value) => {
   const fallback = "https://www.togethersports.org";
@@ -94,9 +94,9 @@ const buildManifest = () =>
       theme_color: "#020367",
       icons: [
         {
-          src: "/headerlogo.svg",
+          src: "/SPORTSTOGETHERHANDLOGO.png",
           sizes: "any",
-          type: "image/svg+xml",
+          type: "image/png",
           purpose: "any",
         },
         {
@@ -118,18 +118,19 @@ const buildManifest = () =>
 
 const generateIconPngs = async () => {
   const [faviconPng, appleTouchPng] = await Promise.all([
-    sharp(headerLogoFile)
+    sharp(iconSourceFile)
       .resize(256, 256, {
         fit: "contain",
         background: { r: 0, g: 0, b: 0, alpha: 0 },
       })
       .png()
       .toBuffer(),
-    sharp(headerLogoFile)
+    sharp(iconSourceFile)
       .resize(180, 180, {
         fit: "contain",
-        background: { r: 0, g: 0, b: 0, alpha: 0 },
+        background: { r: 255, g: 255, b: 255, alpha: 1 },
       })
+      .flatten({ background: { r: 255, g: 255, b: 255 } })
       .png()
       .toBuffer(),
   ]);
