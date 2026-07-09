@@ -30,7 +30,7 @@ const heroSpins = [
   {
     image: golfSpin,
     className:
-      "absolute right-10 top-24 z-0 hidden w-28 sm:block sm:right-14 sm:top-28 sm:w-32 md:right-20 md:top-24 md:w-44 lg:right-28 lg:top-32 lg:w-48",
+      "absolute right-10 top-24 z-0 hidden w-28 sm:block sm:right-14 sm:top-28 sm:w-32 md:right-16 md:top-24 md:w-44 lg:right-12 lg:top-32 lg:w-48",
     rotate: 360,
     duration: 18,
     delay: 1.5,
@@ -48,7 +48,7 @@ const heroSpins = [
   {
     image: footballSpin,
     className:
-      "absolute bottom-8 right-4 z-0 hidden w-64 sm:block sm:bottom-10 sm:right-6 sm:w-72 md:bottom-10 md:right-8 md:w-80 lg:bottom-12 lg:right-10 lg:w-[23rem]",
+      "absolute bottom-8 right-4 z-0 hidden w-64 sm:block sm:bottom-10 sm:right-6 sm:w-72 md:bottom-10 md:right-6 md:w-80 lg:bottom-12 lg:right-4 lg:w-[23rem]",
     rotate: 0,
     duration: 0,
     delay: 0,
@@ -378,14 +378,14 @@ const Index = () => {
         ))}
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 md:py-32 lg:py-36">
-          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(300px,0.8fr)] gap-10 sm:gap-14 lg:gap-28 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.2fr)_minmax(260px,0.6fr)] gap-10 sm:gap-14 lg:gap-12 items-center">
             <motion.div
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease: "easeOut" }}
-              className="max-w-2xl"
+              className="max-w-3xl"
             >
-              <h1 className="font-heading text-[clamp(2.5rem,10.5vw,3.75rem)] sm:text-7xl md:text-8xl lg:text-[6.4rem] xl:text-[7rem] font-black uppercase leading-[0.94] mb-6 sm:mb-8 text-foreground">
+              <h1 className="font-heading text-[clamp(1.75rem,8.5vw,4.4rem)] lg:text-[clamp(3rem,4.5vw,4.4rem)] font-black uppercase leading-[0.94] mb-6 sm:mb-8 text-foreground">
                 <span className="block text-balance">{heroLines[0]}</span>
                 <span className="block text-balance text-[#4f74d6]">
                   {heroLines[1] ?? ""}
