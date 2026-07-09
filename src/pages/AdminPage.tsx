@@ -1886,6 +1886,29 @@ const AdminPage = () => {
                   </div>
                 </div>
               </EditorCard>
+
+              <EditorCard>
+                <p className="font-heading text-2xl font-black uppercase">
+                  Opening Intro Video
+                </p>
+                <p className="text-muted-foreground text-sm">
+                  Plays full screen when someone first opens the site, then
+                  fades into the page. It shows once per visit, plays muted,
+                  and visitors can skip it at any time. Keep it short — a few
+                  seconds works best.
+                </p>
+                <VideoField
+                  label="Intro Video (Optional)"
+                  value={siteText?.introVideo || ""}
+                  onChange={(value) =>
+                    setSiteText((current) => ({
+                      ...current,
+                      introVideo: value
+                    }))
+                  }
+                  onUpload={uploadImage}
+                />
+              </EditorCard>
             </div>
           </TabsContent>
 

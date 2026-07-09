@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { EditableContentProvider, useEditableContent } from "@/lib/editable-content";
 import ScrollToTop from "./components/ScrollToTop";
 import Seo from "./components/Seo";
+import IntroVideo from "./components/IntroVideo";
 import Layout from "./components/Layout";
 import SiteLoadingScreen from "./components/SiteLoadingScreen";
 import Index from "./pages/Index";
@@ -33,6 +34,7 @@ const AppRoutes = () => {
 
   return (
     <TooltipProvider>
+      <IntroVideo />
       <Toaster />
       <Sonner />
       <BrowserRouter>

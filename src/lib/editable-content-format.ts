@@ -76,6 +76,7 @@ export type SiteText = {
   heroImage3?: string;
   missionImage?: string;
   missionVideo?: string;
+  introVideo?: string;
   secondServeImage?: string;
 };
 
@@ -216,6 +217,7 @@ export const serializeEditableContentState = (
     heroImage3: "",
     missionImage: "",
     missionVideo: "",
+    introVideo: "",
     secondServeImage: ""
   },
 });
@@ -301,6 +303,10 @@ export const hydrateEditableContentState = (
             typeof (content.siteText as any).missionVideo === "string"
               ? (content.siteText as any).missionVideo
               : "",
+          introVideo:
+            typeof (content.siteText as any).introVideo === "string"
+              ? (content.siteText as any).introVideo
+              : "",
           secondServeImage: fromPortableMediaValue((content.siteText as any).secondServeImage)
         }
       : {
@@ -315,6 +321,7 @@ export const hydrateEditableContentState = (
           heroImage3: "",
           missionImage: "",
           missionVideo: "",
+          introVideo: "",
           secondServeImage: ""
         },
 });

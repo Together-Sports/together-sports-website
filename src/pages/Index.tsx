@@ -1,5 +1,6 @@
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import ScrollReveal from "@/components/ScrollReveal";
 import heroImage from "@/assets/hero-sports.jpg";
 import secondServe from "@/assets/second-serve.jpg";
@@ -131,6 +132,76 @@ const resolveValueCardAppearance = (bg?: string) => {
   }
 
   return { className: fallbackClass, textClass: "text-white" };
+};
+
+// Splits a metric value like "2000+", "100%", or "$1.5k" into the number to
+// count up to and the text around it. Returns null when there's no number.
+const parseMetricValue = (value: string) => {
+  const match = value.match(/^([^\d]*)([\d,]*\.?\d+)(.*)$/);
+
+  if (!match) {
+    return null;
+  }
+
+  const target = parseFloat(match[2].replace(/,/g, ""));
+
+  if (!Number.isFinite(target)) {
+    return null;
+  }
+
+  return {
+    prefix: match[1],
+    target,
+    suffix: match[3],
+    decimals: (match[2].split(".")[1] || "").length
+  };
+};
+
+const COUNT_UP_DURATION_MS = 1600;
+
+const CountUpValue = ({
+  value,
+  className
+}: {
+  value: string;
+  className: string;
+}) => {
+  const parsed = parseMetricValue(value);
+  const ref = useRef<HTMLParagraphElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-60px" });
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    if (!isInView) {
+      return;
+    }
+
+    let frame: number;
+    const start = performance.now();
+
+    const tick = (now: number) => {
+      const elapsed = Math.min((now - start) / COUNT_UP_DURATION_MS, 1);
+      // ease-out cubic: fast start, gentle landing on the final number
+      setProgress(1 - Math.pow(1 - elapsed, 3));
+
+      if (elapsed < 1) {
+        frame = requestAnimationFrame(tick);
+      }
+    };
+
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [isInView]);
+
+  const display = parsed
+    ? `${parsed.prefix}${(parsed.target * progress).toFixed(parsed.decimals)}${parsed.suffix}`
+    : value;
+
+  return (
+    <p ref={ref} className={className}>
+      {display}
+    </p>
+  );
 };
 
 const MapEmbedCard = ({
@@ -562,9 +633,10 @@ const Index = () => {
                     >
                       {item.title}
                     </p>
-                    <p className="font-heading text-4xl sm:text-5xl md:text-6xl font-black uppercase text-foreground leading-none">
-                      {item.value}
-                    </p>
+                    <CountUpValue
+                      value={item.value}
+                      className="font-heading text-4xl sm:text-5xl md:text-6xl font-black uppercase text-foreground leading-none"
+                    />
                   </div>
                 </ScrollReveal>
               ))}
