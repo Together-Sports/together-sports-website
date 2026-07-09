@@ -21,17 +21,16 @@ const PartnersPage = () => {
           </ScrollReveal>
         </div>
 
-        <div className="relative w-full overflow-hidden">
-          <div className="absolute left-0 right-0 -top-6 md:-top-8 h-12 md:h-16 bg-gradient-to-b from-white via-white to-transparent z-20 pointer-events-none" />
+        <div className="relative w-full overflow-hidden py-4">
           <div className="absolute left-0 top-0 bottom-0 w-24 md:w-40 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
           <div className="absolute right-0 top-0 bottom-0 w-24 md:w-40 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
 
-          <div className="flex w-max will-change-transform animate-partner-marquee">
+          <div className="flex w-max will-change-transform animate-partner-marquee hover:[animation-play-state:paused]">
             {[partners, partners, partners].map((group, groupIndex) => (
               <div
                 key={groupIndex}
                 aria-hidden={groupIndex > 0}
-                className="flex shrink-0 items-center gap-16 pr-16 md:gap-24 md:pr-24"
+                className="flex shrink-0 items-stretch gap-6 pr-6 md:gap-10 md:pr-10"
               >
                 {group.map((partner) => (
                   <a
@@ -40,16 +39,21 @@ const PartnersPage = () => {
                     target={partner.href ? "_blank" : undefined}
                     rel={partner.href ? "noreferrer" : undefined}
                     aria-label={partner.href ? partner.name : undefined}
-                    className="flex-shrink-0 w-40 h-28 md:w-44 md:h-[7.5rem] flex items-center justify-center grayscale hover:grayscale-0 opacity-60 hover:opacity-100 transition-all duration-300"
+                    className="group flex-shrink-0 w-48 md:w-56 flex flex-col items-center justify-between gap-3 border-2 border-border bg-white p-5 md:p-6 transition-all duration-300 hover:-translate-y-1 hover:border-accent hover:shadow-[6px_6px_0_0_hsl(var(--accent))]"
                   >
-                    <img
-                      src={partner.logo}
-                      alt={partner.name}
-                      loading={groupIndex === 0 ? "eager" : "lazy"}
-                      decoding="async"
-                      fetchpriority={groupIndex === 0 ? "high" : "low"}
-                      className="max-w-full max-h-full object-contain"
-                    />
+                    <span className="flex h-20 md:h-24 w-full items-center justify-center">
+                      <img
+                        src={partner.logo}
+                        alt={partner.name}
+                        loading={groupIndex === 0 ? "eager" : "lazy"}
+                        decoding="async"
+                        fetchpriority={groupIndex === 0 ? "high" : "low"}
+                        className="max-w-full max-h-full object-contain"
+                      />
+                    </span>
+                    <span className="w-full truncate text-center font-heading text-sm font-black uppercase tracking-wider text-foreground/70 transition-colors duration-300 group-hover:text-foreground">
+                      {partner.name}
+                    </span>
                   </a>
                 ))}
               </div>
