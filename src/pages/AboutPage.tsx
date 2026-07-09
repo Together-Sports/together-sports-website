@@ -257,13 +257,13 @@ const AboutPage = () => {
                 <div key={section.title}>
                   <ScrollReveal>
                     <div className="mb-8 md:mb-10 text-center">
-                      <p
-                        className="font-body font-bold uppercase tracking-[0.3em] text-sm mb-3"
-                        style={{ color: section.color }}
-                      >
+                      <p className="font-body font-bold uppercase tracking-[0.3em] text-sm mb-3 text-foreground">
                         Together Sports
                       </p>
-                      <h3 className="font-heading text-4xl md:text-6xl font-black uppercase">
+                      <h3
+                        className="font-heading text-4xl md:text-6xl font-black uppercase"
+                        style={{ color: section.color }}
+                      >
                         {section.title}
                       </h3>
                     </div>
