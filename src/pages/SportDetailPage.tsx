@@ -305,14 +305,21 @@ const SportDetailPage = () => {
                   >
                     <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
                       <div className="min-w-0">
-                        <h3 className="mb-3 font-heading text-3xl font-black uppercase text-foreground md:text-4xl">
-                          {session.title}
-                        </h3>
+                        <div className="mb-3 flex flex-wrap items-center gap-3">
+                          <h3 className="font-heading text-3xl font-black uppercase text-foreground md:text-4xl">
+                            {session.title}
+                          </h3>
+                          {session.isRecurring ? (
+                            <span className="bg-accent px-3 py-1 font-heading text-xs font-bold uppercase tracking-wider text-white">
+                              Recurring
+                            </span>
+                          ) : null}
+                        </div>
                         <div className="grid grid-cols-1 gap-x-10 gap-y-3 text-foreground sm:grid-cols-2">
                           {session.dateLabel.trim() ? (
                             <div>
                               <p className="mb-1 font-body text-xs font-bold uppercase tracking-[0.16em] text-muted-foreground">
-                                Date
+                                {session.isRecurring ? "Schedule" : "Date"}
                               </p>
                               <p className="text-lg">{session.dateLabel}</p>
                             </div>

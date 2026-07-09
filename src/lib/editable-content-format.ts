@@ -41,6 +41,7 @@ export type SportSession = {
   location: string;
   spotsLabel: string;
   signupUrl: string;
+  isRecurring?: boolean;
 };
 
 export type SportDescription = {

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import headerLogo from "@/assets/headerlogo.svg";
+import headerLogo from "@/assets/SPORTSTOGETHERHANDLOGOFORDARKBACKS.png";
 import { useEditableContent } from "@/lib/editable-content";
 
 const defaultNavItems = [

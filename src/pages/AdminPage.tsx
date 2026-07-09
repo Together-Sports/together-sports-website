@@ -2354,8 +2354,26 @@ const AdminPage = () => {
                                     placeholder="e.g., Saturday Youth Clinic"
                                   />
                                 </div>
+                                <label className="flex items-center gap-2 md:col-span-2">
+                                  <input
+                                    type="checkbox"
+                                    checked={Boolean(session.isRecurring)}
+                                    onChange={(event) =>
+                                      updateSportSession(sport, session.id, {
+                                        isRecurring: event.target.checked
+                                      })
+                                    }
+                                    className="h-4 w-4 accent-primary"
+                                  />
+                                  <span className="font-body text-sm text-foreground">
+                                    Recurring session (repeats on a schedule,
+                                    e.g. every Saturday)
+                                  </span>
+                                </label>
                                 <div className="space-y-1">
-                                  <p className={labelClass}>Date</p>
+                                  <p className={labelClass}>
+                                    {session.isRecurring ? "Schedule" : "Date"}
+                                  </p>
                                   <input
                                     className={inputClass}
                                     value={session.dateLabel}
@@ -2364,7 +2382,11 @@ const AdminPage = () => {
                                         dateLabel: event.target.value
                                       })
                                     }
-                                    placeholder="e.g., Saturday, July 12"
+                                    placeholder={
+                                      session.isRecurring
+                                        ? "e.g., Every Saturday"
+                                        : "e.g., Saturday, July 12"
+                                    }
                                   />
                                 </div>
                                 <div className="space-y-1">
@@ -2438,7 +2460,8 @@ const AdminPage = () => {
                                     timeLabel: "",
                                     location: "",
                                     spotsLabel: "",
-                                    signupUrl: ""
+                                    signupUrl: "",
+                                    isRecurring: false
                                   }
                                 ]
                               })
