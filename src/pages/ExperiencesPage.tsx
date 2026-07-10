@@ -62,7 +62,7 @@ const ExperiencesPage = () => {
 
   return (
     <div className="overflow-hidden">
-      <section className="relative overflow-hidden bg-[#f4826d]">
+      <section className="relative overflow-hidden bg-[#45c0b2]">
         <div className="absolute left-4 top-10 h-12 w-12 rounded-full bg-white/10 sm:left-8 sm:top-12 sm:h-[4.5rem] sm:w-[4.5rem] md:h-24 md:w-24" />
         <div className="absolute left-[20%] top-8 hidden h-14 w-14 bg-white/10 scrapbook-rotate-2 sm:block" />
         <div className="absolute right-6 top-10 h-12 w-12 rotate-45 bg-white/10 sm:right-10 sm:h-20 sm:w-20 md:h-24 md:w-24" />

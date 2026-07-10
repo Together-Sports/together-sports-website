@@ -732,12 +732,12 @@ const Index = () => {
       <section className="py-14 md:py-32 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <ScrollReveal>
-            <h2 className="font-heading text-5xl md:text-7xl font-black uppercase mb-4 text-center">
-              <span className="mr-2 inline-block text-[0.9em] normal-case align-[0.02em] md:mr-3">
+            <h2 className="font-heading text-[clamp(2.25rem,10vw,3rem)] sm:text-5xl md:text-7xl font-black uppercase mb-4 text-center">
+              <span className="mr-2 hidden text-[0.9em] normal-case align-[0.02em] sm:inline-block md:mr-3">
                 📍
               </span>
               {t("home.locationHeading")}
-              <span className="ml-2 inline-block text-[0.9em] normal-case align-[0.02em] md:ml-3">
+              <span className="ml-2 hidden text-[0.9em] normal-case align-[0.02em] sm:inline-block md:ml-3">
                 📍
               </span>
             </h2>
@@ -757,11 +757,11 @@ const Index = () => {
           {otherLocations.length > 0 ? (
             <div className="mt-16 md:mt-20">
               <ScrollReveal>
-                <h3 className="font-heading text-5xl md:text-7xl font-black uppercase mb-4 text-center">
+                <h3 className="font-heading text-[clamp(2rem,9.4vw,3rem)] sm:text-5xl md:text-7xl font-black uppercase mb-4 text-center">
                   {otherLocationsSection.title?.trim().toLowerCase() ===
                   "other locations" ? (
                     <>
-                      <span className="mr-2 inline-block text-[0.9em] normal-case align-[0.02em] md:mr-3">
+                      <span className="mr-2 hidden text-[0.9em] normal-case align-[0.02em] sm:inline-block md:mr-3">
                         🌍
                       </span>
                       <span className="brush-underline inline-block">
@@ -771,13 +771,13 @@ const Index = () => {
                     </>
                   ) : (
                     <span className="inline-block">
-                      <span className="mr-2 inline-block text-[0.9em] normal-case align-[0.02em] md:mr-3">
+                      <span className="mr-2 hidden text-[0.9em] normal-case align-[0.02em] sm:inline-block md:mr-3">
                         🌍
                       </span>
                       {otherLocationsSection.title || "Other Locations"}
                     </span>
                   )}
-                  <span className="ml-2 inline-block text-[0.9em] normal-case align-[0.02em] md:ml-3">
+                  <span className="ml-2 hidden text-[0.9em] normal-case align-[0.02em] sm:inline-block md:ml-3">
                     🌎
                   </span>
                 </h3>
@@ -814,10 +814,11 @@ const Index = () => {
 
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <ScrollReveal direction="scale">
-            <h2 className="font-heading text-5xl md:text-7xl font-black uppercase text-white leading-[0.85] mb-6">
-              Change the Game.
-              <br />
-              <span className="text-white">Donate Today.</span>
+            <h2 className="font-heading text-[clamp(2rem,9.2vw,3rem)] sm:text-5xl md:text-7xl font-black uppercase text-white leading-[0.9] mb-6">
+              <span className="block whitespace-nowrap">Change the Game.</span>
+              <span className="block whitespace-nowrap text-white">
+                Donate Today.
+              </span>
             </h2>
             <p className="text-white font-bold text-lg mb-8 max-w-lg mx-auto font-body">
               Your contribution puts a racket, a ball, or a dream in a

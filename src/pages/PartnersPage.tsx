@@ -23,7 +23,42 @@ const PartnersPage = () => {
           </ScrollReveal>
         </div>
 
-        <div className="relative w-full overflow-hidden py-4">
+        {/* Mobile: swipeable partner row */}
+        <div className="md:hidden">
+          <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {partners.map((partner) => (
+              <a
+                key={`m-${partner.id}`}
+                href={partner.href}
+                target={partner.href ? "_blank" : undefined}
+                rel={partner.href ? "noreferrer" : undefined}
+                aria-label={partner.href ? partner.name : undefined}
+                className="flex w-40 shrink-0 snap-center flex-col items-center justify-between gap-3 border-2 border-border bg-white p-4"
+              >
+                <span className="flex h-16 w-full items-center justify-center">
+                  <img
+                    src={partner.logo}
+                    alt={partner.name}
+                    loading="lazy"
+                    decoding="async"
+                    className="max-w-full max-h-full object-contain"
+                  />
+                </span>
+                <span className="w-full truncate text-center font-heading text-xs font-black uppercase tracking-wider text-foreground/70">
+                  {partner.name}
+                </span>
+              </a>
+            ))}
+          </div>
+          <p className="mt-4 flex items-center justify-center gap-2 px-4 text-center font-body text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground">
+            <span aria-hidden className="animate-pulse">←</span>
+            Swipe to see all partners
+            <span aria-hidden className="animate-pulse">→</span>
+          </p>
+        </div>
+
+        {/* Desktop: auto-scrolling marquee */}
+        <div className="relative hidden w-full overflow-hidden py-4 md:block">
           <div className="absolute left-0 top-0 bottom-0 w-24 md:w-40 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
           <div className="absolute right-0 top-0 bottom-0 w-24 md:w-40 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
 
