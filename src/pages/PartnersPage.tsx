@@ -65,7 +65,7 @@ const PartnersPage = () => {
       </section>
 
       {/* Why Partner */}
-      <section className="py-14 md:py-20 bg-accent scratchy-overlay">
+      <section className="py-14 md:py-20 bg-[#ab9bfa] scratchy-overlay">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <ScrollReveal>
             <h2 className="font-heading text-5xl md:text-7xl font-black uppercase mb-8 md:mb-12 text-white text-center">

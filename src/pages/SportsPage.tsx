@@ -28,7 +28,7 @@ const SportsPage = () => {
   const t = useSiteText();
   return (
     <div className="overflow-hidden">
-      <section className="relative overflow-hidden bg-primary">
+      <section className="relative overflow-hidden bg-[#f6a15c]">
         <div className="absolute left-6 top-10 h-14 w-14 rounded-full bg-white/10 sm:left-10 sm:h-20 sm:w-20" />
         <div className="absolute left-[18%] top-24 hidden h-12 w-12 rotate-45 bg-white/10 md:block" />
         <div className="absolute left-12 bottom-12 h-10 w-10 bg-white/10 scrapbook-rotate-2 sm:h-14 sm:w-14" />
