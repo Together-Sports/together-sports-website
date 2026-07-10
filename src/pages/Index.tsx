@@ -378,14 +378,14 @@ const Index = () => {
         ))}
 
         <div className="relative z-10 max-w-[87.5rem] mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 md:py-32 lg:py-36">
-          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.25fr)_minmax(260px,0.55fr)] gap-10 sm:gap-14 lg:gap-10 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.35fr)_minmax(240px,0.5fr)] gap-10 sm:gap-14 lg:gap-10 items-center">
             <motion.div
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease: "easeOut" }}
               className="max-w-none"
             >
-              <h1 className="font-heading text-[clamp(1.75rem,8.5vw,5.3rem)] lg:text-[clamp(3rem,5.4vw,5.3rem)] font-black uppercase leading-[0.94] mb-6 sm:mb-8 text-foreground">
+              <h1 className="font-heading text-[clamp(1.75rem,8.5vw,5.75rem)] lg:text-[clamp(3rem,5.9vw,5.75rem)] font-black uppercase leading-[0.94] mb-6 sm:mb-8 text-foreground">
                 <span className="block text-balance">{heroLines[0]}</span>
                 <span className="block text-balance text-[#4f74d6]">
                   {heroLines[1] ?? ""}

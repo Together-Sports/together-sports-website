@@ -107,19 +107,19 @@ const TeamCard = ({
         loading="lazy"
         decoding="async"
         style={personImage.style}
-        className={`w-full object-cover ${isFounder ? "h-[320px] md:h-[400px]" : "h-[320px] md:h-[310px]"}`}
+        className={`w-full object-cover ${isFounder ? "h-[320px] md:h-[400px]" : "h-[180px] sm:h-[280px] md:h-[310px]"}`}
       />
       <div
-        className={`flex flex-1 flex-col ${isFounder ? "p-7 md:p-9" : "p-7 md:p-7"}`}
+        className={`flex flex-1 flex-col ${isFounder ? "p-7 md:p-9" : "p-4 sm:p-7 md:p-7"}`}
       >
         <p
-          className="font-body font-bold uppercase tracking-[0.22em] text-sm mb-3"
+          className={`font-body font-bold uppercase tracking-[0.22em] mb-3 ${isFounder ? "text-sm" : "text-xs sm:text-sm"}`}
           style={{ color }}
         >
           {person.role}
         </p>
         {person.location ? (
-          <p className="font-body text-sm uppercase tracking-[0.18em] text-muted-foreground mb-4 break-words [overflow-wrap:anywhere]">
+          <p className="font-body text-xs sm:text-sm uppercase tracking-[0.18em] text-muted-foreground mb-4 break-words [overflow-wrap:anywhere]">
             {person.location}
           </p>
         ) : null}
@@ -145,7 +145,7 @@ const TeamCard = ({
           >
             <h4
               className={`font-heading font-black uppercase ${
-                isFounder ? "text-4xl md:text-5xl" : "text-3xl md:text-4xl"
+                isFounder ? "text-4xl md:text-5xl" : "text-xl sm:text-3xl md:text-4xl"
               }`}
             >
               {person.name}
@@ -269,7 +269,7 @@ const AboutPage = () => {
                     className={
                       section.title === "Founder"
                         ? "max-w-md md:max-w-lg mx-auto"
-                        : "grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-7"
+                        : "grid grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-6 md:gap-7"
                     }
                   >
                     {section.people.map((person, personIndex) => (
