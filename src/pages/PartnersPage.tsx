@@ -91,8 +91,13 @@ const PartnersPage = () => {
                 titleColor: "#f6a15c"
               }
             ].map((item, i) => (
-              <ScrollReveal key={item.title} delay={i * 0.15} direction="up">
-                <div className="p-8 md:p-8 bg-background border border-border hover:border-accent transition-colors duration-300">
+              <ScrollReveal
+                key={item.title}
+                delay={i * 0.15}
+                direction="up"
+                className="h-full"
+              >
+                <div className="h-full p-8 md:p-8 bg-background border border-border hover:border-accent transition-colors duration-300">
                   <h3
                     className="font-heading text-3xl font-black uppercase mb-3"
                     style={{ color: item.titleColor }}
@@ -140,10 +145,10 @@ const PartnersPage = () => {
                   {t("partners.perksTitle")}
                 </p>
                 {[
-                  "Positive community impact and youth development",
-                  "Featured on our website & social media",
-                  "Meaningful volunteer opportunities for staff and students",
-                  "Opportunities to collaborate on programming and events"
+                  t("partners.perk1"),
+                  t("partners.perk2"),
+                  t("partners.perk3"),
+                  t("partners.perk4")
                 ].map((perk, index) => (
                   <div
                     key={perk}

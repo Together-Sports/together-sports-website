@@ -46,7 +46,20 @@ const Navbar = () => {
 
   useEffect(() => {
     setIsOpen(false);
+    setOpenDropdown(null);
   }, [location.pathname]);
+
+  useEffect(() => {
+    if (!openDropdown) {
+      return;
+    }
+
+    // The nav is fixed, so an open dropdown would ride over page content
+    // (e.g. the Partners cards) while scrolling — close it instead.
+    const handleScroll = () => setOpenDropdown(null);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [openDropdown]);
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-primary border-b border-primary/80">
@@ -91,13 +104,17 @@ const Navbar = () => {
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -8, scale: 0.96 }}
                         transition={{ duration: 0.18, ease: "easeOut" }}
-                        className="absolute left-0 top-full mt-7 hidden w-56 border-2 border-primary bg-white shadow-lg xl:block"
+                        // pt-7 (not a margin) keeps the gap between the trigger
+                        // and the panel inside the hover area, so mouse-out
+                        // always fires and the panel can't get stuck open.
+                        className="absolute left-0 top-full z-50 hidden w-56 pt-7 xl:block"
                       >
-                        <div className="p-2 text-left">
+                        <div className="border-2 border-primary bg-white p-2 text-left shadow-lg">
                           {item.dropdown.map((subItem) => (
                             <Link
                               key={subItem.path}
                               to={subItem.path}
+                              onClick={() => setOpenDropdown(null)}
                               className="block px-4 py-3 text-sm font-[Montserrat] font-bold uppercase tracking-wider transition-colors duration-200 hover:bg-primary/5"
                               style={{ color: subItem.color ?? "#4f74d6" }}
                             >
