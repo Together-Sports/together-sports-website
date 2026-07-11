@@ -2,6 +2,12 @@ import { useEffect, useRef, useState } from "react";
 import { useEditableContent } from "@/lib/editable-content";
 
 const INTRO_SEEN_KEY = "together-sports-intro-seen";
+// Remembers the intro video URL between visits. The URL normally lives in the
+// live site content, which takes a moment to load — without this cache the
+// site can render first and the intro pops in late. With it, the overlay
+// covers the screen from the very first paint and the video starts
+// downloading immediately, in parallel with the content fetch.
+const INTRO_SRC_CACHE_KEY = "together-sports-intro-src";
 // If the video can't start playing within this window (slow network,
 // blocked autoplay, bad URL), skip straight to the site.
 const START_TIMEOUT_MS = 5000;
@@ -26,19 +32,66 @@ const markIntroSeen = () => {
   }
 };
 
+const readCachedIntroSrc = () => {
+  try {
+    return window.localStorage.getItem(INTRO_SRC_CACHE_KEY) ?? "";
+  } catch {
+    return "";
+  }
+};
+
+const cacheIntroSrc = (src: string) => {
+  try {
+    if (src) {
+      window.localStorage.setItem(INTRO_SRC_CACHE_KEY, src);
+    } else {
+      window.localStorage.removeItem(INTRO_SRC_CACHE_KEY);
+    }
+  } catch {
+    // Storage unavailable — the next visit falls back to waiting for the
+    // live content before showing the intro.
+  }
+};
+
 const IntroVideo = () => {
-  const { siteText, isLoadingContent } = useEditableContent();
-  const src = siteText?.introVideo?.trim() || "";
+  const { siteText, hasResolvedContent } = useEditableContent();
+  const liveSrc = siteText?.introVideo?.trim() || "";
   const [dismissed, setDismissed] = useState(hasSeenIntro);
   const [isFading, setIsFading] = useState(false);
+  const [hasStarted, setHasStarted] = useState(false);
   const hasStartedRef = useRef(false);
-  const showIntro = Boolean(src) && !isLoadingContent && !dismissed;
+  const [src, setSrc] = useState(() =>
+    hasSeenIntro() ? "" : readCachedIntroSrc()
+  );
+  const showIntro = Boolean(src) && !dismissed;
 
   const dismiss = () => {
     markIntroSeen();
     setIsFading(true);
     window.setTimeout(() => setDismissed(true), 500);
   };
+
+  // Reconcile the cached URL against the live content once it has actually
+  // resolved. (isLoadingContent isn't enough here — a slow fetch flips it
+  // early via the fallback timer, before the real content is known.)
+  useEffect(() => {
+    if (!hasResolvedContent) {
+      return;
+    }
+
+    cacheIntroSrc(liveSrc);
+
+    if (!liveSrc) {
+      // No intro is configured (anymore) — drop any stale cached overlay.
+      setDismissed(true);
+      return;
+    }
+
+    if (!hasStartedRef.current) {
+      setSrc(liveSrc);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasResolvedContent, liveSrc]);
 
   useEffect(() => {
     if (!showIntro) {
@@ -52,8 +105,10 @@ const IntroVideo = () => {
     }, START_TIMEOUT_MS);
 
     return () => window.clearTimeout(timeout);
+    // The timer restarts when the live content confirms the URL, so a video
+    // shown early from cache gets a fresh window after the content settles.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showIntro]);
+  }, [showIntro, hasResolvedContent]);
 
   if (!showIntro) {
     return null;
@@ -75,10 +130,19 @@ const IntroVideo = () => {
         className="h-full w-full object-cover"
         onPlaying={() => {
           hasStartedRef.current = true;
+          setHasStarted(true);
         }}
         onEnded={dismiss}
         onError={dismiss}
       />
+      {!hasStarted && (
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+          <span
+            aria-hidden
+            className="h-12 w-12 animate-spin rounded-full border-4 border-white/25 border-t-white"
+          />
+        </div>
+      )}
       <button
         type="button"
         onClick={dismiss}

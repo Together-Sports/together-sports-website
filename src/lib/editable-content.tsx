@@ -55,6 +55,7 @@ type EditableContentContextValue = EditableContentState & {
   importContent: (input: unknown) => void;
   hasUnsavedChanges: boolean;
   isLoadingContent: boolean;
+  hasResolvedContent: boolean;
   isSaving: boolean;
   isSupabaseConfigured: boolean;
   isAuthenticated: boolean;
@@ -242,6 +243,10 @@ export const EditableContentProvider = ({
   const [siteText, setSiteText] = useState(() => defaultContent.siteText);
   const [lastSavedSnapshot, setLastSavedSnapshot] = useState(defaultSnapshot);
   const [isLoadingContent, setIsLoadingContent] = useState(true);
+  // Unlike isLoadingContent (which the fallback timer below can flip early to
+  // unblock rendering), this only becomes true once the live-content request
+  // has actually settled — success or failure.
+  const [hasResolvedContent, setHasResolvedContent] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [authLoading, setAuthLoading] = useState(isSupabaseConfigured);
   const [user, setUser] = useState<User | null>(null);
@@ -418,6 +423,7 @@ export const EditableContentProvider = ({
       .finally(() => {
         if (active) {
           setIsLoadingContent(false);
+          setHasResolvedContent(true);
         }
       });
 
@@ -578,6 +584,7 @@ export const EditableContentProvider = ({
       },
       hasUnsavedChanges,
       isLoadingContent,
+      hasResolvedContent,
       isSaving,
       isSupabaseConfigured,
       isAuthenticated: Boolean(user?.email && isAllowedAdminEmail(user.email)),
@@ -628,6 +635,7 @@ export const EditableContentProvider = ({
       currentSnapshot,
       hasUnsavedChanges,
       isLoadingContent,
+      hasResolvedContent,
       isSaving,
       user,
       authLoading,

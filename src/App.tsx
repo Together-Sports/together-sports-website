@@ -29,38 +29,48 @@ const queryClient = new QueryClient();
 const AppRoutes = () => {
   const { isLoadingContent } = useEditableContent();
 
+  // IntroVideo sits outside the loading gate so its overlay can cover the
+  // screen from the very first paint, and so it isn't remounted (restarting
+  // the video) when loading finishes.
   if (isLoadingContent) {
-    return <SiteLoadingScreen />;
+    return (
+      <>
+        <IntroVideo />
+        <SiteLoadingScreen />
+      </>
+    );
   }
 
   return (
-    <TooltipProvider>
+    <>
       <IntroVideo />
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <ScrollToTop />
-        <Seo />
-        <Routes>
-          <Route element={<Layout />}>
-            <Route path="/" element={<Index />} />
-            <Route path="/team" element={<AboutPage />} />
-            <Route path="/about" element={<Navigate to="/team" replace />} />
-            <Route path="/sports" element={<SportsPage />} />
-            <Route path="/sports/:sport" element={<SportDetailPage />} />
-            <Route path="/blog" element={<BlogPage />} />
-            <Route path="/blog/:slug" element={<BlogPostPage />} />
-            <Route path="/experiences" element={<ExperiencesPage />} />
-            <Route path="/moments" element={<MomentsPage />} />
-            <Route path="/get-involved" element={<GetInvolvedPage />} />
-            <Route path="/contact" element={<ContactPage />} />
-            <Route path="/partners" element={<PartnersPage />} />
-          </Route>
-          <Route path="/admin" element={<AdminPage />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <ScrollToTop />
+          <Seo />
+          <Routes>
+            <Route element={<Layout />}>
+              <Route path="/" element={<Index />} />
+              <Route path="/team" element={<AboutPage />} />
+              <Route path="/about" element={<Navigate to="/team" replace />} />
+              <Route path="/sports" element={<SportsPage />} />
+              <Route path="/sports/:sport" element={<SportDetailPage />} />
+              <Route path="/blog" element={<BlogPage />} />
+              <Route path="/blog/:slug" element={<BlogPostPage />} />
+              <Route path="/experiences" element={<ExperiencesPage />} />
+              <Route path="/moments" element={<MomentsPage />} />
+              <Route path="/get-involved" element={<GetInvolvedPage />} />
+              <Route path="/contact" element={<ContactPage />} />
+              <Route path="/partners" element={<PartnersPage />} />
+            </Route>
+            <Route path="/admin" element={<AdminPage />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </>
   );
 };
 
