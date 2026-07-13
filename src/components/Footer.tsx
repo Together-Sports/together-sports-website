@@ -60,7 +60,7 @@ const involvementLinks = [
 
 const socialLinks = [
   {
-    href: "https://www.instagram.com/togethertennis/",
+    href: "https://www.instagram.com/togethersportsorg",
     label: "Instagram",
     Icon: InstagramIcon
   },

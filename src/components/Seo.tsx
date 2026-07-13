@@ -13,7 +13,7 @@ const DEFAULT_DESCRIPTION =
   "Together Sports is a youth-led nonprofit building stronger communities through free sports programs, mentorship, and inclusive access.";
 
 const socialLinks = [
-  "https://www.instagram.com/togethertennis/",
+  "https://www.instagram.com/togethersportsorg",
   "https://www.tiktok.com/@together_sports",
   "https://www.linkedin.com/company/108267093/",
 ];
