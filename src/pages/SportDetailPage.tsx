@@ -15,6 +15,7 @@ import footballAction from "@/assets/football-action.jpg";
 import golfAction from "@/assets/golf-action.jpg";
 import togetherSoccer from "@/assets/TogetherSoccer.webp";
 import secondServe from "@/assets/second-serve.jpg";
+import { useSiteText } from "@/lib/use-site-text";
 
 const sportTheme: Record<
   string,
@@ -135,6 +136,7 @@ const fetchUstaSessionsDirect = async (
 };
 
 const SportDetailPage = () => {
+  const t = useSiteText();
   const { sport } = useParams<{ sport: string }>();
   const { tennisLessonVideos, sportDescriptions } = useEditableContent();
 
@@ -166,6 +168,9 @@ const SportDetailPage = () => {
   const isTennis = sport === "tennis";
   const theme = sportTheme[sport || "tennis"] ?? sportTheme.tennis;
   const aboutAccentClass = isTennis ? "brush-underline" : theme.accentText;
+  const upcomingSessions = (sportDescription?.sessions ?? []).filter(
+    (session) => session.title.trim()
+  );
   const validTennisLessonVideos = tennisLessonVideos
     .map((video) => ({
       ...video,
@@ -262,7 +267,7 @@ const SportDetailPage = () => {
         {theme.shapeClassNames.map((shapeClassName, index) => (
           <div key={`${sport}-shape-${index}`} className={shapeClassName} />
         ))}
-        <div className="relative z-10 mx-auto w-full max-w-7xl px-4 pb-20 pt-20 sm:px-6 lg:px-8 md:pt-28 md:pb-24">
+        <div className="relative z-10 mx-auto w-full max-w-7xl px-4 pb-14 pt-14 sm:px-6 lg:px-8 md:pt-28 md:pb-24">
           <div className="max-w-3xl">
             <h1 className="mb-4 font-heading text-5xl font-black uppercase leading-[0.95] text-white md:text-7xl">
               {data.name}
@@ -274,11 +279,14 @@ const SportDetailPage = () => {
         </div>
       </section>
 
-      <section className="py-16 md:py-24">
+      <section className="py-12 md:py-24">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal>
             <h2 className="mb-6 font-heading text-4xl font-black uppercase md:text-5xl">
-              About the <span className={aboutAccentClass}>Program</span>
+              {t("sport.aboutHeading").split(" ").slice(0, -1).join(" ")}{" "}
+              <span className={aboutAccentClass}>
+                {t("sport.aboutHeading").split(" ").slice(-1)[0]}
+              </span>
             </h2>
             <p className="text-lg leading-relaxed text-muted-foreground">
               {data.description}
@@ -287,10 +295,101 @@ const SportDetailPage = () => {
         </div>
       </section>
 
+      {upcomingSessions.length > 0 ? (
+        <section className="bg-card py-12 md:py-24 scratchy-overlay">
+          <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+            <ScrollReveal>
+              <h2 className="mb-8 font-heading text-4xl font-black uppercase md:text-5xl">
+                {t("sport.sessionsHeading").split(" ").slice(0, -1).join(" ")}{" "}
+                <span className={aboutAccentClass}>
+                  {t("sport.sessionsHeading").split(" ").slice(-1)[0]}
+                </span>
+              </h2>
+              <div className="space-y-4">
+                {upcomingSessions.map((session) => (
+                  <div
+                    key={session.id}
+                    className="border-2 border-border bg-background p-6 md:p-8"
+                  >
+                    <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+                      <div className="min-w-0">
+                        <div className="mb-3 flex flex-wrap items-center gap-3">
+                          <h3 className="font-heading text-3xl font-black uppercase text-foreground md:text-4xl">
+                            {session.title}
+                          </h3>
+                          {session.isRecurring ? (
+                            <span className="bg-accent px-3 py-1 font-heading text-xs font-bold uppercase tracking-wider text-white">
+                              Recurring
+                            </span>
+                          ) : null}
+                        </div>
+                        <div className="grid grid-cols-1 gap-x-10 gap-y-3 text-foreground sm:grid-cols-2">
+                          {session.dateLabel.trim() ? (
+                            <div>
+                              <p className="mb-1 font-body text-xs font-bold uppercase tracking-[0.16em] text-muted-foreground">
+                                {session.isRecurring ? "Schedule" : "Date"}
+                              </p>
+                              <p className="text-lg">{session.dateLabel}</p>
+                            </div>
+                          ) : null}
+                          {session.timeLabel.trim() ? (
+                            <div>
+                              <p className="mb-1 font-body text-xs font-bold uppercase tracking-[0.16em] text-muted-foreground">
+                                Time
+                              </p>
+                              <p className="text-lg">{session.timeLabel}</p>
+                            </div>
+                          ) : null}
+                          {session.location.trim() ? (
+                            <div>
+                              <p className="mb-1 font-body text-xs font-bold uppercase tracking-[0.16em] text-muted-foreground">
+                                Location
+                              </p>
+                              <p className="text-lg">{session.location}</p>
+                            </div>
+                          ) : null}
+                          {session.spotsLabel.trim() ? (
+                            <div>
+                              <p className="mb-1 font-body text-xs font-bold uppercase tracking-[0.16em] text-muted-foreground">
+                                Availability
+                              </p>
+                              <p className="text-lg">{session.spotsLabel}</p>
+                            </div>
+                          ) : null}
+                        </div>
+                      </div>
+                      <div className="shrink-0">
+                        {session.signupUrl.trim() ? (
+                          <a
+                            href={session.signupUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-block bg-primary px-8 py-4 font-heading font-bold uppercase tracking-wider text-white transition-all duration-200 hover:scale-105"
+                          >
+                            Sign Up →
+                          </a>
+                        ) : (
+                          <Link
+                            to="/contact"
+                            className="inline-block bg-accent px-8 py-4 font-heading font-bold uppercase tracking-wider text-white transition-all duration-200 hover:scale-105"
+                          >
+                            Contact to Join
+                          </Link>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </ScrollReveal>
+          </div>
+        </section>
+      ) : null}
+
       {isTennis ? (
         <>
           {validTennisLessonVideos.length > 0 ? (
-            <section className="bg-card py-16 md:py-24 scratchy-overlay">
+            <section className="bg-card py-12 md:py-24 scratchy-overlay">
               <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
                 <ScrollReveal>
                   <h2 className="mb-8 font-heading text-4xl font-black uppercase md:text-5xl">
@@ -332,7 +431,7 @@ const SportDetailPage = () => {
             </section>
           ) : null}
 
-          <section className="py-16 md:py-24">
+          <section className="py-12 md:py-24">
             <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
               <ScrollReveal>
                 <h2 className="mb-8 font-heading text-4xl font-black uppercase md:text-5xl">
@@ -449,19 +548,16 @@ const SportDetailPage = () => {
         </>
       ) : null}
 
-      <section className="bg-card py-16 md:py-24 scratchy-overlay">
+      <section className="bg-card py-12 md:py-24 scratchy-overlay">
         <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
           <ScrollReveal direction="scale">
             <h2 className="mb-4 font-heading text-4xl font-black uppercase md:text-5xl">
-              Ready to{" "}
               <span className="text-accent">
-                {isTennis ? "Register?" : "Enter the Waitlist?"}
+                {isTennis ? t("sport.registerHeading") : t("sport.waitlistHeading")}
               </span>
             </h2>
             <p className="mx-auto mb-8 max-w-md text-lg text-muted-foreground">
-              {isTennis
-                ? "Sign up through USTA or contact us directly to join the program."
-                : "Join the waitlist and we will reach out as soon as space opens up for this sport."}
+              {isTennis ? t("sport.registerBody") : t("sport.waitlistBody")}
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               {isTennis ? (
@@ -480,14 +576,14 @@ const SportDetailPage = () => {
                   rel="noopener noreferrer"
                   className="inline-block bg-primary px-8 py-4 font-heading font-bold uppercase tracking-wider text-white transition-all duration-200 hover:scale-105"
                 >
-                  Join Waitlist →
+                  {t("sport.waitlistButton")}
                 </a>
               )}
               <Link
                 to="/contact"
                 className="inline-block bg-accent px-8 py-4 font-heading font-bold uppercase tracking-wider text-white transition-all duration-200 hover:scale-105"
               >
-                Contact Us
+                {t("sport.contactButton")}
               </Link>
             </div>
           </ScrollReveal>

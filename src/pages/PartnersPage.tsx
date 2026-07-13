@@ -1,37 +1,73 @@
 import { Link } from "react-router-dom";
 import ScrollReveal from "@/components/ScrollReveal";
 import { useEditableContent } from "@/lib/editable-content";
+import { useSiteText } from "@/lib/use-site-text";
 
 const partnerPerkColors = ["#87cb4a", "#84a6ff", "#ab9bfa", "#f6a15c"];
 
 const PartnersPage = () => {
+  const t = useSiteText();
   const { partners } = useEditableContent();
 
   return (
     <div className="overflow-hidden">
       {/* INFINITE CAROUSEL */}
-      <section className="pb-32 md:pb-28 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 md:pt-28 mb-24 md:mb-20">
+      <section className="pb-16 md:pb-28 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 md:pt-28 mb-14 md:mb-20">
           <ScrollReveal>
             <div className="text-center">
-              <h2 className="font-heading text-6xl md:text-[5.25rem] font-black uppercase text-foreground">
-                Meet Our Partners
+              <h2 className="font-heading text-5xl sm:text-6xl md:text-[5.25rem] font-black uppercase text-foreground">
+                {t("partners.heading")}
               </h2>
             </div>
           </ScrollReveal>
         </div>
 
-        <div className="relative w-full overflow-hidden">
-          <div className="absolute left-0 right-0 -top-6 md:-top-8 h-12 md:h-16 bg-gradient-to-b from-white via-white to-transparent z-20 pointer-events-none" />
+        {/* Mobile: swipeable partner row */}
+        <div className="md:hidden">
+          <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {partners.map((partner) => (
+              <a
+                key={`m-${partner.id}`}
+                href={partner.href}
+                target={partner.href ? "_blank" : undefined}
+                rel={partner.href ? "noreferrer" : undefined}
+                aria-label={partner.href ? partner.name : undefined}
+                className="flex w-40 shrink-0 snap-center flex-col items-center justify-between gap-3 border-2 border-border bg-white p-4"
+              >
+                <span className="flex h-16 w-full items-center justify-center">
+                  <img
+                    src={partner.logo}
+                    alt={partner.name}
+                    loading="lazy"
+                    decoding="async"
+                    className="max-w-full max-h-full object-contain"
+                  />
+                </span>
+                <span className="w-full truncate text-center font-heading text-xs font-black uppercase tracking-wider text-foreground/70">
+                  {partner.name}
+                </span>
+              </a>
+            ))}
+          </div>
+          <p className="mt-4 flex items-center justify-center gap-2 px-4 text-center font-body text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground">
+            <span aria-hidden className="animate-pulse">←</span>
+            Swipe to see all partners
+            <span aria-hidden className="animate-pulse">→</span>
+          </p>
+        </div>
+
+        {/* Desktop: auto-scrolling marquee */}
+        <div className="relative hidden w-full overflow-hidden py-4 md:block">
           <div className="absolute left-0 top-0 bottom-0 w-24 md:w-40 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
           <div className="absolute right-0 top-0 bottom-0 w-24 md:w-40 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
 
-          <div className="flex w-max will-change-transform animate-partner-marquee">
+          <div className="flex w-max will-change-transform animate-partner-marquee hover:[animation-play-state:paused]">
             {[partners, partners, partners].map((group, groupIndex) => (
               <div
                 key={groupIndex}
                 aria-hidden={groupIndex > 0}
-                className="flex shrink-0 items-center gap-16 pr-16 md:gap-24 md:pr-24"
+                className="flex shrink-0 items-stretch gap-6 pr-6 md:gap-10 md:pr-10"
               >
                 {group.map((partner) => (
                   <a
@@ -40,16 +76,21 @@ const PartnersPage = () => {
                     target={partner.href ? "_blank" : undefined}
                     rel={partner.href ? "noreferrer" : undefined}
                     aria-label={partner.href ? partner.name : undefined}
-                    className="flex-shrink-0 w-40 h-28 md:w-44 md:h-[7.5rem] flex items-center justify-center grayscale hover:grayscale-0 opacity-60 hover:opacity-100 transition-all duration-300"
+                    className="group flex-shrink-0 w-48 md:w-56 flex flex-col items-center justify-between gap-3 border-2 border-border bg-white p-5 md:p-6 transition-all duration-300 hover:-translate-y-1 hover:border-accent hover:shadow-[6px_6px_0_0_hsl(var(--accent))]"
                   >
-                    <img
-                      src={partner.logo}
-                      alt={partner.name}
-                      loading={groupIndex === 0 ? "eager" : "lazy"}
-                      decoding="async"
-                      fetchpriority={groupIndex === 0 ? "high" : "low"}
-                      className="max-w-full max-h-full object-contain"
-                    />
+                    <span className="flex h-20 md:h-24 w-full items-center justify-center">
+                      <img
+                        src={partner.logo}
+                        alt={partner.name}
+                        loading={groupIndex === 0 ? "eager" : "lazy"}
+                        decoding="async"
+                        fetchpriority={groupIndex === 0 ? "high" : "low"}
+                        className="max-w-full max-h-full object-contain"
+                      />
+                    </span>
+                    <span className="w-full truncate text-center font-heading text-sm font-black uppercase tracking-wider text-foreground/70 transition-colors duration-300 group-hover:text-foreground">
+                      {partner.name}
+                    </span>
                   </a>
                 ))}
               </div>
@@ -59,34 +100,39 @@ const PartnersPage = () => {
       </section>
 
       {/* Why Partner */}
-      <section className="py-20 md:py-20 bg-accent scratchy-overlay">
+      <section className="py-14 md:py-20 bg-[#ab9bfa] scratchy-overlay">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <ScrollReveal>
-            <h2 className="font-heading text-5xl md:text-7xl font-black uppercase mb-12 text-white text-center">
-              Why Partner With Us?
+            <h2 className="font-heading text-5xl md:text-7xl font-black uppercase mb-8 md:mb-12 text-white text-center">
+              {t("partners.whyHeading")}
             </h2>
           </ScrollReveal>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               {
-                title: "Community Reach",
-                desc: "Your brand connects with hundreds of families across local sports programs, events, and social media.",
+                title: t("partners.why1Title"),
+                desc: t("partners.why1Body"),
                 titleColor: "#84a6ff"
               },
               {
-                title: "Shared Values",
-                desc: "Align with a mission that champions teamwork, inclusivity, and youth development through sport.",
+                title: t("partners.why2Title"),
+                desc: t("partners.why2Body"),
                 titleColor: "#ab9bfa"
               },
               {
-                title: "Digital Feature",
-                desc: "Featured on our website and social media so supporters can see the organizations helping our mission grow.",
+                title: t("partners.why3Title"),
+                desc: t("partners.why3Body"),
                 titleColor: "#f6a15c"
               }
             ].map((item, i) => (
-              <ScrollReveal key={item.title} delay={i * 0.15} direction="up">
-                <div className="p-8 md:p-8 bg-background border border-border hover:border-accent transition-colors duration-300">
+              <ScrollReveal
+                key={item.title}
+                delay={i * 0.15}
+                direction="up"
+                className="h-full"
+              >
+                <div className="h-full p-8 md:p-8 bg-background border border-border hover:border-accent transition-colors duration-300">
                   <h3
                     className="font-heading text-3xl font-black uppercase mb-3"
                     style={{ color: item.titleColor }}
@@ -104,7 +150,7 @@ const PartnersPage = () => {
       </section>
 
       {/* CTA */}
-      <section className="py-20 md:py-20">
+      <section className="py-14 md:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-10 items-center">
             <ScrollReveal direction="left">
@@ -119,27 +165,25 @@ const PartnersPage = () => {
                 </span>
               </h2>
               <p className="text-lg leading-relaxed mb-6 text-[#8496c6]">
-                Interested in supporting Together Sports? Head to our Get
-                Involved page to explore ways to partner, volunteer, and help us
-                create more opportunities for youth.
+                {t("partners.ctaBody")}
               </p>
               <Link
                 to="/get-involved"
                 className="inline-block px-8 py-4 bg-accent text-white font-heading font-bold text-lg uppercase tracking-wider hover:scale-105 hover:rotate-1 transition-all duration-200"
               >
-                Get Involved
+                {t("partners.ctaButton")}
               </Link>
             </ScrollReveal>
             <ScrollReveal direction="right">
               <div className="p-8 md:p-9 bg-white border border-border scrapbook-rotate-2">
                 <p className="font-body font-bold uppercase tracking-[0.3em] text-accent text-sm mb-4">
-                  What You Get
+                  {t("partners.perksTitle")}
                 </p>
                 {[
-                  "Positive community impact and youth development",
-                  "Featured on our website & social media",
-                  "Meaningful volunteer opportunities for staff and students",
-                  "Opportunities to collaborate on programming and events"
+                  t("partners.perk1"),
+                  t("partners.perk2"),
+                  t("partners.perk3"),
+                  t("partners.perk4")
                 ].map((perk, index) => (
                   <div
                     key={perk}

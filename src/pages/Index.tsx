@@ -1,5 +1,6 @@
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import ScrollReveal from "@/components/ScrollReveal";
 import heroImage from "@/assets/hero-sports.jpg";
 import secondServe from "@/assets/second-serve.jpg";
@@ -11,13 +12,16 @@ import spinBall from "@/assets/spinball.svg";
 import basketSpin from "@/assets/BASKETSPIN.svg";
 import footballSpin from "@/assets/FOOTBALLSPIN.svg";
 import golfSpin from "@/assets/GOLFSPIN.svg";
+import soccerSpin from "@/assets/SOCCERSPIN.svg";
 import { useEditableContent } from "@/lib/editable-content";
+import { imgProps } from "@/lib/image-position";
+import { useSiteText } from "@/lib/use-site-text";
 
 const heroSpins = [
   {
     image: spinBall,
     className:
-      "absolute bottom-10 left-12 z-0 w-44 sm:bottom-12 sm:left-16 sm:w-52 md:bottom-10 md:left-24 md:w-60 lg:bottom-12 lg:left-16 lg:w-[17rem]",
+      "absolute bottom-10 left-12 z-0 w-52 sm:bottom-12 sm:left-16 sm:w-60 md:bottom-10 md:left-24 md:w-72 lg:bottom-12 lg:left-16 lg:w-[20rem]",
     rotate: -360,
     duration: 24,
     delay: 0,
@@ -26,7 +30,7 @@ const heroSpins = [
   {
     image: golfSpin,
     className:
-      "absolute right-10 top-24 z-0 hidden w-24 sm:block sm:right-14 sm:top-28 sm:w-28 md:right-20 md:top-24 md:w-36 lg:right-28 lg:top-32 lg:w-40",
+      "absolute right-10 top-24 z-0 hidden w-28 sm:block sm:right-14 sm:top-28 sm:w-32 md:right-16 md:top-24 md:w-44 lg:right-12 lg:top-32 lg:w-48",
     rotate: 360,
     duration: 18,
     delay: 1.5,
@@ -35,7 +39,7 @@ const heroSpins = [
   {
     image: basketSpin,
     className:
-      "absolute left-[-8rem] top-10 z-0 hidden w-60 sm:block sm:left-[-9rem] sm:top-14 sm:w-72 md:left-[-10rem] md:top-16 md:w-80 lg:left-[-11rem] lg:top-18 lg:w-[26rem]",
+      "absolute left-[-8rem] top-10 z-0 hidden w-72 sm:block sm:left-[-9rem] sm:top-14 sm:w-80 md:left-[-10rem] md:top-16 md:w-96 lg:left-[-11rem] lg:top-18 lg:w-[29rem]",
     rotate: 360,
     duration: 28,
     delay: 3,
@@ -44,18 +48,28 @@ const heroSpins = [
   {
     image: footballSpin,
     className:
-      "absolute bottom-8 right-4 z-0 hidden w-56 sm:block sm:bottom-10 sm:right-6 sm:w-64 md:bottom-10 md:right-8 md:w-72 lg:bottom-12 lg:right-10 lg:w-[20rem]",
+      "absolute bottom-8 right-4 z-0 hidden w-64 sm:block sm:bottom-10 sm:right-6 sm:w-72 md:bottom-10 md:right-6 md:w-80 lg:bottom-12 lg:right-4 lg:w-[23rem]",
     rotate: 0,
     duration: 0,
     delay: 0,
     scaleX: -1
+  },
+  {
+    image: soccerSpin,
+    className:
+      "absolute left-[38%] top-4 z-0 hidden w-28 md:block md:w-32 lg:top-6 lg:w-36",
+    rotate: 360,
+    duration: 22,
+    delay: 0.8,
+    scaleX: 1
   }
 ];
 
 const sportsCtaSpins = [
   {
     image: spinBall,
-    className: "absolute left-20 top-1/2 hidden w-32 -translate-y-1/2 xl:block",
+    className:
+      "absolute left-16 top-[62%] hidden w-40 -translate-y-1/2 xl:block",
     rotate: -360,
     duration: 24,
     delay: 0,
@@ -64,7 +78,7 @@ const sportsCtaSpins = [
   {
     image: basketSpin,
     className:
-      "absolute left-[19%] top-1/2 hidden w-32 -translate-y-1/2 xl:block",
+      "absolute left-[17%] top-[32%] hidden w-40 -translate-y-1/2 xl:block",
     rotate: 360,
     duration: 28,
     delay: 1.5,
@@ -73,7 +87,7 @@ const sportsCtaSpins = [
   {
     image: golfSpin,
     className:
-      "absolute right-[19%] top-1/2 hidden w-32 -translate-y-1/2 xl:block",
+      "absolute right-[17%] top-[32%] hidden w-40 -translate-y-1/2 xl:block",
     rotate: 360,
     duration: 18,
     delay: 0.8,
@@ -82,11 +96,20 @@ const sportsCtaSpins = [
   {
     image: footballSpin,
     className:
-      "absolute right-20 top-1/2 hidden w-32 -translate-y-1/2 xl:block",
+      "absolute right-16 top-[62%] hidden w-40 -translate-y-1/2 xl:block",
     rotate: 360,
     duration: 30,
     delay: 2.2,
     scaleX: -1
+  },
+  {
+    image: soccerSpin,
+    className:
+      "absolute left-[8%] top-6 hidden w-28 xl:block",
+    rotate: 360,
+    duration: 22,
+    delay: 1.1,
+    scaleX: 1
   }
 ];
 
@@ -130,6 +153,76 @@ const resolveValueCardAppearance = (bg?: string) => {
   }
 
   return { className: fallbackClass, textClass: "text-white" };
+};
+
+// Splits a metric value like "2000+", "100%", or "$1.5k" into the number to
+// count up to and the text around it. Returns null when there's no number.
+const parseMetricValue = (value: string) => {
+  const match = value.match(/^([^\d]*)([\d,]*\.?\d+)(.*)$/);
+
+  if (!match) {
+    return null;
+  }
+
+  const target = parseFloat(match[2].replace(/,/g, ""));
+
+  if (!Number.isFinite(target)) {
+    return null;
+  }
+
+  return {
+    prefix: match[1],
+    target,
+    suffix: match[3],
+    decimals: (match[2].split(".")[1] || "").length
+  };
+};
+
+const COUNT_UP_DURATION_MS = 1600;
+
+const CountUpValue = ({
+  value,
+  className
+}: {
+  value: string;
+  className: string;
+}) => {
+  const parsed = parseMetricValue(value);
+  const ref = useRef<HTMLParagraphElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-60px" });
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    if (!isInView) {
+      return;
+    }
+
+    let frame: number;
+    const start = performance.now();
+
+    const tick = (now: number) => {
+      const elapsed = Math.min((now - start) / COUNT_UP_DURATION_MS, 1);
+      // ease-out cubic: fast start, gentle landing on the final number
+      setProgress(1 - Math.pow(1 - elapsed, 3));
+
+      if (elapsed < 1) {
+        frame = requestAnimationFrame(tick);
+      }
+    };
+
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [isInView]);
+
+  const display = parsed
+    ? `${parsed.prefix}${(parsed.target * progress).toFixed(parsed.decimals)}${parsed.suffix}`
+    : value;
+
+  return (
+    <p ref={ref} className={className}>
+      {display}
+    </p>
+  );
 };
 
 const MapEmbedCard = ({
@@ -179,11 +272,18 @@ const MapEmbedCard = ({
 const Index = () => {
   const { experiences, impactMetricsSection, otherLocationsSection, siteText } =
     useEditableContent();
-  const resolvedHeroImage1 = siteText?.heroImage1 || image0903;
-  const resolvedHeroImage2 = siteText?.heroImage2 || heroImage;
-  const resolvedHeroImage3 = siteText?.heroImage3 || image3782;
-  const resolvedMissionImage = siteText?.missionImage || communityImg;
-  const resolvedSecondServeImage = siteText?.secondServeImage || secondServe;
+  const t = useSiteText();
+  const missionWords = t("home.missionHeading").split(" ");
+  const missionLast = missionWords.pop() ?? "";
+  const valuesWords = t("home.valuesHeading").split(" ");
+  const resolvedHeroImage1 = imgProps(siteText?.heroImage1 || image0903);
+  const resolvedHeroImage2 = imgProps(siteText?.heroImage2 || heroImage);
+  const resolvedHeroImage3 = imgProps(siteText?.heroImage3 || image3782);
+  const resolvedMissionImage = imgProps(siteText?.missionImage || communityImg);
+  const missionVideo = siteText?.missionVideo?.trim() || "";
+  const resolvedSecondServeImage = imgProps(
+    siteText?.secondServeImage || secondServe
+  );
   const featuredTestimonials = experiences
     .filter((item) => item.type === "quote" || item.type === "parent")
     .slice(0, 3);
@@ -277,17 +377,17 @@ const Index = () => {
           </motion.div>
         ))}
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-28 md:py-32 lg:py-36">
-          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(300px,0.8fr)] gap-14 lg:gap-28 items-center">
+        <div className="relative z-10 max-w-[87.5rem] mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 md:py-32 lg:py-36">
+          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.35fr)_minmax(240px,0.5fr)] gap-10 sm:gap-14 lg:gap-10 items-center">
             <motion.div
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease: "easeOut" }}
-              className="max-w-2xl"
+              className="max-w-none"
             >
-              <h1 className="font-heading text-6xl sm:text-7xl md:text-8xl lg:text-[6.4rem] xl:text-[7rem] font-black uppercase leading-[0.94] mb-8 text-foreground">
-                <span className="block whitespace-nowrap">{heroLines[0]}</span>
-                <span className="block whitespace-nowrap text-[#4f74d6]">
+              <h1 className="font-heading text-[clamp(1.75rem,8.5vw,5.75rem)] lg:text-[clamp(3rem,5.9vw,5.75rem)] font-black uppercase leading-[0.94] mb-6 sm:mb-8 text-foreground">
+                <span className="block text-balance">{heroLines[0]}</span>
+                <span className="block text-balance text-[#4f74d6]">
                   {heroLines[1] ?? ""}
                 </span>
               </h1>
@@ -318,7 +418,7 @@ const Index = () => {
             >
               <div className="absolute left-10 -top-6 w-[68%] h-[40%] overflow-hidden border-[10px] border-white bg-white scrapbook-rotate-2 z-10">
                 <img
-                  src={resolvedHeroImage1}
+                  {...resolvedHeroImage1}
                   alt="Together Sports action moment"
                   loading="eager"
                   decoding="async"
@@ -328,7 +428,7 @@ const Index = () => {
               </div>
               <div className="absolute right-2 top-[22%] w-[82%] h-[46%] overflow-hidden border-[12px] border-white bg-white scrapbook-rotate-1 z-10">
                 <img
-                  src={resolvedHeroImage2}
+                  {...resolvedHeroImage2}
                   alt="Together Sports community moment"
                   loading="eager"
                   decoding="async"
@@ -338,7 +438,7 @@ const Index = () => {
               </div>
               <div className="absolute left-[-2%] bottom-[2%] w-[74%] h-[42%] overflow-hidden border-[10px] border-white bg-white scrapbook-rotate-2 z-20">
                 <img
-                  src={resolvedHeroImage3}
+                  {...resolvedHeroImage3}
                   alt="Together Sports team moment"
                   loading="eager"
                   decoding="async"
@@ -352,12 +452,13 @@ const Index = () => {
       </section>
 
       {/* ABOUT MISSION */}
-      <section className="py-20 md:py-28 relative overflow-hidden">
+      <section className="py-14 md:py-28 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-center">
             <ScrollReveal direction="right">
               <h2 className="font-heading text-5xl md:text-7xl font-black uppercase mb-6 text-foreground">
-                Our <span className="brush-underline">Mission</span>
+                {missionWords.join(" ")}{missionWords.length ? " " : ""}
+                <span className="brush-underline">{missionLast}</span>
               </h2>
               {missionParagraphs.map((p, i) => (
                 <p
@@ -370,26 +471,46 @@ const Index = () => {
             </ScrollReveal>
 
             <ScrollReveal direction="left">
-              <div className="scrapbook-rotate-2">
-                <img
-                  src={resolvedMissionImage}
-                  alt="Together Sports community"
-                  loading="lazy"
-                  decoding="async"
+              {missionVideo ? (
+                <video
+                  src={missionVideo}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="metadata"
+                  aria-label="Together Sports community video"
                   className="w-full h-[340px] md:h-[420px] object-cover"
                 />
-              </div>
+              ) : (
+                <div className="scrapbook-rotate-2">
+                  <img
+                    {...resolvedMissionImage}
+                    alt="Together Sports community"
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-[340px] md:h-[420px] object-cover"
+                  />
+                </div>
+              )}
             </ScrollReveal>
           </div>
 
-          <div className="mt-16 md:mt-20">
+          <div className="mt-12 md:mt-20">
             <ScrollReveal>
-              <h3 className="font-heading text-4xl md:text-6xl font-black uppercase mb-12 text-foreground">
-                What{" "}
-                <span className="relative inline-block after:absolute after:bottom-[-4px] after:left-0 after:h-2 after:w-full after:skew-x-[-12deg] after:rounded-[2px] after:bg-[#87cb4a] after:content-['']">
-                  <span className="relative z-10">We</span>
-                </span>{" "}
-                Stand For
+              <h3 className="font-heading text-4xl md:text-6xl font-black uppercase mb-8 md:mb-12 text-foreground">
+                {valuesWords.map((word, wordIndex) => (
+                  <span key={`values-word-${wordIndex}`}>
+                    {wordIndex > 0 ? " " : ""}
+                    {wordIndex === 1 ? (
+                      <span className="relative inline-block after:absolute after:bottom-[-4px] after:left-0 after:h-2 after:w-full after:skew-x-[-12deg] after:rounded-[2px] after:bg-[#87cb4a] after:content-['']">
+                        <span className="relative z-10">{word}</span>
+                      </span>
+                    ) : (
+                      word
+                    )}
+                  </span>
+                ))}
               </h3>
             </ScrollReveal>
 
@@ -400,7 +521,7 @@ const Index = () => {
                 return (
                   <ScrollReveal key={value.title} delay={index * 0.12}>
                     <div
-                      className={`group border-2 border-transparent p-8 md:p-10 transition-all duration-200 hover:scale-105 ${appearance.className}`}
+                      className={`group border-2 border-transparent p-6 md:p-10 transition-all duration-200 hover:scale-105 ${appearance.className}`}
                     >
                       <h4
                         className={`font-heading text-3xl md:text-4xl font-black uppercase mb-4 ${appearance.textClass}`}
@@ -422,7 +543,7 @@ const Index = () => {
       </section>
 
       {/* SPORTS CTA */}
-      <section id="sports" className="py-20 md:py-24 bg-white relative">
+      <section id="sports" className="py-14 md:py-24 bg-white relative">
         {sportsCtaSpins.map((item) => (
           <motion.div
             key={`sports-cta-${item.image}`}
@@ -460,7 +581,7 @@ const Index = () => {
                 to="/sports"
                 className="inline-block px-8 py-4 bg-primary text-white font-heading font-bold text-lg uppercase tracking-wider hover:scale-105 hover:-rotate-1 transition-all duration-200"
               >
-                View All Sports
+                {t("home.sportsCtaButton")}
               </Link>
             </div>
           </ScrollReveal>
@@ -482,7 +603,7 @@ const Index = () => {
               <h2 className="font-heading text-5xl md:text-7xl font-black uppercase mb-4 text-white text-center">
                 {testimonialsText.title}
               </h2>
-              <p className="text-white font-bold text-lg mb-20 max-w-lg mx-auto text-center">
+              <p className="text-white font-bold text-lg mb-10 md:mb-20 max-w-lg mx-auto text-center">
                 {testimonialsText.subtitle}
               </p>
             </ScrollReveal>
@@ -491,7 +612,7 @@ const Index = () => {
               {featuredTestimonials.map((testimonial, i) => (
                 <ScrollReveal key={testimonial.id} delay={i * 0.15}>
                   <div
-                    className={`relative bg-white p-8 md:p-10 transition-all duration-200 hover:scale-105 ${
+                    className={`relative bg-white p-6 md:p-10 transition-all duration-200 hover:scale-105 ${
                       i === 1
                         ? "md:-translate-y-6 scrapbook-rotate-2 hover:rotate-1"
                         : i === 2
@@ -532,22 +653,23 @@ const Index = () => {
       impactMetricsSection.items.length > 0 ? (
         <section className="py-10 md:py-12 bg-white relative">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
               {impactMetricsSection.items.map((item, index) => (
                 <ScrollReveal key={item.id} delay={index * 0.08}>
                   <div
-                    className="flex h-full min-h-[220px] w-full flex-col justify-between bg-white border-4 px-6 py-7 text-center md:min-h-[240px] md:px-6 md:py-8 lg:px-6 xl:px-7"
+                    className="flex h-full min-h-[150px] md:min-h-[190px] w-full flex-col justify-center items-center gap-3 bg-white border-4 px-3 py-6 text-center md:gap-5 md:px-7 md:py-10"
                     style={{ borderColor: item.color }}
                   >
                     <p
-                      className="font-heading text-xl md:text-2xl font-black uppercase leading-tight"
+                      className="font-heading text-base sm:text-xl md:text-2xl font-black uppercase leading-tight"
                       style={{ color: item.color }}
                     >
                       {item.title}
                     </p>
-                    <p className="font-heading text-5xl md:text-6xl font-black uppercase text-foreground leading-none">
-                      {item.value}
-                    </p>
+                    <CountUpValue
+                      value={item.value}
+                      className="font-heading text-4xl sm:text-5xl md:text-6xl font-black uppercase text-foreground leading-none"
+                    />
                   </div>
                 </ScrollReveal>
               ))}
@@ -557,21 +679,21 @@ const Index = () => {
       ) : null}
 
       {/* SECOND SERVE */}
-      <section className="pt-20 pb-16 md:pt-20 md:pb-20 relative overflow-hidden">
+      <section className="pt-14 pb-12 md:pt-20 md:pb-20 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
             <ScrollReveal direction="left">
               <div className="relative">
                 <div className="scrapbook-rotate-1">
                   <img
-                    src={resolvedSecondServeImage}
+                    {...resolvedSecondServeImage}
                     alt="Second Serve service"
                     loading="lazy"
                     decoding="async"
-                    className="w-full h-[400px] md:h-[500px] object-cover"
+                    className="w-full h-[300px] sm:h-[400px] md:h-[500px] object-cover"
                   />
                 </div>
-                <div className="absolute -bottom-4 -right-4 w-32 h-32 border-[8px] border-accent bg-white p-3 scrapbook-rotate-2 flex items-center justify-center">
+                <div className="absolute -bottom-4 -right-4 w-24 h-24 sm:w-32 sm:h-32 border-[8px] border-accent bg-white p-3 scrapbook-rotate-2 flex items-center justify-center">
                   <img
                     src={partnerOne}
                     alt="Second Serve partner logo"
@@ -585,16 +707,13 @@ const Index = () => {
 
             <ScrollReveal direction="right">
               <p className="font-body font-bold uppercase tracking-[0.2em] text-accent text-sm mb-4">
-                Featured Service
+                {t("home.secondServeEyebrow")}
               </p>
-              <h2 className="font-heading text-5xl md:text-6xl font-black uppercase leading-[0.9] mb-6">
-                Every Kid Deserves a Second Serve
+              <h2 className="font-heading text-4xl sm:text-5xl md:text-6xl font-black uppercase leading-[0.9] mb-6">
+                {t("home.secondServeHeading")}
               </h2>
               <p className="text-muted-foreground text-lg mb-6 leading-relaxed">
-                Second Serve is a service from our partner Rally Forward NYC,
-                and it also inspires a Together Tennis initiative where we
-                collect quality used equipment that would otherwise be thrown
-                away and donate it back into the community.
+                {t("home.secondServeBody")}
               </p>
               <a
                 href="https://www.instagram.com/rallyforwardnyc?igsh=c3dpbGNpeWZnOXRj"
@@ -602,7 +721,7 @@ const Index = () => {
                 rel="noopener noreferrer"
                 className="inline-block px-8 py-4 bg-primary text-white font-heading font-bold text-lg uppercase tracking-wider hover:scale-105 hover:-rotate-1 transition-all duration-200"
               >
-                Learn More
+                {t("home.secondServeButton")}
               </a>
             </ScrollReveal>
           </div>
@@ -610,21 +729,20 @@ const Index = () => {
       </section>
 
       {/* LOCATION */}
-      <section className="py-20 md:py-32 relative">
+      <section className="py-14 md:py-32 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <ScrollReveal>
-            <h2 className="font-heading text-5xl md:text-7xl font-black uppercase mb-4 text-center">
-              <span className="mr-2 inline-block text-[0.9em] normal-case align-[0.02em] md:mr-3">
+            <h2 className="font-heading text-[clamp(2.25rem,10vw,3rem)] sm:text-5xl md:text-7xl font-black uppercase mb-4 text-center">
+              <span className="mr-2 hidden text-[0.9em] normal-case align-[0.02em] sm:inline-block md:mr-3">
                 📍
               </span>
-              Main Location
-              <span className="ml-2 inline-block text-[0.9em] normal-case align-[0.02em] md:ml-3">
+              {t("home.locationHeading")}
+              <span className="ml-2 hidden text-[0.9em] normal-case align-[0.02em] sm:inline-block md:ml-3">
                 📍
               </span>
             </h2>
-            <p className="text-muted-foreground text-lg mb-12 text-center">
-              Based in New York City, serving communities across the five
-              boroughs.
+            <p className="text-muted-foreground text-lg mb-8 md:mb-12 text-center">
+              {t("home.locationSubtitle")}
             </p>
           </ScrollReveal>
 
@@ -632,18 +750,18 @@ const Index = () => {
             <MapEmbedCard
               embedUrl="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d193595.25280949658!2d-74.11976389828046!3d40.69766374859258!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY!5e0!3m2!1sen!2sus!4v1700000000000!5m2!1e0!2e0"
               title="Together Sports main location"
-              className="h-[400px] w-full md:h-[500px]"
+              className="h-[300px] w-full sm:h-[400px] md:h-[500px]"
             />
           </ScrollReveal>
 
           {otherLocations.length > 0 ? (
             <div className="mt-16 md:mt-20">
               <ScrollReveal>
-                <h3 className="font-heading text-5xl md:text-7xl font-black uppercase mb-4 text-center">
+                <h3 className="font-heading text-[clamp(2rem,9.4vw,3rem)] sm:text-5xl md:text-7xl font-black uppercase mb-4 text-center">
                   {otherLocationsSection.title?.trim().toLowerCase() ===
                   "other locations" ? (
                     <>
-                      <span className="mr-2 inline-block text-[0.9em] normal-case align-[0.02em] md:mr-3">
+                      <span className="mr-2 hidden text-[0.9em] normal-case align-[0.02em] sm:inline-block md:mr-3">
                         🌍
                       </span>
                       <span className="brush-underline inline-block">
@@ -653,13 +771,13 @@ const Index = () => {
                     </>
                   ) : (
                     <span className="inline-block">
-                      <span className="mr-2 inline-block text-[0.9em] normal-case align-[0.02em] md:mr-3">
+                      <span className="mr-2 hidden text-[0.9em] normal-case align-[0.02em] sm:inline-block md:mr-3">
                         🌍
                       </span>
                       {otherLocationsSection.title || "Other Locations"}
                     </span>
                   )}
-                  <span className="ml-2 inline-block text-[0.9em] normal-case align-[0.02em] md:ml-3">
+                  <span className="ml-2 hidden text-[0.9em] normal-case align-[0.02em] sm:inline-block md:ml-3">
                     🌎
                   </span>
                 </h3>
@@ -696,10 +814,11 @@ const Index = () => {
 
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <ScrollReveal direction="scale">
-            <h2 className="font-heading text-5xl md:text-7xl font-black uppercase text-white leading-[0.85] mb-6">
-              Change the Game.
-              <br />
-              <span className="text-white">Donate Today.</span>
+            <h2 className="font-heading text-[clamp(2rem,9.2vw,3rem)] sm:text-5xl md:text-7xl font-black uppercase text-white leading-[0.9] mb-6">
+              <span className="block whitespace-nowrap">Change the Game.</span>
+              <span className="block whitespace-nowrap text-white">
+                Donate Today.
+              </span>
             </h2>
             <p className="text-white font-bold text-lg mb-8 max-w-lg mx-auto font-body">
               Your contribution puts a racket, a ball, or a dream in a

@@ -4,10 +4,12 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { EditableContentProvider } from "@/lib/editable-content";
+import { EditableContentProvider, useEditableContent } from "@/lib/editable-content";
 import ScrollToTop from "./components/ScrollToTop";
 import Seo from "./components/Seo";
+import IntroVideo from "./components/IntroVideo";
 import Layout from "./components/Layout";
+import SiteLoadingScreen from "./components/SiteLoadingScreen";
 import Index from "./pages/Index";
 import AboutPage from "./pages/AboutPage";
 import SportsPage from "./pages/SportsPage";
@@ -15,6 +17,7 @@ import SportDetailPage from "./pages/SportDetailPage";
 import BlogPage from "./pages/BlogPage";
 import BlogPostPage from "./pages/BlogPostPage";
 import ExperiencesPage from "./pages/ExperiencesPage";
+import MomentsPage from "./pages/MomentsPage";
 import GetInvolvedPage from "./pages/GetInvolvedPage";
 import ContactPage from "./pages/ContactPage";
 import PartnersPage from "./pages/PartnersPage";
@@ -23,9 +26,24 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <EditableContentProvider>
+const AppRoutes = () => {
+  const { isLoadingContent } = useEditableContent();
+
+  // IntroVideo sits outside the loading gate so its overlay can cover the
+  // screen from the very first paint, and so it isn't remounted (restarting
+  // the video) when loading finishes.
+  if (isLoadingContent) {
+    return (
+      <>
+        <IntroVideo />
+        <SiteLoadingScreen />
+      </>
+    );
+  }
+
+  return (
+    <>
+      <IntroVideo />
       <TooltipProvider>
         <Toaster />
         <Sonner />
@@ -42,6 +60,7 @@ const App = () => (
               <Route path="/blog" element={<BlogPage />} />
               <Route path="/blog/:slug" element={<BlogPostPage />} />
               <Route path="/experiences" element={<ExperiencesPage />} />
+              <Route path="/moments" element={<MomentsPage />} />
               <Route path="/get-involved" element={<GetInvolvedPage />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/partners" element={<PartnersPage />} />
@@ -51,6 +70,14 @@ const App = () => (
           </Routes>
         </BrowserRouter>
       </TooltipProvider>
+    </>
+  );
+};
+
+const App = () => (
+  <QueryClientProvider client={queryClient}>
+    <EditableContentProvider>
+      <AppRoutes />
     </EditableContentProvider>
   </QueryClientProvider>
 );

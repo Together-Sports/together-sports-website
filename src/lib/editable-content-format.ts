@@ -33,12 +33,24 @@ export type OtherLocationsSection = {
   items: OtherLocation[];
 };
 
+export type SportSession = {
+  id: string;
+  title: string;
+  dateLabel: string;
+  timeLabel: string;
+  location: string;
+  spotsLabel: string;
+  signupUrl: string;
+  isRecurring?: boolean;
+};
+
 export type SportDescription = {
   id: string;
   name: string;
   tagline: string;
   description: string;
   schedule: string[];
+  sessions?: SportSession[];
 };
 
 export type SiteNavItem = {
@@ -64,6 +76,9 @@ export type SiteText = {
   heroImage2?: string;
   heroImage3?: string;
   missionImage?: string;
+  missionVideo?: string;
+  introVideo?: string;
+  textOverrides?: Record<string, string>;
   secondServeImage?: string;
 };
 
@@ -88,9 +103,19 @@ export type EditableContentExportFile = {
 };
 
 const MEDIA_PREFIX = "media:";
+const POSITION_MARKER = "#pos=";
 
 const mediaIdBySrc = new Map(mediaLibrary.map((item) => [item.src, item.id]));
 const mediaSrcById = new Map(mediaLibrary.map((item) => [item.id, item.src]));
+
+// Image values may carry an inline focal point ("...#pos=x,y"); split it off
+// before mapping the base src to/from a media id and re-attach it after.
+const splitPositionFragment = (value: string): [string, string] => {
+  const markerIndex = value.indexOf(POSITION_MARKER);
+  return markerIndex === -1
+    ? [value, ""]
+    : [value.slice(0, markerIndex), value.slice(markerIndex)];
+};
 
 const isPlainObject = (value: unknown): value is Record<string, unknown> =>
   typeof value === "object" && value !== null && !Array.isArray(value);
@@ -108,8 +133,9 @@ const toPortableMediaValue = (value: string | undefined) => {
     return value ?? "";
   }
 
-  const mediaId = mediaIdBySrc.get(value);
-  return mediaId ? `${MEDIA_PREFIX}${mediaId}` : value;
+  const [base, fragment] = splitPositionFragment(value);
+  const mediaId = mediaIdBySrc.get(base);
+  return mediaId ? `${MEDIA_PREFIX}${mediaId}${fragment}` : value;
 };
 
 const fromPortableMediaValue = (value: string | undefined) => {
@@ -117,12 +143,15 @@ const fromPortableMediaValue = (value: string | undefined) => {
     return value ?? "";
   }
 
-  if (!value.startsWith(MEDIA_PREFIX)) {
+  const [base, fragment] = splitPositionFragment(value);
+
+  if (!base.startsWith(MEDIA_PREFIX)) {
     return value;
   }
 
-  const mediaId = value.slice(MEDIA_PREFIX.length);
-  return mediaSrcById.get(mediaId) ?? value;
+  const mediaId = base.slice(MEDIA_PREFIX.length);
+  const src = mediaSrcById.get(mediaId);
+  return src ? `${src}${fragment}` : value;
 };
 
 export const serializeEditableContentState = (
@@ -164,7 +193,12 @@ export const serializeEditableContentState = (
       : [],
   },
   sportDescriptions: Array.isArray(content.sportDescriptions)
-    ? content.sportDescriptions.map((item) => ({ ...item }))
+    ? content.sportDescriptions.map((item) => ({
+        ...item,
+        sessions: Array.isArray(item.sessions)
+          ? item.sessions.map((session) => ({ ...session }))
+          : [],
+      }))
     : [],
   siteText: content.siteText ? {
     ...content.siteText,
@@ -184,6 +218,8 @@ export const serializeEditableContentState = (
     heroImage2: "",
     heroImage3: "",
     missionImage: "",
+    missionVideo: "",
+    introVideo: "",
     secondServeImage: ""
   },
 });
@@ -233,7 +269,12 @@ export const hydrateEditableContentState = (
           items: [],
         },
   sportDescriptions: Array.isArray(content.sportDescriptions)
-    ? content.sportDescriptions.map((item) => ({ ...item }))
+    ? content.sportDescriptions.map((item) => ({
+        ...item,
+        sessions: Array.isArray(item.sessions)
+          ? item.sessions.map((session) => ({ ...session }))
+          : [],
+      }))
     : [],
   siteText:
     content.siteText && isPlainObject(content.siteText)
@@ -256,10 +297,25 @@ export const hydrateEditableContentState = (
           testimonials: isPlainObject((content.siteText as any).testimonials)
             ? { ...((content.siteText as any).testimonials) }
             : { title: "Testimonials", subtitle: "" },
+          textOverrides: isPlainObject((content.siteText as any).textOverrides)
+            ? Object.fromEntries(
+                Object.entries((content.siteText as any).textOverrides).filter(
+                  (entry): entry is [string, string] => typeof entry[1] === "string",
+                ),
+              )
+            : {},
           heroImage1: fromPortableMediaValue((content.siteText as any).heroImage1),
           heroImage2: fromPortableMediaValue((content.siteText as any).heroImage2),
           heroImage3: fromPortableMediaValue((content.siteText as any).heroImage3),
           missionImage: fromPortableMediaValue((content.siteText as any).missionImage),
+          missionVideo:
+            typeof (content.siteText as any).missionVideo === "string"
+              ? (content.siteText as any).missionVideo
+              : "",
+          introVideo:
+            typeof (content.siteText as any).introVideo === "string"
+              ? (content.siteText as any).introVideo
+              : "",
           secondServeImage: fromPortableMediaValue((content.siteText as any).secondServeImage)
         }
       : {
@@ -273,6 +329,8 @@ export const hydrateEditableContentState = (
           heroImage2: "",
           heroImage3: "",
           missionImage: "",
+          missionVideo: "",
+          introVideo: "",
           secondServeImage: ""
         },
 });

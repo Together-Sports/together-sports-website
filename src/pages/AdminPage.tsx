@@ -25,9 +25,16 @@ import type { TeamPerson, TeamSection, TeamSocialPlatform } from "@/data/team";
 import type {
   OtherLocation,
   TennisLessonVideo,
-  SportDescription
+  SportDescription,
+  SportSession
 } from "@/lib/editable-content-format";
 import { useEditableContent } from "@/lib/editable-content";
+import { TEXT_FIELDS, TEXT_PAGES } from "@/lib/text-registry";
+import {
+  imageObjectPosition,
+  splitImageValue,
+  withImagePosition
+} from "@/lib/image-position";
 import { normalizeYouTubeEmbedUrl } from "@/lib/youtube";
 
 const inputClass =
@@ -56,6 +63,13 @@ const EditorCard = ({ children }: { children: ReactNode }) => (
   </div>
 );
 
+const FRAMING_FRAMES = [
+  { label: "Headshot", boxClass: "aspect-[4/3]" },
+  { label: "Square", boxClass: "aspect-square" },
+  { label: "Wide", boxClass: "aspect-video" },
+  { label: "Tall", boxClass: "aspect-[3/4]" }
+];
+
 const ImageField = ({
   label,
   value,
@@ -68,6 +82,18 @@ const ImageField = ({
   onUpload: (file: File) => Promise<string>;
 }) => {
   const [isUploading, setIsUploading] = useState(false);
+  const [isAdjusting, setIsAdjusting] = useState(false);
+  const [frame, setFrame] = useState(FRAMING_FRAMES[0]);
+  const frameRef = useRef<HTMLDivElement | null>(null);
+  const naturalSizeRef = useRef<{ width: number; height: number } | null>(null);
+  const dragRef = useRef<{
+    pointerX: number;
+    pointerY: number;
+    startX: number;
+    startY: number;
+  } | null>(null);
+  const { src: baseSrc, position } = splitImageValue(value || "");
+  const positionStyle = imageObjectPosition(position);
 
   const handleFileSelect = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -92,21 +118,143 @@ const ImageField = ({
     }
   };
 
+  const handleFrameDrag = (clientX: number, clientY: number) => {
+    const drag = dragRef.current;
+    const box = frameRef.current?.getBoundingClientRect();
+    const natural = naturalSizeRef.current;
+
+    if (!drag || !box?.width || !box?.height || !natural) {
+      return;
+    }
+
+    // object-cover math: how far the scaled image overflows the frame is
+    // exactly the range object-position can pan across.
+    const scale = Math.max(box.width / natural.width, box.height / natural.height);
+    const overflowX = natural.width * scale - box.width;
+    const overflowY = natural.height * scale - box.height;
+    const deltaX = clientX - drag.pointerX;
+    const deltaY = clientY - drag.pointerY;
+
+    onChange(
+      withImagePosition(baseSrc, {
+        x: drag.startX - (overflowX > 0 ? (deltaX / overflowX) * 100 : 0),
+        y: drag.startY - (overflowY > 0 ? (deltaY / overflowY) * 100 : 0)
+      })
+    );
+  };
+
   return (
     <div className="space-y-3">
       <p className={labelClass}>{label}</p>
       <div className="w-full h-40 border border-border bg-white overflow-hidden flex items-center justify-center">
-        {value ? (
-          <img src={value} alt={label} className="w-full h-full object-cover" />
+        {baseSrc ? (
+          <img
+            src={baseSrc}
+            alt={label}
+            className="w-full h-full object-cover"
+            style={positionStyle}
+          />
         ) : (
           <span className="text-muted-foreground text-sm">
             No image selected
           </span>
         )}
       </div>
+      {baseSrc ? (
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setIsAdjusting((current) => !current)}
+            className="px-4 py-2 border border-border bg-white text-foreground font-heading font-bold uppercase text-xs tracking-wider"
+          >
+            {isAdjusting ? "Done Adjusting" : "Adjust Framing"}
+          </button>
+          {position ? (
+            <span className="text-xs text-muted-foreground font-body">
+              Adjusted ({position.x}% across, {position.y}% down)
+            </span>
+          ) : null}
+        </div>
+      ) : null}
+      {baseSrc && isAdjusting ? (
+        <div className="border border-border bg-white p-3 space-y-3">
+          <p className="text-xs text-muted-foreground font-body">
+            Drag the photo inside the frame to position it. The frame shows
+            exactly how the photo will be cropped on the site — pick the frame
+            shape closest to where this photo is used.
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {FRAMING_FRAMES.map((entry) => (
+              <button
+                key={entry.label}
+                type="button"
+                onClick={() => setFrame(entry)}
+                className={`px-3 py-1.5 border font-heading font-bold uppercase text-[11px] tracking-wider ${
+                  frame.label === entry.label
+                    ? "border-primary bg-primary text-white"
+                    : "border-border bg-white text-foreground"
+                }`}
+              >
+                {entry.label}
+              </button>
+            ))}
+          </div>
+          <div
+            ref={frameRef}
+            className={`relative w-full overflow-hidden border-2 border-primary select-none touch-none cursor-grab active:cursor-grabbing ${frame.boxClass}`}
+            onPointerDown={(event) => {
+              event.currentTarget.setPointerCapture(event.pointerId);
+              dragRef.current = {
+                pointerX: event.clientX,
+                pointerY: event.clientY,
+                startX: position?.x ?? 50,
+                startY: position?.y ?? 50
+              };
+            }}
+            onPointerMove={(event) => {
+              if (dragRef.current) {
+                handleFrameDrag(event.clientX, event.clientY);
+              }
+            }}
+            onPointerUp={() => {
+              dragRef.current = null;
+            }}
+            onPointerCancel={() => {
+              dragRef.current = null;
+            }}
+          >
+            <img
+              src={baseSrc}
+              alt={`${label} framing`}
+              draggable={false}
+              onLoad={(event) => {
+                naturalSizeRef.current = {
+                  width: event.currentTarget.naturalWidth,
+                  height: event.currentTarget.naturalHeight
+                };
+              }}
+              className="h-full w-full object-cover pointer-events-none"
+              style={positionStyle}
+            />
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={() => onChange(baseSrc)}
+              disabled={!position}
+              className="px-4 py-2 border border-border bg-white text-foreground font-heading font-bold uppercase text-xs tracking-wider disabled:opacity-50"
+            >
+              Reset to Center
+            </button>
+            <span className="text-xs text-muted-foreground font-body">
+              Changes apply after you save live.
+            </span>
+          </div>
+        </div>
+      ) : null}
       <select
         className={inputClass}
-        value={mediaLibrary.some((item) => item.src === value) ? value : ""}
+        value={mediaLibrary.some((item) => item.src === baseSrc) ? baseSrc : ""}
         onChange={(event) => {
           if (event.target.value) {
             onChange(event.target.value);
@@ -122,7 +270,7 @@ const ImageField = ({
       </select>
       <input
         type="url"
-        value={value}
+        value={baseSrc}
         onChange={(event) => onChange(event.target.value)}
         placeholder="Paste an image URL or leave the selected asset path"
         className={inputClass}
@@ -139,6 +287,99 @@ const ImageField = ({
       </label>
       {isUploading ? (
         <p className="text-sm text-muted-foreground">Uploading image...</p>
+      ) : null}
+    </div>
+  );
+};
+
+const VideoField = ({
+  label,
+  description,
+  value,
+  onChange,
+  onUpload
+}: {
+  label: string;
+  description?: string;
+  value: string;
+  onChange: (value: string) => void;
+  onUpload: (file: File) => Promise<string>;
+}) => {
+  const [isUploading, setIsUploading] = useState(false);
+
+  const handleFileSelect = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    setIsUploading(true);
+
+    try {
+      const nextValue = await onUpload(file);
+      onChange(nextValue);
+      toast.success(`${file.name} uploaded.`);
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Unable to upload that video."
+      );
+    } finally {
+      setIsUploading(false);
+      event.target.value = "";
+    }
+  };
+
+  return (
+    <div className="space-y-3">
+      <p className={labelClass}>{label}</p>
+      {description ? (
+        <p className="text-xs text-muted-foreground font-body">{description}</p>
+      ) : null}
+      <div className="w-full h-40 border border-border bg-white overflow-hidden flex items-center justify-center">
+        {value ? (
+          <video
+            src={value}
+            controls
+            muted
+            playsInline
+            preload="metadata"
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <span className="text-muted-foreground text-sm">
+            No video selected
+          </span>
+        )}
+      </div>
+      <input
+        type="url"
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        placeholder="Paste an MP4 video URL"
+        className={inputClass}
+      />
+      <label className="block">
+        <span className="sr-only">Upload video file</span>
+        <input
+          type="file"
+          accept="video/mp4,video/webm,video/quicktime"
+          onChange={handleFileSelect}
+          className={inputClass}
+          disabled={isUploading}
+        />
+      </label>
+      {isUploading ? (
+        <p className="text-sm text-muted-foreground">Uploading video...</p>
+      ) : null}
+      {value ? (
+        <button
+          type="button"
+          onClick={() => onChange("")}
+          className="px-4 py-2 border border-border bg-white text-foreground font-heading font-bold uppercase text-xs tracking-wider"
+        >
+          Remove Video
+        </button>
       ) : null}
     </div>
   );
@@ -464,14 +705,6 @@ const AdminPage = () => {
   };
 
   const handleSave = async () => {
-    if (
-      !window.confirm(
-        "Save these changes live? This will update the deployed site content after save."
-      )
-    ) {
-      return;
-    }
-
     try {
       await saveContent();
       setStatusMessage("Live content saved to Supabase.");
@@ -614,6 +847,41 @@ const AdminPage = () => {
     });
   };
 
+  const movePersonToSection = (
+    fromSectionId: string,
+    personId: string,
+    toSectionId: string
+  ) => {
+    if (fromSectionId === toSectionId) {
+      return;
+    }
+
+    setTeamSections((current) => {
+      const person = current
+        .find((section) => section.id === fromSectionId)
+        ?.people.find((item) => item.id === personId);
+
+      if (!person || !current.some((section) => section.id === toSectionId)) {
+        return current;
+      }
+
+      return current.map((section) => {
+        if (section.id === fromSectionId) {
+          return {
+            ...section,
+            people: section.people.filter((item) => item.id !== personId)
+          };
+        }
+
+        if (section.id === toSectionId) {
+          return { ...section, people: [...section.people, person] };
+        }
+
+        return section;
+      });
+    });
+  };
+
   const moveTeamPerson = (
     sectionId: string,
     personId: string,
@@ -671,6 +939,19 @@ const AdminPage = () => {
     setSportDescriptions((current) =>
       current.map((item) => (item.id === id ? next : item))
     );
+  };
+
+  const updateSportSession = (
+    sport: SportDescription,
+    sessionId: string,
+    patch: Partial<SportSession>
+  ) => {
+    updateSportDescription(sport.id, {
+      ...sport,
+      sessions: (sport.sessions ?? []).map((session) =>
+        session.id === sessionId ? { ...session, ...patch } : session
+      )
+    });
   };
 
   const hasInvalidTennisLessonVideos = tennisLessonVideos.some(
@@ -937,7 +1218,83 @@ const AdminPage = () => {
               <Users size={16} className="mr-2" />
               Team
             </TabsTrigger>
+            <TabsTrigger
+              value="pagetext"
+              className="px-4 py-3 data-[state=active]:bg-primary data-[state=active]:text-white"
+            >
+              <FileText size={16} className="mr-2" />
+              Page Text
+            </TabsTrigger>
           </TabsList>
+
+          <TabsContent value="pagetext">
+            <div className="space-y-6">
+              <EditorCard>
+                <p className="font-heading text-2xl font-black uppercase">
+                  Page Text
+                </p>
+                <p className="text-muted-foreground text-sm">
+                  Edit headings, subtitles, and button labels across every
+                  page. Leave a field empty to use the site's default text
+                  (shown as the placeholder).
+                </p>
+              </EditorCard>
+              {TEXT_PAGES.map((pageName) => (
+                <EditorCard key={pageName}>
+                  <p className="font-heading text-2xl font-black uppercase">
+                    {pageName}
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {TEXT_FIELDS.filter(
+                      (field) => field.page === pageName
+                    ).map((field) => (
+                      <div
+                        key={field.key}
+                        className={
+                          field.multiline
+                            ? "space-y-2 md:col-span-2"
+                            : "space-y-2"
+                        }
+                      >
+                        <p className={labelClass}>{field.label}</p>
+                        {field.multiline ? (
+                          <textarea
+                            className={textareaClass}
+                            value={siteText?.textOverrides?.[field.key] ?? ""}
+                            onChange={(event) =>
+                              setSiteText((current) => ({
+                                ...current,
+                                textOverrides: {
+                                  ...(current.textOverrides || {}),
+                                  [field.key]: event.target.value
+                                }
+                              }))
+                            }
+                            placeholder={field.fallback}
+                          />
+                        ) : (
+                          <input
+                            className={inputClass}
+                            value={siteText?.textOverrides?.[field.key] ?? ""}
+                            onChange={(event) =>
+                              setSiteText((current) => ({
+                                ...current,
+                                textOverrides: {
+                                  ...(current.textOverrides || {}),
+                                  [field.key]: event.target.value
+                                }
+                              }))
+                            }
+                            placeholder={field.fallback}
+                          />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </EditorCard>
+              ))}
+            </div>
+          </TabsContent>
 
           <TabsContent value="site">
             <div className="space-y-6">
@@ -1643,6 +2000,18 @@ const AdminPage = () => {
                     }
                     onUpload={uploadImage}
                   />
+                  <VideoField
+                    label="Mission Section Video (Optional)"
+                    description="When a video is set, it plays automatically in place of the mission photo (shown straight, without the photo tilt). Remove the video to switch back to the photo."
+                    value={siteText?.missionVideo || ""}
+                    onChange={(value) =>
+                      setSiteText((current) => ({
+                        ...current,
+                        missionVideo: value
+                      }))
+                    }
+                    onUpload={uploadImage}
+                  />
                   <div className="md:col-span-2">
                     <ImageField
                       label="Second Serve Section Photo"
@@ -1657,6 +2026,29 @@ const AdminPage = () => {
                     />
                   </div>
                 </div>
+              </EditorCard>
+
+              <EditorCard>
+                <p className="font-heading text-2xl font-black uppercase">
+                  Opening Intro Video
+                </p>
+                <p className="text-muted-foreground text-sm">
+                  Plays full screen when someone first opens the site, then
+                  fades into the page. It shows once per visit, plays muted,
+                  and visitors can skip it at any time. Keep it short — a few
+                  seconds works best.
+                </p>
+                <VideoField
+                  label="Intro Video (Optional)"
+                  value={siteText?.introVideo || ""}
+                  onChange={(value) =>
+                    setSiteText((current) => ({
+                      ...current,
+                      introVideo: value
+                    }))
+                  }
+                  onUpload={uploadImage}
+                />
               </EditorCard>
             </div>
           </TabsContent>
@@ -1806,8 +2198,9 @@ const AdminPage = () => {
                     Sports Content
                   </p>
                   <p className="text-muted-foreground text-sm">
-                    Edit sport descriptions, taglines, and schedules. Changes
-                    appear on the sport detail pages.
+                    Edit sport descriptions, taglines, schedules, and upcoming
+                    sessions with sign-ups. Changes appear on the sport detail
+                    pages.
                   </p>
                 </div>
               </div>
@@ -1959,7 +2352,8 @@ const AdminPage = () => {
                     Sport Descriptions
                   </p>
                   <p className="text-muted-foreground text-sm">
-                    Edit each sport's tagline, description, and schedule times.
+                    Edit each sport's tagline, description, schedule times, and
+                    upcoming sessions with sign-up links.
                   </p>
                 </div>
               </div>
@@ -2050,6 +2444,172 @@ const AdminPage = () => {
                             className="px-4 py-2 border border-border bg-white text-foreground font-heading font-bold uppercase text-xs tracking-wider"
                           >
                             + Add Time
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2 md:col-span-2">
+                        <p className={labelClass}>Upcoming Sessions</p>
+                        <p className="text-muted-foreground text-xs">
+                          Sessions appear on the {sport.name} page with a sign-up
+                          button. Paste a Google Form (or any sign-up page) link
+                          for each session — if left empty, the button links to
+                          the contact page instead.
+                        </p>
+                        <div className="space-y-3">
+                          {(sport.sessions ?? []).map((session, index) => (
+                            <div
+                              key={session.id}
+                              className="border border-border bg-card p-4 space-y-3"
+                            >
+                              <div className="flex items-center justify-between gap-2">
+                                <p className="font-heading font-bold uppercase text-sm tracking-wider">
+                                  Session {index + 1}
+                                </p>
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    updateSportDescription(sport.id, {
+                                      ...sport,
+                                      sessions: (sport.sessions ?? []).filter(
+                                        (entry) => entry.id !== session.id
+                                      )
+                                    })
+                                  }
+                                  className="px-4 py-2 border border-border bg-white text-foreground font-heading font-bold uppercase text-xs tracking-wider whitespace-nowrap"
+                                >
+                                  Remove
+                                </button>
+                              </div>
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                <div className="space-y-1 md:col-span-2">
+                                  <p className={labelClass}>Title</p>
+                                  <input
+                                    className={inputClass}
+                                    value={session.title}
+                                    onChange={(event) =>
+                                      updateSportSession(sport, session.id, {
+                                        title: event.target.value
+                                      })
+                                    }
+                                    placeholder="e.g., Saturday Youth Clinic"
+                                  />
+                                </div>
+                                <label className="flex items-center gap-2 md:col-span-2">
+                                  <input
+                                    type="checkbox"
+                                    checked={Boolean(session.isRecurring)}
+                                    onChange={(event) =>
+                                      updateSportSession(sport, session.id, {
+                                        isRecurring: event.target.checked
+                                      })
+                                    }
+                                    className="h-4 w-4 accent-primary"
+                                  />
+                                  <span className="font-body text-sm text-foreground">
+                                    Recurring session (repeats on a schedule,
+                                    e.g. every Saturday)
+                                  </span>
+                                </label>
+                                <div className="space-y-1">
+                                  <p className={labelClass}>
+                                    {session.isRecurring ? "Schedule" : "Date"}
+                                  </p>
+                                  <input
+                                    className={inputClass}
+                                    value={session.dateLabel}
+                                    onChange={(event) =>
+                                      updateSportSession(sport, session.id, {
+                                        dateLabel: event.target.value
+                                      })
+                                    }
+                                    placeholder={
+                                      session.isRecurring
+                                        ? "e.g., Every Saturday"
+                                        : "e.g., Saturday, July 12"
+                                    }
+                                  />
+                                </div>
+                                <div className="space-y-1">
+                                  <p className={labelClass}>Time</p>
+                                  <input
+                                    className={inputClass}
+                                    value={session.timeLabel}
+                                    onChange={(event) =>
+                                      updateSportSession(sport, session.id, {
+                                        timeLabel: event.target.value
+                                      })
+                                    }
+                                    placeholder="e.g., 10:00 AM - 12:00 PM"
+                                  />
+                                </div>
+                                <div className="space-y-1">
+                                  <p className={labelClass}>Location</p>
+                                  <input
+                                    className={inputClass}
+                                    value={session.location}
+                                    onChange={(event) =>
+                                      updateSportSession(sport, session.id, {
+                                        location: event.target.value
+                                      })
+                                    }
+                                    placeholder="e.g., Riverside Park Courts"
+                                  />
+                                </div>
+                                <div className="space-y-1">
+                                  <p className={labelClass}>
+                                    Availability (optional)
+                                  </p>
+                                  <input
+                                    className={inputClass}
+                                    value={session.spotsLabel}
+                                    onChange={(event) =>
+                                      updateSportSession(sport, session.id, {
+                                        spotsLabel: event.target.value
+                                      })
+                                    }
+                                    placeholder="e.g., 8 spots left"
+                                  />
+                                </div>
+                                <div className="space-y-1 md:col-span-2">
+                                  <p className={labelClass}>Sign-Up Link</p>
+                                  <input
+                                    className={inputClass}
+                                    value={session.signupUrl}
+                                    onChange={(event) =>
+                                      updateSportSession(sport, session.id, {
+                                        signupUrl: event.target.value
+                                      })
+                                    }
+                                    placeholder="https://forms.gle/..."
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                          <button
+                            type="button"
+                            onClick={() =>
+                              updateSportDescription(sport.id, {
+                                ...sport,
+                                sessions: [
+                                  ...(sport.sessions ?? []),
+                                  {
+                                    id: createId("session"),
+                                    title: "",
+                                    dateLabel: "",
+                                    timeLabel: "",
+                                    location: "",
+                                    spotsLabel: "",
+                                    signupUrl: "",
+                                    isRecurring: false
+                                  }
+                                ]
+                              })
+                            }
+                            className="px-4 py-2 border border-border bg-white text-foreground font-heading font-bold uppercase text-xs tracking-wider"
+                          >
+                            + Add Session
                           </button>
                         </div>
                       </div>
@@ -2328,6 +2888,39 @@ const AdminPage = () => {
                             {person.name}
                           </p>
                           <div className="flex flex-wrap items-center gap-2">
+                            {teamSections.length > 1 ? (
+                              <select
+                                value=""
+                                onChange={(event) => {
+                                  const targetId = event.target.value;
+                                  if (!targetId) {
+                                    return;
+                                  }
+                                  const target = teamSections.find(
+                                    (entry) => entry.id === targetId
+                                  );
+                                  movePersonToSection(
+                                    section.id,
+                                    person.id,
+                                    targetId
+                                  );
+                                  toast.success(
+                                    `${person.name || "Person"} moved to ${target?.title || "another section"}.`
+                                  );
+                                }}
+                                className="px-3 py-2 border border-border bg-card text-foreground font-heading font-bold uppercase text-xs tracking-wider"
+                                aria-label={`Move ${person.name || "person"} to another section`}
+                              >
+                                <option value="">Move To...</option>
+                                {teamSections
+                                  .filter((entry) => entry.id !== section.id)
+                                  .map((entry) => (
+                                    <option key={entry.id} value={entry.id}>
+                                      {entry.title || "Untitled section"}
+                                    </option>
+                                  ))}
+                              </select>
+                            ) : null}
                             <button
                               type="button"
                               onClick={() => moveTeamPerson(section.id, person.id, -1)}

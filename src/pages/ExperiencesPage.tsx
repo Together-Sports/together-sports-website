@@ -1,15 +1,10 @@
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { MapPin } from "lucide-react";
 import ScrollReveal from "@/components/ScrollReveal";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselPrevious,
-  CarouselNext
-} from "@/components/ui/carousel";
 import { useEditableContent } from "@/lib/editable-content";
 import type { Experience } from "@/data/experiences";
+import { useSiteText } from "@/lib/use-site-text";
 
 const sportAccent: Record<string, string> = {
   Tennis: "text-[hsl(var(--sport-tennis))]",
@@ -31,7 +26,7 @@ const renderStars = (rating?: number) => {
 const QuoteCard = ({ item, index }: { item: Experience; index: number }) => {
   return (
     <ScrollReveal direction="up" delay={index * 0.1}>
-      <div className="h-full p-8 bg-background border border-border hover:border-accent transition-colors duration-300 text-center">
+      <div className="h-full p-6 md:p-8 bg-background border border-border hover:border-accent transition-colors duration-300 text-center">
         <p
           className={`font-heading font-bold uppercase text-sm mb-4 ${sportAccent[item.sport || ""] || "text-accent"}`}
         >
@@ -59,88 +54,21 @@ const QuoteCard = ({ item, index }: { item: Experience; index: number }) => {
   );
 };
 
-const PhotoCard = ({ item, index }: { item: Experience; index: number }) => {
-  return (
-    <ScrollReveal direction="scale" delay={index * 0.12}>
-      <div className="text-center">
-        {item.images && item.images.length > 1 ? (
-          <div className="relative">
-            <Carousel className="">
-              <CarouselContent className="flex">
-                {item.images.map((src, idx) => (
-                  <CarouselItem key={idx} className="h-[300px] md:h-[350px]">
-                    <img
-                      src={src}
-                      alt={item.caption || `Experience photo ${idx + 1}`}
-                      className="w-full h-full object-cover"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious className="" />
-              <CarouselNext className="" />
-            </Carousel>
-          </div>
-        ) : (
-          <img
-            src={item.image || ""}
-            alt={item.caption || "Experience photo"}
-            className="w-full h-[300px] md:h-[350px] object-cover"
-            loading="lazy"
-            decoding="async"
-          />
-        )}
-
-        {item.caption ? (
-          <p className="mt-3 text-muted-foreground text-sm font-body italic">
-            {item.caption}
-          </p>
-        ) : null}
-      </div>
-    </ScrollReveal>
-  );
-};
-
-const VideoCard = ({ item, index }: { item: Experience; index: number }) => (
-  <ScrollReveal direction="up" delay={index * 0.15}>
-    <div className="border border-border bg-background overflow-hidden">
-      <div className="relative w-full aspect-video">
-        <iframe
-          src={item.videoUrl}
-          title={item.videoTitle || "Video"}
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-          className="absolute inset-0 w-full h-full"
-        />
-      </div>
-      {item.videoTitle ? (
-        <div className="p-4 text-center">
-          <p className="font-heading font-bold uppercase text-sm">
-            {item.videoTitle}
-          </p>
-        </div>
-      ) : null}
-    </div>
-  </ScrollReveal>
-);
-
 const ExperiencesPage = () => {
+  const t = useSiteText();
   const { experiences } = useEditableContent();
-  const quotes = experiences.filter((e) => e.type === "quote");
+  const athleteQuotes = experiences.filter((e) => e.type === "quote");
   const parentQuotes = experiences.filter((e) => e.type === "parent");
-  const photos = experiences.filter((e) => e.type === "photo" && e.image);
 
   return (
     <div className="overflow-hidden">
-      <section className="relative overflow-hidden bg-[#84a6ff]">
+      <section className="relative overflow-hidden bg-[#45c0b2]">
         <div className="absolute left-4 top-10 h-12 w-12 rounded-full bg-white/10 sm:left-8 sm:top-12 sm:h-[4.5rem] sm:w-[4.5rem] md:h-24 md:w-24" />
         <div className="absolute left-[20%] top-8 hidden h-14 w-14 bg-white/10 scrapbook-rotate-2 sm:block" />
         <div className="absolute right-6 top-10 h-12 w-12 rotate-45 bg-white/10 sm:right-10 sm:h-20 sm:w-20 md:h-24 md:w-24" />
         <div className="absolute right-[22%] top-28 hidden h-12 w-12 rounded-full bg-white/10 sm:block" />
         <div className="absolute right-12 bottom-8 hidden h-0 w-0 border-l-[22px] border-r-[22px] border-b-[38px] border-l-transparent border-r-transparent border-b-white/10 md:block" />
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-20 md:pt-28 md:pb-24">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-14 md:pt-28 md:pb-24">
           <motion.div
             initial={{ opacity: 0, y: 28 }}
             animate={{ opacity: 1, y: 0 }}
@@ -148,41 +76,21 @@ const ExperiencesPage = () => {
             className="max-w-3xl mx-auto text-center"
           >
             <h1 className="font-heading text-5xl sm:text-6xl md:text-[5.25rem] font-black uppercase leading-[0.95] mb-4 text-white">
-              <span className="sm:whitespace-nowrap">Our </span>
-              <span className="sm:whitespace-nowrap">Experiences</span>
+              <span className="text-balance">{t("experiences.heroTitle")}</span>
             </h1>
             <p className="text-white font-bold text-lg md:text-xl max-w-2xl mx-auto font-body">
-              Hear from the athletes, families, and coaches who make Together
-              Sports what it is. These are their words, their moments, and their
-              stories.
+              {t("experiences.heroSubtitle")}
             </p>
           </motion.div>
         </div>
       </section>
 
-      {photos.length > 0 ? (
-        <section className="pt-20 pb-12 md:pt-28 md:pb-16 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <ScrollReveal>
-              <h2 className="font-heading text-5xl md:text-7xl font-black uppercase mb-12 text-center">
-                Moments Captured
-              </h2>
-            </ScrollReveal>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {photos.map((p, i) => (
-                <PhotoCard key={p.id} item={p} index={i} />
-              ))}
-            </div>
-          </div>
-        </section>
-      ) : null}
-
       {parentQuotes.length > 0 ? (
-        <section className="py-20 md:py-28 bg-white">
+        <section className="pt-14 pb-8 md:pt-28 md:pb-14 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <ScrollReveal>
-              <h2 className="font-heading text-5xl md:text-7xl font-black uppercase mb-12 text-center">
-                Parents Speak
+              <h2 className="font-heading text-5xl md:text-7xl font-black uppercase mb-8 md:mb-12 text-center">
+                {t("experiences.parentsHeading")}
               </h2>
             </ScrollReveal>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -193,6 +101,42 @@ const ExperiencesPage = () => {
           </div>
         </section>
       ) : null}
+
+      {athleteQuotes.length > 0 ? (
+        <section className="py-14 md:py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <ScrollReveal>
+              <h2 className="font-heading text-5xl md:text-7xl font-black uppercase mb-8 md:mb-12 text-center">
+                {t("experiences.athletesHeading")}
+              </h2>
+            </ScrollReveal>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {athleteQuotes.map((q, i) => (
+                <QuoteCard key={q.id} item={q} index={i} />
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
+
+      <section className="bg-card py-14 md:py-20 scratchy-overlay">
+        <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
+          <ScrollReveal direction="scale">
+            <h2 className="mb-4 font-heading text-4xl md:text-5xl font-black uppercase">
+              {t("experiences.ctaHeading")}
+            </h2>
+            <p className="mx-auto mb-8 max-w-md text-lg text-muted-foreground">
+              {t("experiences.ctaBody")}
+            </p>
+            <Link
+              to="/moments"
+              className="inline-block bg-accent px-8 py-4 font-heading font-bold uppercase tracking-wider text-white transition-all duration-200 hover:scale-105"
+            >
+              {t("experiences.ctaButton")}
+            </Link>
+          </ScrollReveal>
+        </div>
+      </section>
     </div>
   );
 };

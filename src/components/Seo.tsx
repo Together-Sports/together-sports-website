@@ -34,7 +34,7 @@ const formatSportName = (value: string) => {
 const getMetaForPath = (pathname: string, blogPosts: ReturnType<typeof useEditableContent>["blogPosts"]): MetaConfig => {
   if (pathname === "/") {
     return {
-      title: `${SITE_NAME} | Play Loud. Build Strong.`,
+      title: `${SITE_NAME} | Every Kid Plays. Every Kid Belongs.`,
       description:
         "Together Sports empowers youth through free sports programs, mentorship, and community building across tennis, basketball, football, and golf.",
     };
@@ -60,7 +60,15 @@ const getMetaForPath = (pathname: string, blogPosts: ReturnType<typeof useEditab
     return {
       title: `Our Experiences | ${SITE_NAME}`,
       description:
-        "Read athlete and parent testimonials, explore photos, and watch moments from Together Sports programs and community experiences.",
+        "Read athlete and parent testimonials about Together Sports programs, coaches, and community experiences.",
+    };
+  }
+
+  if (pathname === "/moments") {
+    return {
+      title: `Moments Captured | ${SITE_NAME}`,
+      description:
+        "Browse photos and videos from Together Sports sessions, events, and communities.",
     };
   }
 
@@ -163,8 +171,8 @@ const Seo = () => {
     const origin = window.location.origin;
     const currentUrl = `${origin}${pathname}${search}`;
     const imageUrl = new URL("/EMBEDPIC.png", origin).toString();
-    const logoUrl = new URL("/headerlogo.svg", origin).toString();
-    const appleTouchUrl = new URL("/apple-touch-icon.png?v=5", origin).toString();
+    const logoUrl = new URL("/SPORTSTOGETHERHANDLOGO.png", origin).toString();
+    const appleTouchUrl = new URL("/apple-touch-icon.png?v=6", origin).toString();
     const meta = getMetaForPath(pathname, blogPosts);
 
     document.title = meta.title;
@@ -185,8 +193,8 @@ const Seo = () => {
     setMetaContent("twitter:description", meta.description);
     setMetaContent("twitter:image", imageUrl);
     setLinkHref("canonical", currentUrl);
-    setLinkHref("icon", new URL("/favicon.ico?v=5", origin).toString());
-    setLinkHref("shortcut icon", new URL("/favicon.ico?v=5", origin).toString());
+    setLinkHref("icon", new URL("/favicon.png?v=6", origin).toString());
+    setLinkHref("shortcut icon", new URL("/favicon.png?v=6", origin).toString());
     setLinkHref("apple-touch-icon", appleTouchUrl);
 
     const organizationSchema = {
@@ -218,6 +226,7 @@ const Seo = () => {
         `${origin}/sports`,
         `${origin}/team`,
         `${origin}/experiences`,
+        `${origin}/moments`,
         `${origin}/blog`,
         `${origin}/partners`,
         `${origin}/contact`,

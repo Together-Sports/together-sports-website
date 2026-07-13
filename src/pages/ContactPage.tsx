@@ -11,11 +11,13 @@ import {
   contactTopicOptions,
   type ContactFormValues,
 } from "@/lib/contact-form";
+import { useSiteText } from "@/lib/use-site-text";
 
 const fieldClass =
   "w-full p-4 bg-card border border-border text-foreground font-body placeholder:text-muted-foreground focus:border-[#f6a15c] focus:outline-none";
 
 const ContactPage = () => {
+  const t = useSiteText();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const {
     register,
@@ -74,7 +76,7 @@ const ContactPage = () => {
         <div className="absolute right-4 top-10 h-12 w-12 rotate-45 bg-white/10 sm:right-12 sm:top-12 sm:h-16 sm:w-16" />
         <div className="absolute right-[24%] top-24 hidden h-14 w-14 rounded-full bg-white/10 sm:block" />
         <div className="absolute right-10 bottom-8 h-8 w-8 bg-white/10 scrapbook-rotate-3 sm:right-20 sm:h-10 sm:w-10" />
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-20 md:pt-28 md:pb-24">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-14 md:pt-28 md:pb-24">
           <motion.div
             initial={{ opacity: 0, y: 28 }}
             animate={{ opacity: 1, y: 0 }}
@@ -82,18 +84,16 @@ const ContactPage = () => {
             className="max-w-3xl mx-auto text-center"
           >
             <h1 className="font-heading text-5xl sm:text-6xl md:text-[5.25rem] font-black uppercase leading-[0.95] mb-4 text-white">
-              <span className="sm:whitespace-nowrap">Contact </span>
-              <span className="sm:whitespace-nowrap">Us</span>
+              <span className="text-balance">{t("contact.heroTitle")}</span>
             </h1>
             <p className="text-white font-bold text-lg md:text-xl max-w-2xl mx-auto font-body">
-              Questions, partnerships, volunteering, or support requests, reach out and we will point you in the right
-              direction.
+              {t("contact.heroSubtitle")}
             </p>
           </motion.div>
         </div>
       </section>
 
-      <section className="py-16 md:py-18">
+      <section className="py-12 md:py-18">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-10 lg:items-stretch">
             <ScrollReveal direction="left">

@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import ScrollReveal from "@/components/ScrollReveal";
 import { useEditableContent } from "@/lib/editable-content";
+import { imgProps } from "@/lib/image-position";
+import { useSiteText } from "@/lib/use-site-text";
 
 const BLOG_REFRESH_INTERVAL_MS = 5 * 60 * 1000;
 
@@ -14,6 +16,7 @@ const formatDate = (value: string) =>
   });
 
 const BlogPage = () => {
+  const t = useSiteText();
   const { blogPosts, refreshContent, isLoadingContent } = useEditableContent();
   const featured = blogPosts.find((post) => post.featured) ?? blogPosts[0];
   const posts = featured
@@ -32,7 +35,7 @@ const BlogPage = () => {
     return (
       <div className="overflow-hidden">
         <section className="relative overflow-hidden bg-[#ab9bfa]">
-          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-20 md:pt-28 md:pb-24">
+          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-14 md:pt-28 md:pb-24">
             <div className="max-w-3xl mx-auto text-center">
               <h1 className="font-heading text-5xl sm:text-6xl md:text-[5.25rem] font-black uppercase leading-[0.95] mb-4 text-white">
                 <span className="sm:whitespace-nowrap">The </span>
@@ -45,7 +48,7 @@ const BlogPage = () => {
             </div>
           </div>
         </section>
-        <section className="py-16 md:py-18">
+        <section className="py-12 md:py-18">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="border border-border bg-card p-8 md:p-12">
               <p className="text-muted-foreground text-lg">
@@ -66,7 +69,7 @@ const BlogPage = () => {
         <div className="absolute right-6 top-8 h-12 w-12 bg-white/10 scrapbook-rotate-1 sm:right-10 sm:h-16 sm:w-16" />
         <div className="absolute right-[18%] top-24 hidden h-0 w-0 border-l-[24px] border-r-[24px] border-b-[42px] border-l-transparent border-r-transparent border-b-white/10 md:block" />
         <div className="absolute left-10 bottom-8 h-8 w-8 rounded-full bg-white/10 sm:left-20 sm:h-10 sm:w-10" />
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-20 md:pt-28 md:pb-24">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-14 md:pt-28 md:pb-24">
           <motion.div
             initial={{ opacity: 0, y: 28 }}
             animate={{ opacity: 1, y: 0 }}
@@ -74,12 +77,10 @@ const BlogPage = () => {
             className="max-w-3xl mx-auto text-center"
           >
             <h1 className="font-heading text-5xl sm:text-6xl md:text-[5.25rem] font-black uppercase leading-[0.95] mb-4 text-white">
-              <span className="sm:whitespace-nowrap">The </span>
-              <span className="sm:whitespace-nowrap">Blog</span>
+              <span className="text-balance">{t("blog.heroTitle")}</span>
             </h1>
             <p className="text-white font-bold text-lg md:text-xl max-w-2xl mx-auto font-body">
-              Stories, updates, and moments from Together Sports, all in one
-              place on the site.
+              {t("blog.heroSubtitle")}
             </p>
           </motion.div>
         </div>
@@ -87,7 +88,7 @@ const BlogPage = () => {
 
       {featured ? (
         <>
-          <section className="py-16 md:py-18">
+          <section className="py-12 md:py-18">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <ScrollReveal>
                 <Link
@@ -96,7 +97,7 @@ const BlogPage = () => {
                 >
                   {featured.image ? (
                     <img
-                      src={featured.image}
+                      {...imgProps(featured.image)}
                       alt={featured.title}
                       loading="eager"
                       decoding="async"
@@ -128,7 +129,7 @@ const BlogPage = () => {
             </div>
           </section>
 
-          <section className="pb-20 md:pb-20">
+          <section className="pb-14 md:pb-20">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               {posts.length ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -145,7 +146,7 @@ const BlogPage = () => {
                         <div className="relative min-h-[240px] sm:min-h-[280px]">
                           {post.image ? (
                             <img
-                              src={post.image}
+                              {...imgProps(post.image)}
                               alt={post.title}
                               loading="lazy"
                               decoding="async"
@@ -193,7 +194,7 @@ const BlogPage = () => {
           </section>
         </>
       ) : (
-        <section className="py-16 md:py-24">
+        <section className="py-12 md:py-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <ScrollReveal>
               <div className="border border-border bg-card p-8 md:p-12">
