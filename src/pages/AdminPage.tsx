@@ -57,8 +57,14 @@ const TEAM_DESCRIPTION_MAX_CHARS = 360;
 const limitCharacters = (value: string, maxCharacters: number) =>
   value.slice(0, maxCharacters);
 
-const EditorCard = ({ children }: { children: ReactNode }) => (
-  <div className="border border-border bg-card p-6 md:p-8 space-y-5">
+const EditorCard = ({
+  children,
+  id
+}: {
+  children: ReactNode;
+  id?: string;
+}) => (
+  <div id={id} className="border border-border bg-card p-6 md:p-8 space-y-5">
     {children}
   </div>
 );
@@ -83,7 +89,9 @@ const ImageField = ({
 }) => {
   const [isUploading, setIsUploading] = useState(false);
   const [isAdjusting, setIsAdjusting] = useState(false);
+  const [isDragOver, setIsDragOver] = useState(false);
   const [frame, setFrame] = useState(FRAMING_FRAMES[0]);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const frameRef = useRef<HTMLDivElement | null>(null);
   const naturalSizeRef = useRef<{ width: number; height: number } | null>(null);
   const dragRef = useRef<{
@@ -95,10 +103,9 @@ const ImageField = ({
   const { src: baseSrc, position } = splitImageValue(value || "");
   const positionStyle = imageObjectPosition(position);
 
-  const handleFileSelect = async (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-
-    if (!file) {
+  const uploadFile = async (file: File) => {
+    if (!file.type.startsWith("image/")) {
+      toast.error("That file is not an image.");
       return;
     }
 
@@ -114,8 +121,17 @@ const ImageField = ({
       );
     } finally {
       setIsUploading(false);
-      event.target.value = "";
     }
+  };
+
+  const handleFileSelect = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+
+    if (file) {
+      void uploadFile(file);
+    }
+
+    event.target.value = "";
   };
 
   const handleFrameDrag = (clientX: number, clientY: number) => {
@@ -146,22 +162,81 @@ const ImageField = ({
   return (
     <div className="space-y-3">
       <p className={labelClass}>{label}</p>
-      <div className="w-full h-40 border border-border bg-white overflow-hidden flex items-center justify-center">
+      <button
+        type="button"
+        onClick={() => fileInputRef.current?.click()}
+        onDragOver={(event) => {
+          event.preventDefault();
+          setIsDragOver(true);
+        }}
+        onDragLeave={() => setIsDragOver(false)}
+        onDrop={(event) => {
+          event.preventDefault();
+          setIsDragOver(false);
+          const file = [...event.dataTransfer.files].find((entry) =>
+            entry.type.startsWith("image/")
+          );
+
+          if (file) {
+            void uploadFile(file);
+          }
+        }}
+        className={`group relative block w-full h-40 overflow-hidden text-left ${
+          isDragOver
+            ? "border-2 border-dashed border-primary bg-primary/5"
+            : "border border-border bg-white"
+        }`}
+      >
         {baseSrc ? (
-          <img
-            src={baseSrc}
-            alt={label}
-            className="w-full h-full object-cover"
-            style={positionStyle}
-          />
+          <>
+            <img
+              src={baseSrc}
+              alt={label}
+              className="w-full h-full object-cover"
+              style={positionStyle}
+            />
+            <span className="absolute inset-x-0 bottom-0 bg-black/60 py-1.5 text-center font-body text-[11px] font-bold uppercase tracking-wider text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+              Click or drop a photo to replace
+            </span>
+          </>
         ) : (
-          <span className="text-muted-foreground text-sm">
-            No image selected
+          <span className="flex h-full w-full flex-col items-center justify-center gap-1">
+            <span className="font-heading text-xs font-bold uppercase tracking-wider text-foreground">
+              Click to upload a photo
+            </span>
+            <span className="text-xs text-muted-foreground">
+              or drag &amp; drop it here
+            </span>
           </span>
         )}
-      </div>
-      {baseSrc ? (
-        <div className="flex flex-wrap items-center gap-2">
+        {isUploading ? (
+          <span className="absolute inset-0 flex items-center justify-center bg-white/80 font-body text-sm text-foreground">
+            Uploading…
+          </span>
+        ) : null}
+      </button>
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        onChange={handleFileSelect}
+        className="hidden"
+        aria-label={`Upload ${label} image`}
+      />
+      <div className="flex flex-wrap items-center gap-2">
+        <button
+          type="button"
+          onClick={() => fileInputRef.current?.click()}
+          disabled={isUploading}
+          className="px-4 py-2 bg-primary text-white font-heading font-bold uppercase text-xs tracking-wider disabled:opacity-50"
+        >
+          {isUploading
+            ? "Uploading…"
+            : baseSrc
+              ? "Replace Photo"
+              : "Upload Photo"}
+        </button>
+        {baseSrc ? (
           <button
             type="button"
             onClick={() => setIsAdjusting((current) => !current)}
@@ -169,13 +244,13 @@ const ImageField = ({
           >
             {isAdjusting ? "Done Adjusting" : "Adjust Framing"}
           </button>
-          {position ? (
-            <span className="text-xs text-muted-foreground font-body">
-              Adjusted ({position.x}% across, {position.y}% down)
-            </span>
-          ) : null}
-        </div>
-      ) : null}
+        ) : null}
+        {position ? (
+          <span className="text-xs text-muted-foreground font-body">
+            Adjusted ({position.x}% across, {position.y}% down)
+          </span>
+        ) : null}
+      </div>
       {baseSrc && isAdjusting ? (
         <div className="border border-border bg-white p-3 space-y-3">
           <p className="text-xs text-muted-foreground font-body">
@@ -275,19 +350,6 @@ const ImageField = ({
         placeholder="Paste an image URL or leave the selected asset path"
         className={inputClass}
       />
-      <label className="block">
-        <span className="sr-only">Upload image file</span>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleFileSelect}
-          className={inputClass}
-          disabled={isUploading}
-        />
-      </label>
-      {isUploading ? (
-        <p className="text-sm text-muted-foreground">Uploading image...</p>
-      ) : null}
     </div>
   );
 };
@@ -395,6 +457,48 @@ const TestimonialFields = ({
   onUpload: (file: File) => Promise<string>;
 }) => {
   const type = item.type;
+  const [isBatchUploading, setIsBatchUploading] = useState(false);
+  const batchInputRef = useRef<HTMLInputElement | null>(null);
+
+  // Uploads every selected image and appends them all to this card in one go,
+  // instead of making the admin add an empty slot and upload one at a time.
+  const appendUploadedImages = async (incoming: FileList | File[]) => {
+    const files = [...incoming].filter((file) =>
+      file.type.startsWith("image/")
+    );
+
+    if (!files.length) {
+      return;
+    }
+
+    setIsBatchUploading(true);
+
+    try {
+      const uploaded: string[] = [];
+
+      for (const file of files) {
+        uploaded.push(await onUpload(file));
+      }
+
+      const nextImages =
+        (item.images && [...item.images]) || (item.image ? [item.image] : []);
+      nextImages.push(...uploaded);
+      onChange({ ...item, images: nextImages, image: nextImages[0] });
+      toast.success(
+        uploaded.length === 1
+          ? "Image added."
+          : `${uploaded.length} images added.`
+      );
+    } catch (error) {
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Unable to upload those images."
+      );
+    } finally {
+      setIsBatchUploading(false);
+    }
+  };
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -534,7 +638,7 @@ const TestimonialFields = ({
                     </button>
                   </div>
                   <ImageField
-                    label={`Photo ${idx + 1}`}
+                    label="Image"
                     value={img || ""}
                     onChange={(value) => {
                       const nextImages =
@@ -552,7 +656,29 @@ const TestimonialFields = ({
                 </div>
               ))}
 
-              <div className="flex gap-3">
+              <div className="flex flex-wrap gap-3">
+                <input
+                  ref={batchInputRef}
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  className="hidden"
+                  aria-label="Upload images to this photo card"
+                  onChange={(event) => {
+                    if (event.target.files?.length) {
+                      void appendUploadedImages(event.target.files);
+                    }
+                    event.target.value = "";
+                  }}
+                />
+                <button
+                  type="button"
+                  onClick={() => batchInputRef.current?.click()}
+                  disabled={isBatchUploading}
+                  className="px-4 py-3 bg-primary text-white font-heading font-bold uppercase text-sm tracking-wider disabled:opacity-50"
+                >
+                  {isBatchUploading ? "Uploading…" : "+ Upload Images"}
+                </button>
                 <button
                   type="button"
                   onClick={() => {
@@ -566,12 +692,12 @@ const TestimonialFields = ({
                       image: nextImages[0]
                     });
                   }}
-                  className="px-4 py-3 bg-primary text-white font-heading font-bold uppercase text-sm tracking-wider"
+                  className="px-4 py-3 border border-border bg-white text-foreground font-heading font-bold uppercase text-sm tracking-wider"
                 >
-                  + Add Image
+                  + Add Empty Slot
                 </button>
                 <p className="self-center text-sm text-muted-foreground">
-                  Add multiple images to create a slideshow.
+                  Select several images at once to build a slideshow.
                 </p>
               </div>
             </div>
@@ -661,7 +787,13 @@ const AdminPage = () => {
   const [statusMessage, setStatusMessage] = useState("");
   const [email, setEmail] = useState("");
   const [isSendingMagicLink, setIsSendingMagicLink] = useState(false);
+  const [bulkPhotoProgress, setBulkPhotoProgress] = useState<{
+    done: number;
+    total: number;
+  } | null>(null);
+  const [isPhotoDropActive, setIsPhotoDropActive] = useState(false);
   const importInputRef = useRef<HTMLInputElement | null>(null);
+  const bulkPhotoInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleExport = () => {
     const exportFile = exportContent();
@@ -756,6 +888,60 @@ const AdminPage = () => {
     setExperiences((current) =>
       current.map((item) => (item.id === id ? next : item))
     );
+  };
+
+  // Bulk photo pipeline: pick (or drop) many files at once, and each one is
+  // uploaded and turned into its own photo card — no empty-card-then-upload
+  // shuffle, and the list scrolls to the first new card when done.
+  const addPhotosFromFiles = async (incoming: FileList | File[]) => {
+    const files = [...incoming].filter((file) =>
+      file.type.startsWith("image/")
+    );
+
+    if (!files.length) {
+      toast.error("Choose image files (JPG, PNG, WebP...) to add photos.");
+      return;
+    }
+
+    setBulkPhotoProgress({ done: 0, total: files.length });
+    const addedIds: string[] = [];
+
+    try {
+      for (const [index, file] of files.entries()) {
+        setBulkPhotoProgress({ done: index, total: files.length });
+        const src = await uploadImage(file);
+        const id = createId("photo");
+        addedIds.push(id);
+        setExperiences((current) => [
+          ...current,
+          { id, type: "photo", image: src, caption: "" }
+        ]);
+      }
+
+      toast.success(
+        addedIds.length === 1
+          ? "Photo added. Give it a caption if you like, then save live."
+          : `${addedIds.length} photos added. Add captions if you like, then save live.`
+      );
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Unable to upload photos.";
+      toast.error(
+        addedIds.length
+          ? `Added ${addedIds.length} of ${files.length} photos, then an upload failed: ${message}`
+          : message
+      );
+    } finally {
+      setBulkPhotoProgress(null);
+
+      if (addedIds.length) {
+        window.setTimeout(() => {
+          document
+            .getElementById(addedIds[0])
+            ?.scrollIntoView({ behavior: "smooth", block: "center" });
+        }, 100);
+      }
+    }
   };
 
   const moveExperience = (id: string, direction: -1 | 1) => {
@@ -2055,7 +2241,7 @@ const AdminPage = () => {
 
           <TabsContent value="testimonials">
             <ScrollReveal>
-              <div className="flex flex-wrap gap-3 mb-8">
+              <div className="flex flex-wrap gap-3 mb-4">
                 <button
                   type="button"
                   onClick={() =>
@@ -2097,22 +2283,32 @@ const AdminPage = () => {
                 >
                   + Add Parent
                 </button>
+                <input
+                  ref={bulkPhotoInputRef}
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  className="hidden"
+                  aria-label="Upload photos"
+                  onChange={(event) => {
+                    if (event.target.files?.length) {
+                      void addPhotosFromFiles(event.target.files);
+                    }
+                    event.target.value = "";
+                  }}
+                />
                 <button
                   type="button"
-                  onClick={() =>
-                    setExperiences((current) => [
-                      ...current,
-                      {
-                        id: createId("photo"),
-                        type: "photo",
-                        image: "",
-                        caption: "New photo caption"
-                      }
-                    ])
-                  }
-                  className="px-4 py-3 border border-border bg-white text-foreground font-heading font-bold uppercase text-sm tracking-wider"
+                  onClick={() => bulkPhotoInputRef.current?.click()}
+                  disabled={Boolean(bulkPhotoProgress)}
+                  className="px-4 py-3 border border-border bg-white text-foreground font-heading font-bold uppercase text-sm tracking-wider disabled:opacity-50"
                 >
-                  + Add Photo
+                  {bulkPhotoProgress
+                    ? `Uploading ${Math.min(
+                        bulkPhotoProgress.done + 1,
+                        bulkPhotoProgress.total
+                      )} of ${bulkPhotoProgress.total}…`
+                    : "+ Add Photos"}
                 </button>
                 <button
                   type="button"
@@ -2132,11 +2328,52 @@ const AdminPage = () => {
                   + Add Video
                 </button>
               </div>
+              <div
+                onDragOver={(event) => {
+                  event.preventDefault();
+                  setIsPhotoDropActive(true);
+                }}
+                onDragLeave={() => setIsPhotoDropActive(false)}
+                onDrop={(event) => {
+                  event.preventDefault();
+                  setIsPhotoDropActive(false);
+                  void addPhotosFromFiles(event.dataTransfer.files);
+                }}
+                className={`mb-8 flex flex-wrap items-center justify-between gap-3 border-2 border-dashed px-5 py-4 ${
+                  isPhotoDropActive
+                    ? "border-primary bg-primary/5"
+                    : "border-border bg-white"
+                }`}
+              >
+                <p className="font-body text-sm text-muted-foreground">
+                  <span className="font-bold text-foreground">
+                    Drag &amp; drop photos here
+                  </span>{" "}
+                  — each one becomes its own photo card, ready for a caption.
+                </p>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setExperiences((current) => [
+                      ...current,
+                      {
+                        id: createId("photo"),
+                        type: "photo",
+                        image: "",
+                        caption: ""
+                      }
+                    ])
+                  }
+                  className="text-xs font-body font-bold uppercase tracking-wider text-muted-foreground underline underline-offset-4"
+                >
+                  or add an empty photo card
+                </button>
+              </div>
             </ScrollReveal>
 
             <div className="space-y-6">
               {experiences.map((item, index) => (
-                <EditorCard key={item.id}>
+                <EditorCard key={item.id} id={item.id}>
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <div>
                       <p className="font-heading text-2xl font-black uppercase">
