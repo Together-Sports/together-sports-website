@@ -213,40 +213,104 @@ const EditableContentContext =
 const defaultContent = createDefaultContent();
 const defaultSnapshot = createSerializedSnapshot(defaultContent);
 
+// Pure loader for the live site content. Used by the provider below, and by
+// main.tsx to fetch content BEFORE React takes over from prerendered HTML so
+// the static page can be swapped for the live one in a single, seamless
+// commit. Returns null when Supabase isn't configured.
+export const resolveLiveContent =
+  async (): Promise<EditableContentState | null> => {
+    if (!supabase) {
+      return null;
+    }
+
+    const { data, error } = await supabase
+      .from("site_content")
+      .select("content")
+      .eq("id", SUPABASE_SITE_CONTENT_ID)
+      .maybeSingle();
+
+    if (error) {
+      throw error;
+    }
+
+    let nextContent = data?.content
+      ? parseEditableContentImport(data.content)
+      : createDefaultContent();
+
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const previewDraft = window.localStorage.getItem(
+        PREVIEW_DRAFT_STORAGE_KEY
+      );
+
+      if (params.get("preview") === "1" && previewDraft) {
+        try {
+          nextContent = parseEditableContentImport(JSON.parse(previewDraft));
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    }
+
+    nextContent = await withLiveBlogPosts(nextContent);
+
+    // If the live content in Supabase is missing sport descriptions,
+    // fall back to the local seed so detail pages (e.g. /sports/tennis)
+    // still render on the deployed site.
+    if (
+      !Array.isArray(nextContent.sportDescriptions) ||
+      nextContent.sportDescriptions.length === 0
+    ) {
+      nextContent.sportDescriptions = createDefaultContent().sportDescriptions;
+    }
+
+    return nextContent;
+  };
+
 export const EditableContentProvider = ({
-  children
+  children,
+  initialContent
 }: {
   children: ReactNode;
+  // When provided (prerender build, or a client boot that fetched live
+  // content before mounting), the provider starts fully resolved — no
+  // loading gate, no initial fetch.
+  initialContent?: EditableContentState;
 }) => {
+  const bootContent = initialContent ?? defaultContent;
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>(
-    () => defaultContent.blogPosts
+    () => bootContent.blogPosts
   );
   const [experiences, setExperiences] = useState<Experience[]>(
-    () => defaultContent.experiences
+    () => bootContent.experiences
   );
   const [partners, setPartners] = useState<Partner[]>(
-    () => defaultContent.partners
+    () => bootContent.partners
   );
   const [teamSections, setTeamSections] = useState<TeamSection[]>(
-    () => defaultContent.teamSections
+    () => bootContent.teamSections
   );
   const [tennisLessonVideos, setTennisLessonVideos] = useState<
     TennisLessonVideo[]
-  >(() => defaultContent.tennisLessonVideos);
+  >(() => bootContent.tennisLessonVideos);
   const [impactMetricsSection, setImpactMetricsSection] =
-    useState<ImpactMetricsSection>(() => defaultContent.impactMetricsSection);
+    useState<ImpactMetricsSection>(() => bootContent.impactMetricsSection);
   const [otherLocationsSection, setOtherLocationsSection] =
-    useState<OtherLocationsSection>(() => defaultContent.otherLocationsSection);
+    useState<OtherLocationsSection>(() => bootContent.otherLocationsSection);
   const [sportDescriptions, setSportDescriptions] = useState<
     SportDescription[]
-  >(() => defaultContent.sportDescriptions);
-  const [siteText, setSiteText] = useState(() => defaultContent.siteText);
-  const [lastSavedSnapshot, setLastSavedSnapshot] = useState(defaultSnapshot);
-  const [isLoadingContent, setIsLoadingContent] = useState(true);
+  >(() => bootContent.sportDescriptions);
+  const [siteText, setSiteText] = useState(() => bootContent.siteText);
+  const [lastSavedSnapshot, setLastSavedSnapshot] = useState(() =>
+    initialContent ? createSerializedSnapshot(initialContent) : defaultSnapshot
+  );
+  const [isLoadingContent, setIsLoadingContent] = useState(!initialContent);
   // Unlike isLoadingContent (which the fallback timer below can flip early to
   // unblock rendering), this only becomes true once the live-content request
   // has actually settled — success or failure.
-  const [hasResolvedContent, setHasResolvedContent] = useState(false);
+  const [hasResolvedContent, setHasResolvedContent] = useState(
+    Boolean(initialContent)
+  );
   const [isSaving, setIsSaving] = useState(false);
   const [authLoading, setAuthLoading] = useState(isSupabaseConfigured);
   const [user, setUser] = useState<User | null>(null);
@@ -296,45 +360,11 @@ export const EditableContentProvider = ({
     }
 
     setIsLoadingContent(true);
-    const { data, error } = await supabase
-      .from("site_content")
-      .select("content")
-      .eq("id", SUPABASE_SITE_CONTENT_ID)
-      .maybeSingle();
+    const nextContent = await resolveLiveContent();
 
-    if (error) {
-      throw error;
-    }
-
-    let nextContent = data?.content
-      ? parseEditableContentImport(data.content)
-      : defaultContent;
-
-    if (typeof window !== "undefined") {
-      const params = new URLSearchParams(window.location.search);
-      const previewDraft = window.localStorage.getItem(
-        PREVIEW_DRAFT_STORAGE_KEY
-      );
-
-      if (params.get("preview") === "1" && previewDraft) {
-        try {
-          nextContent = parseEditableContentImport(JSON.parse(previewDraft));
-        } catch (error) {
-          console.error(error);
-        }
-      }
-    }
-
-    nextContent = await withLiveBlogPosts(nextContent);
-
-    // If the live content in Supabase is missing sport descriptions,
-    // fall back to the local seed so detail pages (e.g. /sports/tennis)
-    // still render on the deployed site.
-    if (
-      !Array.isArray(nextContent.sportDescriptions) ||
-      nextContent.sportDescriptions.length === 0
-    ) {
-      nextContent.sportDescriptions = defaultContent.sportDescriptions;
+    if (!nextContent) {
+      setIsLoadingContent(false);
+      return;
     }
 
     applyContent(nextContent);
@@ -400,6 +430,11 @@ export const EditableContentProvider = ({
   }, []);
 
   useEffect(() => {
+    if (initialContent) {
+      // Content was already resolved before mounting — nothing to fetch.
+      return;
+    }
+
     let active = true;
 
     // Safety valve: never let a slow/hung network request block the initial

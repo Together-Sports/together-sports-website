@@ -71,6 +71,14 @@ const IntroVideo = () => {
     window.setTimeout(() => setDismissed(true), 500);
   };
 
+  useEffect(() => {
+    // Prerendered pages ship a tiny inline script that covers the static
+    // HTML while an intro video is expected (see scripts/prerender.mjs).
+    // Once React is mounted this component owns the overlay, so drop the
+    // temporary cover.
+    document.getElementById("intro-preroll")?.remove();
+  }, []);
+
   // Reconcile the cached URL against the live content once it has actually
   // resolved. (isLoadingContent isn't enough here — a slow fetch flips it
   // early via the fallback timer, before the real content is known.)

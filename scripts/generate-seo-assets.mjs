@@ -34,6 +34,7 @@ const staticRoutes = [
   "/sports/tennis",
   "/sports/basketball",
   "/sports/football",
+  "/sports/soccer",
   "/sports/golf",
   "/team",
   "/experiences",

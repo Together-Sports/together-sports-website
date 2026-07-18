@@ -307,7 +307,7 @@ const editableContentSeed: PortableEditableContentState = {
       "ctaSecondary": "Donate Now"
     },
     "mission": [
-      "Together Sports is a nonprofit dedicated to building stronger communities through athletics. We provide accessible sports programs and create opportunities for youth to connect, grow, and thrive.",
+      "Together Sports is a nonprofit dedicated to building stronger communities through athletics. We provide free youth sports programs across NYC and create opportunities for youth to connect, grow, and thrive.",
       "We believe every kid deserves a chance to play. Through free sports programs, mentorship, and community building, we're creating the next generation of leaders — on and off the field.",
       "From tennis courts to basketball hoops, from football fields to golf courses — we meet kids where they are and take them where they want to go."
     ],

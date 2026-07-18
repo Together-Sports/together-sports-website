@@ -3,7 +3,7 @@ import react from "@vitejs/plugin-react-swc";
 import path from "path";
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => ({
+export default defineConfig(({ isSsrBuild }) => ({
   server: {
     host: "::",
     port: 8081,
@@ -21,7 +21,11 @@ export default defineConfig(({ mode }) => ({
   build: {
     rollupOptions: {
       output: {
-        manualChunks(id) {
+        // Chunk splitting only applies to the client bundle — the SSR
+        // (prerender) build must stay a single module.
+        manualChunks: isSsrBuild
+          ? undefined
+          : (id) => {
           if (!id.includes("node_modules")) {
             return undefined;
           }
@@ -71,3 +75,4 @@ export default defineConfig(({ mode }) => ({
     },
   },
 }));
+

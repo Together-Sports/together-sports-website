@@ -1,5 +1,6 @@
 import { useRef, ReactNode } from "react";
 import { motion, useInView } from "framer-motion";
+import { IS_SERVER } from "@/lib/ssr";
 
 interface ScrollRevealProps {
   children: ReactNode;
@@ -15,7 +16,7 @@ const variants = {
   scale: { hidden: { opacity: 0, scale: 0.9 }, visible: { opacity: 1, scale: 1 } },
 };
 
-const ScrollReveal = ({ children, direction = "up", delay = 0, className = "" }: ScrollRevealProps) => {
+const ScrollRevealClient = ({ children, direction = "up", delay = 0, className = "" }: ScrollRevealProps) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
@@ -32,5 +33,15 @@ const ScrollReveal = ({ children, direction = "up", delay = 0, className = "" }:
     </motion.div>
   );
 };
+
+// On the server (build-time prerender) the reveal animation is meaningless
+// and its initial "hidden" style would ship invisible text in the static
+// HTML — render a plain, fully visible wrapper instead.
+const ScrollReveal = (props: ScrollRevealProps) =>
+  IS_SERVER ? (
+    <div className={props.className ?? ""}>{props.children}</div>
+  ) : (
+    <ScrollRevealClient {...props} />
+  );
 
 export default ScrollReveal;

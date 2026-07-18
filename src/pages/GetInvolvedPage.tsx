@@ -58,6 +58,7 @@ const GetInvolvedPage = () => {
   }));
   const location = useLocation();
   const showDonationSuccess =
+    typeof window !== "undefined" &&
     new URLSearchParams(window.location.search).get("donation") === "success";
 
   useEffect(() => {

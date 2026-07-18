@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, useInView } from "framer-motion";
+import { IS_SERVER } from "@/lib/ssr";
 import ScrollReveal from "@/components/ScrollReveal";
 import heroImage from "@/assets/hero-sports.jpg";
 import secondServe from "@/assets/second-serve.jpg";
@@ -296,7 +297,7 @@ const Index = () => {
   const missionParagraphs = siteText?.mission?.length
     ? siteText.mission
     : [
-        "Together Sports is a nonprofit dedicated to building stronger communities through athletics. We provide accessible sports programs and create opportunities for youth to connect, grow, and thrive.",
+        "Together Sports is a nonprofit dedicated to building stronger communities through athletics. We provide free youth sports programs across NYC and create opportunities for youth to connect, grow, and thrive.",
         "We believe every kid deserves a chance to play. Through free sports programs, mentorship, and community building, we're creating the next generation of leaders — on and off the field.",
         "From tennis courts to basketball hoops, from football fields to golf courses — we meet kids where they are and take them where they want to go."
       ];
@@ -380,7 +381,7 @@ const Index = () => {
         <div className="relative z-10 max-w-[87.5rem] mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 md:py-32 lg:py-36">
           <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.35fr)_minmax(240px,0.5fr)] gap-10 sm:gap-14 lg:gap-10 items-center">
             <motion.div
-              initial={{ opacity: 0, y: 40 }}
+              initial={IS_SERVER ? false : { opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease: "easeOut" }}
               className="max-w-none"
@@ -411,7 +412,7 @@ const Index = () => {
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, y: 50, rotate: -2 }}
+              initial={IS_SERVER ? false : { opacity: 0, y: 50, rotate: -2 }}
               animate={{ opacity: 1, y: 0, rotate: 0 }}
               transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
               className="relative h-[420px] sm:h-[600px] md:h-[680px] w-full max-w-[680px] mx-auto -translate-y-4 sm:-translate-y-8 md:-translate-y-12 lg:mx-0 lg:ml-20 lg:-translate-y-20"
@@ -718,7 +719,7 @@ const Index = () => {
               <a
                 href="https://www.instagram.com/rallyforwardnyc?igsh=c3dpbGNpeWZnOXRj"
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="noopener noreferrer nofollow"
                 className="inline-block px-8 py-4 bg-primary text-white font-heading font-bold text-lg uppercase tracking-wider hover:scale-105 hover:-rotate-1 transition-all duration-200"
               >
                 {t("home.secondServeButton")}

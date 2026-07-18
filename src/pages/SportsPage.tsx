@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { IS_SERVER } from "@/lib/ssr";
 import ScrollReveal from "@/components/ScrollReveal";
 import togetherTennis from "@/assets/TogetherTennis.webp";
 import togetherBasketball from "@/assets/TogetherBB.webp";
@@ -37,7 +38,7 @@ const SportsPage = () => {
         <div className="absolute right-12 bottom-10 h-16 w-16 rotate-45 bg-white/10 sm:h-24 sm:w-24" />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-14 md:pt-28 md:pb-24">
           <motion.div
-            initial={{ opacity: 0, y: 28 }}
+            initial={IS_SERVER ? false : { opacity: 0, y: 28 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
             className="max-w-3xl mx-auto text-center"
