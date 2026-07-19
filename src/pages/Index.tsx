@@ -191,7 +191,11 @@ const CountUpValue = ({
   const parsed = parseMetricValue(value);
   const ref = useRef<HTMLParagraphElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-60px" });
-  const [progress, setProgress] = useState(0);
+  // On the server (build-time prerender) there's no scroll/animation, so start
+  // fully counted — otherwise the static HTML search engines read would freeze
+  // every stat at its "0" starting frame. The client still starts at 0 and
+  // animates up when the section scrolls into view.
+  const [progress, setProgress] = useState(() => (IS_SERVER ? 1 : 0));
 
   useEffect(() => {
     if (!isInView) {
@@ -322,7 +326,7 @@ const Index = () => {
       ];
   const sportsSection = siteText?.sportsSection ?? {
     title: "Our Sports",
-    subtitle: "Explore all four Together Sports programs in one place."
+    subtitle: "Explore all five Together Sports programs in one place."
   };
   const testimonialsText = siteText?.testimonials ?? {
     title: "Testimonials",

@@ -316,7 +316,7 @@ const editableContentSeed: PortableEditableContentState = {
       { "title": "Growth", "desc": "Sports build character, discipline, and confidence.", "bg": "#87cb4a" },
       { "title": "Community", "desc": "We rise together — athletes, mentors, families.", "bg": "#ab9bfa" }
     ],
-    "sportsSection": { "title": "Our Sports", "subtitle": "Explore all four Together Sports programs in one place." },
+    "sportsSection": { "title": "Our Sports", "subtitle": "Explore all five Together Sports programs in one place." },
     "testimonials": { "title": "Testimonials", "subtitle": "The little stories that show the big picture: connection, encouragement, and growth." },
     "heroImage1": "media:img-0903",
     "heroImage2": "media:hero-sports",
