@@ -16,7 +16,9 @@ const distDir = path.join(rootDir, "dist");
 const serverDir = path.join(rootDir, "dist-server");
 
 const normalizeSiteUrl = (value) => {
-  const fallback = "https://www.togethersports.org";
+  // The Vercel production domain is the bare apex (www redirects to it), so
+  // canonical/OG URLs and the sitemap must use the apex too.
+  const fallback = "https://togethersports.org";
   const raw = (value || fallback).trim();
   const withProtocol = /^https?:\/\//i.test(raw) ? raw : `https://${raw}`;
 

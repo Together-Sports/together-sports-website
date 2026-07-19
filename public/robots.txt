@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /admin
 
-Sitemap: https://www.togethersports.org/sitemap.xml
+Sitemap: https://togethersports.org/sitemap.xml
