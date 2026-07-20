@@ -89,7 +89,7 @@
      separately) are left at 100%. */
   @media (min-width: 1024px) {
     :root {
-      zoom: 0.9;
+      zoom: 0.81;
     }
   }
 
