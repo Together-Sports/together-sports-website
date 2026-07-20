@@ -81,6 +81,18 @@
     scrollbar-color: #87cb4a transparent;
   }
 
+  /* On desktop the design reads a touch large at 100% browser zoom, so render
+     it as if zoomed to 90%. `zoom` scales everything together — text, images,
+     the fixed navbar, spacing — and reflows the layout just like browser zoom,
+     unlike a root font-size change which would leave the vw-based hero text and
+     fixed-pixel images at full size. Mobile/tablet layouts (which are tuned
+     separately) are left at 100%. */
+  @media (min-width: 1024px) {
+    :root {
+      zoom: 0.9;
+    }
+  }
+
   *::-webkit-scrollbar {
     width: 14px;
     height: 14px;
