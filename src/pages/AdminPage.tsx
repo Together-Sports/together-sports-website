@@ -52,10 +52,6 @@ const socialPlatformOptions: { value: TeamSocialPlatform; label: string }[] = [
   { value: "tiktok", label: "TikTok" }
 ];
 const impactMetricColors = ["#ab9bfa", "#f6a15c", "#87cb4a", "#84a6ff"];
-const TEAM_DESCRIPTION_MAX_CHARS = 360;
-
-const limitCharacters = (value: string, maxCharacters: number) =>
-  value.slice(0, maxCharacters);
 
 const EditorCard = ({
   children,
@@ -3241,22 +3237,14 @@ const AdminPage = () => {
                             <textarea
                               className={textareaClass}
                               value={person.description || ""}
-                              maxLength={TEAM_DESCRIPTION_MAX_CHARS}
                               onChange={(event) =>
                                 updatePerson(section.id, person.id, {
                                   ...person,
-                                  description: limitCharacters(
-                                    event.target.value,
-                                    TEAM_DESCRIPTION_MAX_CHARS
-                                  )
+                                  description: event.target.value
                                 })
                               }
-                              placeholder="Optional short description"
+                              placeholder="Optional description"
                             />
-                            <p className="text-xs text-muted-foreground">
-                              {(person.description || "").length}/
-                              {TEAM_DESCRIPTION_MAX_CHARS} characters
-                            </p>
                           </div>
                           <div className="md:col-span-2">
                             <ImageField
