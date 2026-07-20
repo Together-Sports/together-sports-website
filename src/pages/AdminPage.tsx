@@ -2211,15 +2211,37 @@ const AdminPage = () => {
               </EditorCard>
 
               <EditorCard>
-                <p className="font-heading text-2xl font-black uppercase">
-                  Opening Intro Video
-                </p>
-                <p className="text-muted-foreground text-sm">
-                  Plays full screen when someone first opens the site, then
-                  fades into the page. It shows once per visit, plays muted,
-                  and visitors can skip it at any time. Keep it short — a few
-                  seconds works best.
-                </p>
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div>
+                    <p className="font-heading text-2xl font-black uppercase">
+                      Opening Intro Video
+                    </p>
+                    <p className="text-muted-foreground text-sm">
+                      Plays full screen when someone first opens the site,
+                      then fades into the page. It shows once per visit,
+                      plays muted, and visitors can skip it at any time. Keep
+                      it short — a few seconds works best.
+                    </p>
+                  </div>
+                  <label className="flex min-h-[54px] items-center gap-3 border border-border bg-white px-4 py-3">
+                    <input
+                      type="checkbox"
+                      checked={siteText?.introVideoEnabled !== false}
+                      onChange={(event) =>
+                        setSiteText((current) => ({
+                          ...current,
+                          introVideoEnabled: event.target.checked
+                        }))
+                      }
+                      className="h-4 w-4 accent-[hsl(var(--primary))]"
+                    />
+                    <span className="text-sm text-foreground">
+                      {siteText?.introVideoEnabled !== false
+                        ? "Intro video is on for visitors."
+                        : "Intro video is off for visitors."}
+                    </span>
+                  </label>
+                </div>
                 <VideoField
                   label="Intro Video (Optional)"
                   value={siteText?.introVideo || ""}

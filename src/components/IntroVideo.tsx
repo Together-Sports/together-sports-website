@@ -63,7 +63,8 @@ const cacheIntroSrc = (src: string) => {
 
 const IntroVideo = () => {
   const { siteText, hasResolvedContent } = useEditableContent();
-  const liveSrc = siteText?.introVideo?.trim() || "";
+  const isEnabled = siteText?.introVideoEnabled !== false;
+  const liveSrc = isEnabled ? siteText?.introVideo?.trim() || "" : "";
   const [dismissed, setDismissed] = useState(hasSeenIntro);
   const [isFading, setIsFading] = useState(false);
   const [hasStarted, setHasStarted] = useState(false);

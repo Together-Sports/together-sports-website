@@ -78,6 +78,10 @@ export type SiteText = {
   missionImage?: string;
   missionVideo?: string;
   introVideo?: string;
+  // Lets the intro video be switched off without losing the saved video, so
+  // it can be turned back on later. Defaults to enabled (true) when a video
+  // is set but this key is absent, for content saved before this existed.
+  introVideoEnabled?: boolean;
   textOverrides?: Record<string, string>;
   secondServeImage?: string;
 };
@@ -206,7 +210,8 @@ export const serializeEditableContentState = (
     heroImage2: toPortableMediaValue(content.siteText.heroImage2),
     heroImage3: toPortableMediaValue(content.siteText.heroImage3),
     missionImage: toPortableMediaValue(content.siteText.missionImage),
-    secondServeImage: toPortableMediaValue(content.siteText.secondServeImage)
+    secondServeImage: toPortableMediaValue(content.siteText.secondServeImage),
+    introVideoEnabled: content.siteText.introVideoEnabled !== false
   } : {
     navItems: [],
     hero: { lines: [], subtitle: "", ctaPrimary: "", ctaSecondary: "" },
@@ -220,6 +225,7 @@ export const serializeEditableContentState = (
     missionImage: "",
     missionVideo: "",
     introVideo: "",
+    introVideoEnabled: true,
     secondServeImage: ""
   },
 });
@@ -316,6 +322,7 @@ export const hydrateEditableContentState = (
             typeof (content.siteText as any).introVideo === "string"
               ? (content.siteText as any).introVideo
               : "",
+          introVideoEnabled: (content.siteText as any).introVideoEnabled !== false,
           secondServeImage: fromPortableMediaValue((content.siteText as any).secondServeImage)
         }
       : {
@@ -331,6 +338,7 @@ export const hydrateEditableContentState = (
           missionImage: "",
           missionVideo: "",
           introVideo: "",
+          introVideoEnabled: true,
           secondServeImage: ""
         },
 });
