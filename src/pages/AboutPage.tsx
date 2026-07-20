@@ -270,7 +270,12 @@ const AboutPage = () => {
                     className={
                       section.title === "Founder"
                         ? "max-w-md md:max-w-lg mx-auto"
-                        : "grid grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-6 md:gap-7"
+                        : // flex-wrap + justify-center so a partial row (1 or 2
+                          // people, not a full 3) auto-centers instead of being
+                          // stuck on the left. The card widths below match the
+                          // old 2-up / 3-up grid columns exactly, so full rows
+                          // stay edge-to-edge unchanged.
+                          "flex flex-wrap justify-center gap-3 sm:gap-6 md:gap-7"
                     }
                   >
                     {section.people.map((person, personIndex) => (
@@ -278,6 +283,11 @@ const AboutPage = () => {
                         key={`${section.title}-${person.name}-${personIndex}`}
                         delay={sectionIndex * 0.05 + personIndex * 0.1}
                         direction="up"
+                        className={
+                          section.title === "Founder"
+                            ? undefined
+                            : "basis-[calc((100%_-_0.75rem)_/_2)] sm:basis-[calc((100%_-_1.5rem)_/_2)] md:basis-[calc((100%_-_1.75rem)_/_2)] xl:basis-[calc((100%_-_3.5rem)_/_3)]"
+                        }
                       >
                         <TeamCard
                           person={person}
