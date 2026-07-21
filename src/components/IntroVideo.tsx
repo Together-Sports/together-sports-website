@@ -211,21 +211,26 @@ const IntroVideo = () => {
       )}
 
       {/* Big, obvious close button — the primary way out. onClick also bubbles
-          to the overlay, which is fine since both just dismiss. */}
+          to the overlay, which is fine since both just dismiss. Bigger and
+          higher-contrast on desktop, where a mouse pointer needs a clear
+          target rather than the "tap anywhere" affordance mobile gets. */}
       <button
         type="button"
         onClick={dismiss}
         aria-label="Skip intro"
-        className="absolute right-4 top-4 flex h-11 items-center gap-2 rounded-full border border-white/50 bg-black/55 pl-4 pr-4 font-heading text-sm font-bold uppercase tracking-wider text-white backdrop-blur-sm transition-all duration-200 hover:scale-105 hover:bg-black/70 sm:right-6 sm:top-6"
+        className="absolute right-4 top-4 flex h-11 items-center gap-2 rounded-full border border-white/50 bg-black/55 pl-4 pr-4 font-heading text-sm font-bold uppercase tracking-wider text-white backdrop-blur-sm transition-all duration-200 hover:scale-105 hover:bg-black/70 sm:right-6 sm:top-6 lg:right-10 lg:top-10 lg:h-16 lg:gap-3 lg:border-2 lg:border-white/70 lg:bg-black/65 lg:pl-7 lg:pr-6 lg:text-xl lg:shadow-[0_4px_24px_rgba(0,0,0,0.4)] lg:hover:bg-black/80"
       >
         Skip
-        <span aria-hidden className="text-lg leading-none">
+        <span aria-hidden className="text-lg leading-none lg:text-2xl">
           ✕
         </span>
       </button>
 
-      <p className="pointer-events-none absolute inset-x-0 bottom-6 text-center font-body text-xs font-semibold uppercase tracking-[0.2em] text-white/70">
+      <p className="pointer-events-none absolute inset-x-0 bottom-6 text-center font-body text-xs font-semibold uppercase tracking-[0.2em] text-white/70 lg:hidden">
         Tap anywhere to skip
+      </p>
+      <p className="pointer-events-none absolute inset-x-0 bottom-8 hidden text-center font-body text-sm font-semibold uppercase tracking-[0.2em] text-white/70 lg:block">
+        Click anywhere to skip
       </p>
     </div>
   );
