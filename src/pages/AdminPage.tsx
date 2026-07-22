@@ -3089,7 +3089,6 @@ const AdminPage = () => {
                         onChange={(event) =>
                           updatePartner(partner.id, "href", event.target.value)
                         }
-                        placeholder="https://..."
                       />
                     </div>
                     <div className="space-y-2 md:col-span-2">
@@ -3449,7 +3448,6 @@ const AdminPage = () => {
                                         )
                                       })
                                     }
-                                    placeholder="https://..."
                                   />
                                   <button
                                     type="button"
