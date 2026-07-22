@@ -235,6 +235,25 @@
     animation: partner-marquee 24s linear infinite;
   }
 
+  /* Partner description pop-out: grows out of the hovered logo card.
+     The keyframes carry the same centering translate as the resting
+     state so the scale-in doesn't fight the positioning transform. */
+  @keyframes partner-popout {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.9);
+    }
+
+    to {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+  }
+
+  .animate-partner-popout {
+    animation: partner-popout 0.18s ease-out;
+  }
+
   .text-balance {
     text-wrap: balance;
   }
