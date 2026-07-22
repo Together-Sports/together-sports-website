@@ -991,6 +991,27 @@ const AdminPage = () => {
     );
   };
 
+  const movePartner = (id: string, direction: -1 | 1) => {
+    setPartners((current) => {
+      const index = current.findIndex((item) => item.id === id);
+
+      if (index < 0) {
+        return current;
+      }
+
+      const nextIndex = index + direction;
+
+      if (nextIndex < 0 || nextIndex >= current.length) {
+        return current;
+      }
+
+      const next = [...current];
+      const [moved] = next.splice(index, 1);
+      next.splice(nextIndex, 0, moved);
+      return next;
+    });
+  };
+
   const updateSection = (sectionId: string, next: TeamSection) => {
     setTeamSections((current) =>
       current.map((section) => (section.id === sectionId ? next : section))
@@ -2953,6 +2974,37 @@ const AdminPage = () => {
 
           <TabsContent value="partners">
             <div className="space-y-6">
+              <EditorCard>
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div>
+                    <p className="font-heading text-2xl font-black uppercase">
+                      Logo Carousel Speed
+                    </p>
+                    <p className="text-muted-foreground text-sm">
+                      How fast the partner logos scroll on the Partners page.
+                      Use Up / Down on the cards below to change their order —
+                      the carousel and the mobile row follow it.
+                    </p>
+                  </div>
+                  <select
+                    className="border border-border bg-white px-4 py-3 font-body text-foreground focus:border-accent focus:outline-none"
+                    value={String(siteText?.partnersMarqueeSeconds || 24)}
+                    onChange={(event) =>
+                      setSiteText((current) => ({
+                        ...current,
+                        partnersMarqueeSeconds: Number(event.target.value)
+                      }))
+                    }
+                  >
+                    <option value="48">Very Slow</option>
+                    <option value="34">Slow</option>
+                    <option value="24">Normal</option>
+                    <option value="16">Fast</option>
+                    <option value="10">Very Fast</option>
+                  </select>
+                </div>
+              </EditorCard>
+
               <div className="flex flex-wrap gap-3">
                 <button
                   type="button"
@@ -2973,7 +3025,7 @@ const AdminPage = () => {
                 </button>
               </div>
 
-              {partners.map((partner) => (
+              {partners.map((partner, partnerIndex) => (
                 <EditorCard key={partner.id}>
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <div>
@@ -2984,17 +3036,37 @@ const AdminPage = () => {
                         {partner.id}
                       </p>
                     </div>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setPartners((current) =>
-                          current.filter((item) => item.id !== partner.id)
-                        )
-                      }
-                      className="px-4 py-2 border border-border bg-white text-foreground font-heading font-bold uppercase text-xs tracking-wider"
-                    >
-                      Remove
-                    </button>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => movePartner(partner.id, -1)}
+                        disabled={partnerIndex === 0}
+                        className="px-3 py-2 border border-border bg-white text-foreground font-heading font-bold uppercase text-xs tracking-wider inline-flex items-center gap-2 disabled:opacity-50"
+                      >
+                        <ArrowUp size={14} />
+                        Up
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => movePartner(partner.id, 1)}
+                        disabled={partnerIndex === partners.length - 1}
+                        className="px-3 py-2 border border-border bg-white text-foreground font-heading font-bold uppercase text-xs tracking-wider inline-flex items-center gap-2 disabled:opacity-50"
+                      >
+                        <ArrowDown size={14} />
+                        Down
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setPartners((current) =>
+                            current.filter((item) => item.id !== partner.id)
+                          )
+                        }
+                        className="px-4 py-2 border border-border bg-white text-foreground font-heading font-bold uppercase text-xs tracking-wider"
+                      >
+                        Remove
+                      </button>
+                    </div>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -3018,6 +3090,21 @@ const AdminPage = () => {
                           updatePartner(partner.id, "href", event.target.value)
                         }
                         placeholder="https://..."
+                      />
+                    </div>
+                    <div className="space-y-2 md:col-span-2">
+                      <p className={labelClass}>What We Do Together</p>
+                      <textarea
+                        className={textareaClass}
+                        value={partner.description || ""}
+                        onChange={(event) =>
+                          updatePartner(
+                            partner.id,
+                            "description",
+                            event.target.value
+                          )
+                        }
+                        placeholder="Shown when visitors hover this partner's logo. Keep it to a sentence or two."
                       />
                     </div>
                     <div className="md:col-span-2">

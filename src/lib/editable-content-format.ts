@@ -82,6 +82,8 @@ export type SiteText = {
   // it can be turned back on later. Defaults to enabled (true) when a video
   // is set but this key is absent, for content saved before this existed.
   introVideoEnabled?: boolean;
+  // Seconds for one full loop of the partner-logo carousel (default 24).
+  partnersMarqueeSeconds?: number;
   textOverrides?: Record<string, string>;
   secondServeImage?: string;
 };
@@ -323,6 +325,12 @@ export const hydrateEditableContentState = (
               ? (content.siteText as any).introVideo
               : "",
           introVideoEnabled: (content.siteText as any).introVideoEnabled !== false,
+          partnersMarqueeSeconds:
+            typeof (content.siteText as any).partnersMarqueeSeconds === "number" &&
+            Number.isFinite((content.siteText as any).partnersMarqueeSeconds) &&
+            (content.siteText as any).partnersMarqueeSeconds > 0
+              ? (content.siteText as any).partnersMarqueeSeconds
+              : undefined,
           secondServeImage: fromPortableMediaValue((content.siteText as any).secondServeImage)
         }
       : {

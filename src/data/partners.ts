@@ -8,6 +8,8 @@ export type Partner = {
   name: string;
   logo: string;
   href: string;
+  // Short "what we do together" blurb, shown when hovering the logo card.
+  description?: string;
 };
 
 const partners: Partner[] = [

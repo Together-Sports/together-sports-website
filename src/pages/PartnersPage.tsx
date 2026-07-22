@@ -7,7 +7,8 @@ const partnerPerkColors = ["#87cb4a", "#84a6ff", "#ab9bfa", "#f6a15c"];
 
 const PartnersPage = () => {
   const t = useSiteText();
-  const { partners } = useEditableContent();
+  const { partners, siteText } = useEditableContent();
+  const marqueeSeconds = siteText?.partnersMarqueeSeconds || 24;
 
   return (
     <div className="overflow-hidden">
@@ -62,7 +63,10 @@ const PartnersPage = () => {
           <div className="absolute left-0 top-0 bottom-0 w-24 md:w-40 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
           <div className="absolute right-0 top-0 bottom-0 w-24 md:w-40 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
 
-          <div className="flex w-max will-change-transform animate-partner-marquee hover:[animation-play-state:paused]">
+          <div
+            className="flex w-max will-change-transform animate-partner-marquee hover:[animation-play-state:paused]"
+            style={{ animationDuration: `${marqueeSeconds}s` }}
+          >
             {[partners, partners, partners].map((group, groupIndex) => (
               <div
                 key={groupIndex}
@@ -76,7 +80,7 @@ const PartnersPage = () => {
                     target={partner.href ? "_blank" : undefined}
                     rel={partner.href ? "noreferrer" : undefined}
                     aria-label={partner.href ? partner.name : undefined}
-                    className="group flex-shrink-0 w-48 md:w-56 flex flex-col items-center justify-between gap-3 border-2 border-border bg-white p-5 md:p-6 transition-all duration-300 hover:-translate-y-1 hover:border-accent hover:shadow-[6px_6px_0_0_hsl(var(--accent))]"
+                    className="group relative flex-shrink-0 w-48 md:w-56 flex flex-col items-center justify-between gap-3 border-2 border-border bg-white p-5 md:p-6 transition-all duration-300 hover:-translate-y-1 hover:scale-[1.04] hover:border-accent hover:shadow-[6px_6px_0_0_hsl(var(--accent))]"
                   >
                     <span className="flex h-20 md:h-24 w-full items-center justify-center">
                       <img
@@ -91,6 +95,19 @@ const PartnersPage = () => {
                     <span className="w-full truncate text-center font-heading text-sm font-black uppercase tracking-wider text-foreground/70 transition-colors duration-300 group-hover:text-foreground">
                       {partner.name}
                     </span>
+                    {partner.description?.trim() ? (
+                      // "What we do together" — fades in over the card on
+                      // hover. Fills the card's footprint so nothing around
+                      // it shifts while the marquee is paused.
+                      <span className="pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center gap-1.5 bg-white p-4 text-center opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                        <span className="font-heading text-xs font-black uppercase tracking-wider text-accent">
+                          {partner.name}
+                        </span>
+                        <span className="font-body text-[11px] font-medium leading-snug text-foreground/80 line-clamp-5 md:text-xs">
+                          {partner.description}
+                        </span>
+                      </span>
+                    ) : null}
                   </a>
                 ))}
               </div>
