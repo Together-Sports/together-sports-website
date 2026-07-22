@@ -1,14 +1,33 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import ScrollReveal from "@/components/ScrollReveal";
+import type { Partner } from "@/data/partners";
 import { useEditableContent } from "@/lib/editable-content";
 import { useSiteText } from "@/lib/use-site-text";
 
 const partnerPerkColors = ["#87cb4a", "#84a6ff", "#ab9bfa", "#f6a15c"];
 
+// Width of the hover pop-out card (matches w-[24rem] below); used to keep
+// it from being clamped off the edge of the viewport.
+const POPOUT_WIDTH = 384;
+
+// Desktop renders with `zoom: 0.81` on :root, which makes a fixed element's
+// left/top be interpreted in zoomed units while getBoundingClientRect reports
+// visual units. Divide measured coordinates by this factor to line them up.
+const getRootZoom = () => {
+  const root = document.documentElement as HTMLElement & { currentCSSZoom?: number };
+  return root.currentCSSZoom ?? (parseFloat(getComputedStyle(root).zoom) || 1);
+};
+
 const PartnersPage = () => {
   const t = useSiteText();
   const { partners, siteText } = useEditableContent();
   const marqueeSeconds = siteText?.partnersMarqueeSeconds || 24;
+
+  // Hovered partner + the center of its card in viewport coordinates. The
+  // pop-out renders position:fixed so the marquee's overflow-hidden can't
+  // clip it (the marquee pauses on hover, so the anchor point stays put).
+  const [popout, setPopout] = useState<{ partner: Partner; x: number; y: number } | null>(null);
 
   return (
     <div className="overflow-hidden">
@@ -80,6 +99,29 @@ const PartnersPage = () => {
                     target={partner.href ? "_blank" : undefined}
                     rel={partner.href ? "noreferrer" : undefined}
                     aria-label={partner.href ? partner.name : undefined}
+                    onMouseEnter={
+                      partner.description?.trim()
+                        ? (event) => {
+                            const rect = event.currentTarget.getBoundingClientRect();
+                            const zoom = getRootZoom();
+                            const viewportWidth = window.innerWidth / zoom;
+                            setPopout({
+                              partner,
+                              // Center on the card, but keep the pop-out
+                              // fully inside the viewport horizontally.
+                              x: Math.min(
+                                Math.max(
+                                  (rect.left + rect.width / 2) / zoom,
+                                  POPOUT_WIDTH / 2 + 16
+                                ),
+                                viewportWidth - POPOUT_WIDTH / 2 - 16
+                              ),
+                              y: (rect.top + rect.height / 2) / zoom
+                            });
+                          }
+                        : undefined
+                    }
+                    onMouseLeave={() => setPopout(null)}
                     className="group relative flex-shrink-0 w-48 md:w-56 flex flex-col items-center justify-between gap-3 border-2 border-border bg-white p-5 md:p-6 transition-all duration-300 hover:-translate-y-1 hover:scale-[1.04] hover:border-accent hover:shadow-[6px_6px_0_0_hsl(var(--accent))]"
                   >
                     <span className="flex h-20 md:h-24 w-full items-center justify-center">
@@ -95,25 +137,33 @@ const PartnersPage = () => {
                     <span className="w-full truncate text-center font-heading text-sm font-black uppercase tracking-wider text-foreground/70 transition-colors duration-300 group-hover:text-foreground">
                       {partner.name}
                     </span>
-                    {partner.description?.trim() ? (
-                      // "What we do together" — fades in over the card on
-                      // hover. Fills the card's footprint so nothing around
-                      // it shifts while the marquee is paused.
-                      <span className="pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center gap-1.5 bg-white p-4 text-center opacity-0 transition-opacity duration-200 group-hover:opacity-100">
-                        <span className="font-heading text-xs font-black uppercase tracking-wider text-accent">
-                          {partner.name}
-                        </span>
-                        <span className="font-body text-[11px] font-medium leading-snug text-foreground/80 line-clamp-5 md:text-xs">
-                          {partner.description}
-                        </span>
-                      </span>
-                    ) : null}
                   </a>
                 ))}
               </div>
             ))}
           </div>
         </div>
+
+        {/* "What we do together" pop-out — a bigger card that grows out of
+            the hovered logo and shows the full description, no truncation.
+            Fixed positioning keeps it clear of the marquee's overflow
+            clipping; pointer-events-none stops it stealing the hover. */}
+        {popout ? (
+          <div
+            className="animate-partner-popout pointer-events-none fixed z-50 w-[24rem] max-w-[calc(100vw-2rem)] -translate-x-1/2 -translate-y-1/2 border-2 border-accent bg-white p-6 shadow-[8px_8px_0_0_hsl(var(--accent))]"
+            style={{ left: popout.x, top: popout.y }}
+          >
+            <p className="mb-1 text-center font-heading text-xl font-black uppercase tracking-wider text-accent">
+              {popout.partner.name}
+            </p>
+            <p className="mb-3 text-center font-body text-[10px] font-bold uppercase tracking-[0.3em] text-muted-foreground">
+              What we do together
+            </p>
+            <p className="font-body text-sm font-medium leading-relaxed text-foreground/85">
+              {popout.partner.description}
+            </p>
+          </div>
+        ) : null}
       </section>
 
       {/* Why Partner */}
