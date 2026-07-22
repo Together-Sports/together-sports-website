@@ -443,6 +443,13 @@ const VideoField = ({
   );
 };
 
+// The shared experiences array feeds two admin tabs: quotes/parent quotes
+// belong to the Experiences page, photos/videos to the Gallery page.
+const isGalleryExperience = (item: Experience) =>
+  item.type === "photo" || item.type === "video";
+const isTestimonialExperience = (item: Experience) =>
+  !isGalleryExperience(item);
+
 const TestimonialFields = ({
   item,
   onChange,
@@ -966,25 +973,94 @@ const AdminPage = () => {
     }
   };
 
-  const moveExperience = (id: string, direction: -1 | 1) => {
+  // Moves an item up/down within its own tab (testimonials or gallery),
+  // skipping over items of the other group in the shared experiences array.
+  const moveExperience = (
+    id: string,
+    direction: -1 | 1,
+    group: (item: Experience) => boolean
+  ) => {
     setExperiences((current) => {
-      const index = current.findIndex((item) => item.id === id);
+      const subset = current.filter(group);
+      const subIndex = subset.findIndex((item) => item.id === id);
+      const neighbor = subset[subIndex + direction];
 
-      if (index < 0) {
-        return current;
-      }
-
-      const nextIndex = index + direction;
-
-      if (nextIndex < 0 || nextIndex >= current.length) {
+      if (subIndex < 0 || !neighbor) {
         return current;
       }
 
       const next = [...current];
-      const [moved] = next.splice(index, 1);
-      next.splice(nextIndex, 0, moved);
+      const [moved] = next.splice(
+        next.findIndex((item) => item.id === id),
+        1
+      );
+      const neighborIndex = next.findIndex((item) => item.id === neighbor.id);
+      next.splice(direction < 0 ? neighborIndex : neighborIndex + 1, 0, moved);
       return next;
     });
+  };
+
+  // One card per experience item — used by both the Experiences and Gallery
+  // tabs, which show their own slice of the shared list.
+  const renderExperienceCards = (group: (item: Experience) => boolean) => {
+    const items = experiences.filter(group);
+
+    return (
+      <div className="space-y-6">
+        {items.map((item, index) => (
+          <EditorCard key={item.id} id={item.id}>
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <p className="font-heading text-2xl font-black uppercase">
+                  {item.type === "quote" && "Athlete Quote"}
+                  {item.type === "parent" && "Parent Quote"}
+                  {item.type === "photo" && "Photo Item"}
+                  {item.type === "video" && "Video Item"}
+                </p>
+                <p className="text-muted-foreground text-sm">{item.id}</p>
+              </div>
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => moveExperience(item.id, -1, group)}
+                  disabled={index === 0}
+                  className="px-3 py-2 border border-border bg-white text-foreground font-heading font-bold uppercase text-xs tracking-wider inline-flex items-center gap-2 disabled:opacity-50"
+                >
+                  <ArrowUp size={14} />
+                  Up
+                </button>
+                <button
+                  type="button"
+                  onClick={() => moveExperience(item.id, 1, group)}
+                  disabled={index === items.length - 1}
+                  className="px-3 py-2 border border-border bg-white text-foreground font-heading font-bold uppercase text-xs tracking-wider inline-flex items-center gap-2 disabled:opacity-50"
+                >
+                  <ArrowDown size={14} />
+                  Down
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setExperiences((current) =>
+                      current.filter((entry) => entry.id !== item.id)
+                    )
+                  }
+                  className="px-4 py-2 border border-border bg-white text-foreground font-heading font-bold uppercase text-xs tracking-wider"
+                >
+                  Remove
+                </button>
+              </div>
+            </div>
+
+            <TestimonialFields
+              item={item}
+              onChange={(next) => updateExperience(item.id, next)}
+              onUpload={uploadImage}
+            />
+          </EditorCard>
+        ))}
+      </div>
+    );
   };
 
   const updateBlogPost = (
@@ -1417,7 +1493,14 @@ const AdminPage = () => {
               className="px-4 py-3 data-[state=active]:bg-primary data-[state=active]:text-white"
             >
               <FileText size={16} className="mr-2" />
-              Testimonials
+              Experiences
+            </TabsTrigger>
+            <TabsTrigger
+              value="gallery"
+              className="px-4 py-3 data-[state=active]:bg-primary data-[state=active]:text-white"
+            >
+              <Images size={16} className="mr-2" />
+              Gallery
             </TabsTrigger>
             <TabsTrigger
               value="sports"
@@ -2306,7 +2389,11 @@ const AdminPage = () => {
 
           <TabsContent value="testimonials">
             <ScrollReveal>
-              <div className="flex flex-wrap gap-3 mb-4">
+              <p className="mb-4 text-sm text-muted-foreground">
+                Quotes and testimonials shown on the Experiences page. Photos
+                and videos live in the Gallery tab.
+              </p>
+              <div className="flex flex-wrap gap-3 mb-8">
                 <button
                   type="button"
                   onClick={() =>
@@ -2348,6 +2435,19 @@ const AdminPage = () => {
                 >
                   + Add Parent
                 </button>
+              </div>
+            </ScrollReveal>
+
+            {renderExperienceCards(isTestimonialExperience)}
+          </TabsContent>
+
+          <TabsContent value="gallery">
+            <ScrollReveal>
+              <p className="mb-4 text-sm text-muted-foreground">
+                Photos and videos shown on the Gallery page. Quotes live in
+                the Experiences tab.
+              </p>
+              <div className="flex flex-wrap gap-3 mb-4">
                 <input
                   ref={bulkPhotoInputRef}
                   type="file"
@@ -2366,7 +2466,7 @@ const AdminPage = () => {
                   type="button"
                   onClick={() => bulkPhotoInputRef.current?.click()}
                   disabled={Boolean(bulkPhotoProgress)}
-                  className="px-4 py-3 border border-border bg-white text-foreground font-heading font-bold uppercase text-sm tracking-wider disabled:opacity-50"
+                  className="px-4 py-3 bg-primary text-white font-heading font-bold uppercase text-sm tracking-wider disabled:opacity-50"
                 >
                   {bulkPhotoProgress
                     ? `Uploading ${Math.min(
@@ -2436,60 +2536,7 @@ const AdminPage = () => {
               </div>
             </ScrollReveal>
 
-            <div className="space-y-6">
-              {experiences.map((item, index) => (
-                <EditorCard key={item.id} id={item.id}>
-                  <div className="flex flex-wrap items-center justify-between gap-3">
-                    <div>
-                      <p className="font-heading text-2xl font-black uppercase">
-                        {item.type === "quote" && "Athlete Quote"}
-                        {item.type === "parent" && "Parent Quote"}
-                        {item.type === "photo" && "Photo Item"}
-                        {item.type === "video" && "Video Item"}
-                      </p>
-                      <p className="text-muted-foreground text-sm">{item.id}</p>
-                    </div>
-                    <div className="flex flex-wrap items-center gap-2">
-                      <button
-                        type="button"
-                        onClick={() => moveExperience(item.id, -1)}
-                        disabled={index === 0}
-                        className="px-3 py-2 border border-border bg-white text-foreground font-heading font-bold uppercase text-xs tracking-wider inline-flex items-center gap-2 disabled:opacity-50"
-                      >
-                        <ArrowUp size={14} />
-                        Up
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => moveExperience(item.id, 1)}
-                        disabled={index === experiences.length - 1}
-                        className="px-3 py-2 border border-border bg-white text-foreground font-heading font-bold uppercase text-xs tracking-wider inline-flex items-center gap-2 disabled:opacity-50"
-                      >
-                        <ArrowDown size={14} />
-                        Down
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() =>
-                          setExperiences((current) =>
-                            current.filter((entry) => entry.id !== item.id)
-                          )
-                        }
-                        className="px-4 py-2 border border-border bg-white text-foreground font-heading font-bold uppercase text-xs tracking-wider"
-                      >
-                        Remove
-                      </button>
-                    </div>
-                  </div>
-
-                  <TestimonialFields
-                    item={item}
-                    onChange={(next) => updateExperience(item.id, next)}
-                    onUpload={uploadImage}
-                  />
-                </EditorCard>
-              ))}
-            </div>
+            {renderExperienceCards(isGalleryExperience)}
           </TabsContent>
 
           <TabsContent value="sports">

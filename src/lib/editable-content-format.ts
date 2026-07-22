@@ -288,7 +288,14 @@ export const hydrateEditableContentState = (
     content.siteText && isPlainObject(content.siteText)
       ? {
           navItems: Array.isArray((content.siteText as any).navItems)
-            ? (content.siteText as any).navItems.map((n: any) => ({ ...n }))
+            ? (content.siteText as any).navItems.map((n: any) =>
+                // The Moments page was renamed to Gallery — migrate menus
+                // saved under the old default label. A custom label an admin
+                // typed themselves is left alone.
+                n?.path === "/moments" && n?.label === "Moments"
+                  ? { ...n, label: "Gallery" }
+                  : { ...n },
+              )
             : [],
           hero: isPlainObject((content.siteText as any).hero)
             ? { ...((content.siteText as any).hero) }
