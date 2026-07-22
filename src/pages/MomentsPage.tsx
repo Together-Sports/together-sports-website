@@ -55,14 +55,16 @@ const AutoPhotoCarousel = ({
 
   return (
     <div
-      className="relative"
+      className="absolute inset-0"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      <Carousel opts={{ loop: true }} setApi={setApi}>
-        <CarouselContent className="flex">
+      {/* [&>div]:h-full reaches the embla viewport div inside Carousel;
+          ml-0/pl-0 strip the slide gutters so images bleed edge to edge. */}
+      <Carousel opts={{ loop: true }} setApi={setApi} className="h-full [&>div]:h-full">
+        <CarouselContent className="ml-0 flex h-full">
           {images.map((src, idx) => (
-            <CarouselItem key={idx} className="h-[300px] md:h-[350px]">
+            <CarouselItem key={idx} className="h-full pl-0">
               <img
                 {...imgProps(src)}
                 alt={`${altPrefix} ${idx + 1}`}
@@ -76,7 +78,9 @@ const AutoPhotoCarousel = ({
       </Carousel>
 
       {images.length > 1 ? (
-        <div className="absolute inset-x-0 bottom-3 flex justify-center gap-1.5">
+        // Dots sit top-right so they never collide with the tag/caption
+        // that lives along the bottom of the tile.
+        <div className="absolute right-3 top-3 z-10 flex gap-1.5">
           {images.map((_, idx) => (
             <button
               key={idx}
@@ -94,10 +98,21 @@ const AutoPhotoCarousel = ({
   );
 };
 
+// Small green label above the caption, e.g. "CHIANG MAI · SOCCER",
+// composed from the optional location and sport fields.
+const photoTag = (item: Experience) =>
+  [item.location, item.sport]
+    .map((part) => part?.trim())
+    .filter(Boolean)
+    .join(" · ")
+    .toUpperCase();
+
 const PhotoCard = ({ item, index }: { item: Experience; index: number }) => {
+  const tag = photoTag(item);
+
   return (
     <ScrollReveal direction="scale" delay={index * 0.12}>
-      <div className="text-center">
+      <div className="relative aspect-[4/3] overflow-hidden rounded-[3px]">
         {item.images && item.images.length > 1 ? (
           <AutoPhotoCarousel
             images={item.images}
@@ -107,16 +122,28 @@ const PhotoCard = ({ item, index }: { item: Experience; index: number }) => {
           <img
             {...imgProps(item.image)}
             alt={item.caption || "Experience photo"}
-            className="w-full h-[300px] md:h-[350px] object-cover"
+            className="absolute inset-0 w-full h-full object-cover"
             loading="lazy"
             decoding="async"
           />
         )}
 
-        {item.caption ? (
-          <p className="mt-3 text-muted-foreground text-sm font-body italic">
-            {item.caption}
-          </p>
+        {tag || item.caption ? (
+          <>
+            <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(20,26,55,0.82)_0%,rgba(20,26,55,0.35)_32%,rgba(20,26,55,0)_55%)]" />
+            <div className="pointer-events-none absolute bottom-3.5 left-4 right-4 flex flex-col gap-1.5">
+              {tag ? (
+                <p className="font-body text-[10px] font-bold uppercase tracking-[1.5px] text-[#b5e36a]">
+                  {tag}
+                </p>
+              ) : null}
+              {item.caption ? (
+                <p className="font-body text-sm font-semibold leading-snug text-white [text-wrap:pretty]">
+                  {item.caption}
+                </p>
+              ) : null}
+            </div>
+          </>
         ) : null}
       </div>
     </ScrollReveal>
@@ -154,23 +181,20 @@ const MomentsPage = () => {
 
   return (
     <div className="overflow-hidden">
-      <section className="relative overflow-hidden bg-[#87cb4a]">
-        <div className="absolute left-4 top-10 h-12 w-12 rounded-full bg-white/10 sm:left-8 sm:top-12 sm:h-[4.5rem] sm:w-[4.5rem] md:h-24 md:w-24" />
-        <div className="absolute left-[20%] top-8 hidden h-14 w-14 bg-white/10 scrapbook-rotate-2 sm:block" />
-        <div className="absolute right-6 top-10 h-12 w-12 rotate-45 bg-white/10 sm:right-10 sm:h-20 sm:w-20 md:h-24 md:w-24" />
-        <div className="absolute right-[22%] top-28 hidden h-12 w-12 rounded-full bg-white/10 sm:block" />
-        <div className="absolute right-12 bottom-8 hidden h-0 w-0 border-l-[22px] border-r-[22px] border-b-[38px] border-l-transparent border-r-transparent border-b-white/10 md:block" />
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-14 md:pt-28 md:pb-24">
+      <section className="bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 md:pt-24">
           <motion.div
             initial={IS_SERVER ? false : { opacity: 0, y: 28 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
-            className="max-w-3xl mx-auto text-center"
           >
-            <h1 className="font-heading text-[clamp(2rem,8.6vw,4.4rem)] font-black uppercase leading-[0.95] mb-4 text-white">
-              <span className="text-balance">{t("moments.heroTitle")}</span>
-            </h1>
-            <p className="text-white font-bold text-lg md:text-xl max-w-2xl mx-auto font-body">
+            <div className="mb-2 flex items-center gap-3.5">
+              <span aria-hidden className="h-[3px] w-8 shrink-0 bg-accent" />
+              <h1 className="font-heading text-3xl sm:text-4xl md:text-[2.5rem] font-black uppercase tracking-wide text-foreground">
+                {t("moments.heroTitle")}
+              </h1>
+            </div>
+            <p className="max-w-2xl font-body text-[15px] leading-relaxed text-muted-foreground md:ml-[46px]">
               {t("moments.heroSubtitle")}
             </p>
           </motion.div>
@@ -178,9 +202,9 @@ const MomentsPage = () => {
       </section>
 
       {photos.length > 0 ? (
-        <section className="pt-14 pb-10 md:pt-28 md:pb-16 bg-white">
+        <section className="pt-10 pb-10 md:pt-12 md:pb-16 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {photos.map((p, i) => (
                 <PhotoCard key={p.id} item={p} index={i} />
               ))}

@@ -601,6 +601,32 @@ const TestimonialFields = ({
 
       {type === "photo" ? (
         <>
+          <div className="space-y-2">
+            <p className={labelClass}>Location (photo label)</p>
+            <input
+              className={inputClass}
+              value={item.location || ""}
+              onChange={(event) =>
+                onChange({ ...item, location: event.target.value })
+              }
+              placeholder="Chiang Mai"
+            />
+          </div>
+          <div className="space-y-2">
+            <p className={labelClass}>Sport (photo label)</p>
+            <input
+              className={inputClass}
+              value={item.sport || ""}
+              onChange={(event) =>
+                onChange({ ...item, sport: event.target.value })
+              }
+              placeholder="Soccer"
+            />
+          </div>
+          <p className="md:col-span-2 -mt-2 text-sm text-muted-foreground">
+            Location and sport appear as a small green label on the photo, like
+            “CHIANG MAI · SOCCER”. Leave both blank to hide the label.
+          </p>
           <div className="md:col-span-2">
             <p className={labelClass}>Photos</p>
             <div className="space-y-4">
