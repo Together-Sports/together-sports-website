@@ -50,13 +50,13 @@ export const TEXT_FIELDS: TextField[] = [
   { key: "experiences.ctaBody", label: "Bottom CTA Text", page: "Experiences", fallback: "Browse photos and videos from sessions, events, and communities across Together Sports.", multiline: true },
   { key: "experiences.ctaButton", label: "Bottom CTA Button", page: "Experiences", fallback: "View Moments Captured →" },
 
-  // Moments
-  { key: "moments.heroTitle", label: "Hero Title", page: "Moments", fallback: "Moments Captured" },
-  { key: "moments.heroSubtitle", label: "Hero Subtitle", page: "Moments", fallback: "Snapshots from the courts, fields, and communities where Together Sports comes to life.", multiline: true },
-  { key: "moments.videosHeading", label: "Videos Heading", page: "Moments", fallback: "On Video" },
-  { key: "moments.ctaHeading", label: "Bottom CTA Heading", page: "Moments", fallback: "The Stories Behind the Smiles" },
-  { key: "moments.ctaBody", label: "Bottom CTA Text", page: "Moments", fallback: "Hear what athletes and parents say about their time with Together Sports.", multiline: true },
-  { key: "moments.ctaButton", label: "Bottom CTA Button", page: "Moments", fallback: "Read Testimonials →" },
+  // Gallery
+  { key: "moments.heroTitle", label: "Hero Title", page: "Gallery", fallback: "Moments Captured" },
+  { key: "moments.heroSubtitle", label: "Hero Subtitle", page: "Gallery", fallback: "Snapshots from the courts, fields, and communities where Together Sports comes to life.", multiline: true },
+  { key: "moments.videosHeading", label: "Videos Heading", page: "Gallery", fallback: "On Video" },
+  { key: "moments.ctaHeading", label: "Bottom CTA Heading", page: "Gallery", fallback: "The Stories Behind the Smiles" },
+  { key: "moments.ctaBody", label: "Bottom CTA Text", page: "Gallery", fallback: "Hear what athletes and parents say about their time with Together Sports.", multiline: true },
+  { key: "moments.ctaButton", label: "Bottom CTA Button", page: "Gallery", fallback: "Read Testimonials →" },
 
   // Blog
   { key: "blog.heroTitle", label: "Hero Title", page: "Blog", fallback: "The Blog" },
