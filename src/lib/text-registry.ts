@@ -59,8 +59,11 @@ export const TEXT_FIELDS: TextField[] = [
   { key: "moments.ctaButton", label: "Bottom CTA Button", page: "Gallery", fallback: "Read Testimonials →" },
 
   // Press
-  { key: "press.heroTitle", label: "Hero Title", page: "Press", fallback: "In the Press" },
-  { key: "press.heroSubtitle", label: "Hero Subtitle", page: "Press", fallback: "News stories and articles about Together Sports from around the community.", multiline: true },
+  { key: "press.heroTitle", label: "Masthead Kicker", page: "Press", fallback: "In the Press" },
+  { key: "press.mastheadTitle", label: "Masthead Title", page: "Press", fallback: "Together Sports" },
+  { key: "press.heroSubtitle", label: "Masthead Subtitle", page: "Press", fallback: "News stories & articles about Together Sports from around the community", multiline: true },
+  { key: "press.mastheadLeft", label: "Masthead Top Left", page: "Press", fallback: "The Coverage Edition" },
+  { key: "press.mastheadRight", label: "Masthead Top Right", page: "Press", fallback: "New York" },
   { key: "press.ctaHeading", label: "Bottom CTA Heading", page: "Press", fallback: "Writing About Us?" },
   { key: "press.ctaBody", label: "Bottom CTA Text", page: "Press", fallback: "We'd love to share our story. Reach out for interviews, photos, and background on Together Sports.", multiline: true },
   { key: "press.ctaButton", label: "Bottom CTA Button", page: "Press", fallback: "Get in Touch →" },
