@@ -13,6 +13,7 @@ import type { BlogPost } from "@/data/blogPosts";
 import type { Experience } from "@/data/experiences";
 import editableContentSeed from "@/data/editableContentSeed";
 import type { Partner } from "@/data/partners";
+import type { PressArticle } from "@/data/press";
 import type { TeamSection } from "@/data/team";
 import {
   createEditableContentExport,
@@ -39,6 +40,8 @@ type EditableContentContextValue = EditableContentState & {
   setBlogPosts: Dispatch<SetStateAction<BlogPost[]>>;
   setExperiences: Dispatch<SetStateAction<Experience[]>>;
   setPartners: Dispatch<SetStateAction<Partner[]>>;
+  pressArticles: PressArticle[];
+  setPressArticles: Dispatch<SetStateAction<PressArticle[]>>;
   setTeamSections: Dispatch<SetStateAction<TeamSection[]>>;
   setTennisLessonVideos: Dispatch<SetStateAction<TennisLessonVideo[]>>;
   setImpactMetricsSection: Dispatch<SetStateAction<ImpactMetricsSection>>;
@@ -287,6 +290,9 @@ export const EditableContentProvider = ({
   const [partners, setPartners] = useState<Partner[]>(
     () => bootContent.partners
   );
+  const [pressArticles, setPressArticles] = useState<PressArticle[]>(
+    () => bootContent.pressArticles ?? []
+  );
   const [teamSections, setTeamSections] = useState<TeamSection[]>(
     () => bootContent.teamSections
   );
@@ -319,6 +325,7 @@ export const EditableContentProvider = ({
     setBlogPosts(next.blogPosts);
     setExperiences(next.experiences);
     setPartners(next.partners);
+    setPressArticles(next.pressArticles ?? []);
     setTeamSections(next.teamSections);
     setTennisLessonVideos(next.tennisLessonVideos);
     setImpactMetricsSection(next.impactMetricsSection);
@@ -336,6 +343,7 @@ export const EditableContentProvider = ({
       blogPosts,
       experiences,
       partners,
+      pressArticles,
       teamSections,
       tennisLessonVideos,
       impactMetricsSection,
@@ -474,6 +482,7 @@ export const EditableContentProvider = ({
         blogPosts,
         experiences,
         partners,
+        pressArticles,
         teamSections,
         tennisLessonVideos,
         impactMetricsSection,
@@ -485,6 +494,7 @@ export const EditableContentProvider = ({
       blogPosts,
       experiences,
       partners,
+      pressArticles,
       teamSections,
       tennisLessonVideos,
       impactMetricsSection,
@@ -503,6 +513,7 @@ export const EditableContentProvider = ({
       siteText,
       setSiteText,
       partners,
+      pressArticles,
       teamSections,
       tennisLessonVideos,
       impactMetricsSection,
@@ -510,6 +521,7 @@ export const EditableContentProvider = ({
       sportDescriptions,
       setExperiences,
       setPartners,
+      setPressArticles,
       setTeamSections,
       setTennisLessonVideos,
       setImpactMetricsSection,
@@ -536,6 +548,7 @@ export const EditableContentProvider = ({
             blogPosts,
             experiences,
             partners,
+            pressArticles,
             teamSections,
             tennisLessonVideos,
             impactMetricsSection,
@@ -606,6 +619,7 @@ export const EditableContentProvider = ({
           blogPosts,
           experiences,
           partners,
+          pressArticles,
           teamSections,
           tennisLessonVideos,
           impactMetricsSection,
@@ -662,6 +676,7 @@ export const EditableContentProvider = ({
       blogPosts,
       experiences,
       partners,
+      pressArticles,
       teamSections,
       tennisLessonVideos,
       impactMetricsSection,

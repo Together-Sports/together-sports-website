@@ -48,6 +48,7 @@ const STATIC_ROUTES = [
   "/experiences",
   "/moments",
   "/blog",
+  "/press",
   "/partners",
   "/contact",
   "/get-involved",

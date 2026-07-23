@@ -32,6 +32,7 @@ const quickLinks = [
   { label: "Experiences", path: "/experiences" },
   { label: "Gallery", path: "/moments" },
   { label: "Blog", path: "/blog" },
+  { label: "Press", path: "/press" },
   { label: "Partners", path: "/partners" },
   { label: "Contact", path: "/contact" }
 ];

@@ -18,6 +18,7 @@ import BlogPage from "./pages/BlogPage";
 import BlogPostPage from "./pages/BlogPostPage";
 import ExperiencesPage from "./pages/ExperiencesPage";
 import MomentsPage from "./pages/MomentsPage";
+import PressPage from "./pages/PressPage";
 import GetInvolvedPage from "./pages/GetInvolvedPage";
 import ContactPage from "./pages/ContactPage";
 import PartnersPage from "./pages/PartnersPage";
@@ -40,6 +41,7 @@ export const SiteRoutes = () => (
       <Route path="/blog/:slug" element={<BlogPostPage />} />
       <Route path="/experiences" element={<ExperiencesPage />} />
       <Route path="/moments" element={<MomentsPage />} />
+      <Route path="/press" element={<PressPage />} />
       <Route path="/get-involved" element={<GetInvolvedPage />} />
       <Route path="/contact" element={<ContactPage />} />
       <Route path="/partners" element={<PartnersPage />} />
