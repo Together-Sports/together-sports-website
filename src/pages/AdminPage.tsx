@@ -21,6 +21,7 @@ import type { BlogPost } from "@/data/blogPosts";
 import { mediaLibrary } from "@/data/mediaLibrary";
 import type { Experience, ExperienceType } from "@/data/experiences";
 import type { Partner } from "@/data/partners";
+import type { PressArticle } from "@/data/press";
 import type { TeamPerson, TeamSection, TeamSocialPlatform } from "@/data/team";
 import type {
   OtherLocation,
@@ -780,6 +781,7 @@ const AdminPage = () => {
     blogPosts,
     experiences,
     partners,
+    pressArticles,
     teamSections,
     tennisLessonVideos,
     impactMetricsSection,
@@ -788,6 +790,7 @@ const AdminPage = () => {
     setBlogPosts,
     setExperiences,
     setPartners,
+    setPressArticles,
     setTeamSections,
     setTennisLessonVideos,
     setImpactMetricsSection,
@@ -1091,6 +1094,34 @@ const AdminPage = () => {
         item.id === id ? { ...item, [field]: value } : item
       )
     );
+  };
+
+  const updatePressArticle = (
+    id: string,
+    field: keyof PressArticle,
+    value: string
+  ) => {
+    setPressArticles((current) =>
+      current.map((item) =>
+        item.id === id ? { ...item, [field]: value } : item
+      )
+    );
+  };
+
+  const movePressArticle = (id: string, direction: -1 | 1) => {
+    setPressArticles((current) => {
+      const index = current.findIndex((item) => item.id === id);
+      const nextIndex = index + direction;
+
+      if (index < 0 || nextIndex < 0 || nextIndex >= current.length) {
+        return current;
+      }
+
+      const next = [...current];
+      const [moved] = next.splice(index, 1);
+      next.splice(nextIndex, 0, moved);
+      return next;
+    });
   };
 
   const movePartner = (id: string, direction: -1 | 1) => {
@@ -1515,6 +1546,13 @@ const AdminPage = () => {
             >
               <Newspaper size={16} className="mr-2" />
               Blog
+            </TabsTrigger>
+            <TabsTrigger
+              value="press"
+              className="px-4 py-3 data-[state=active]:bg-primary data-[state=active]:text-white"
+            >
+              <Newspaper size={16} className="mr-2" />
+              Press
             </TabsTrigger>
             <TabsTrigger
               value="partners"
@@ -3038,6 +3076,173 @@ const AdminPage = () => {
                         <p>Author: {post.author}</p>
                         <p>Source: {post.sourceUrl}</p>
                       </div>
+                    </div>
+                  </div>
+                </EditorCard>
+              ))}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="press">
+            <ScrollReveal>
+              <p className="mb-4 text-sm text-muted-foreground">
+                News articles shown on the Press page, newest at the top. The
+                first article is featured with a larger card.
+              </p>
+              <div className="flex flex-wrap gap-3 mb-8">
+                <button
+                  type="button"
+                  onClick={() =>
+                    setPressArticles((current) => [
+                      {
+                        id: createId("press"),
+                        outlet: "Publication Name",
+                        title: "Article headline",
+                        date: "",
+                        href: "",
+                        excerpt: "",
+                        image: ""
+                      },
+                      ...current
+                    ])
+                  }
+                  className="px-4 py-3 bg-primary text-white font-heading font-bold uppercase text-sm tracking-wider"
+                >
+                  + Add Article
+                </button>
+              </div>
+            </ScrollReveal>
+
+            <div className="space-y-6">
+              {pressArticles.map((article, articleIndex) => (
+                <EditorCard key={article.id} id={article.id}>
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                      <p className="font-heading text-2xl font-black uppercase">
+                        Press Article
+                      </p>
+                      <p className="text-muted-foreground text-sm">
+                        {article.id}
+                      </p>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => movePressArticle(article.id, -1)}
+                        disabled={articleIndex === 0}
+                        className="px-3 py-2 border border-border bg-white text-foreground font-heading font-bold uppercase text-xs tracking-wider inline-flex items-center gap-2 disabled:opacity-50"
+                      >
+                        <ArrowUp size={14} />
+                        Up
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => movePressArticle(article.id, 1)}
+                        disabled={articleIndex === pressArticles.length - 1}
+                        className="px-3 py-2 border border-border bg-white text-foreground font-heading font-bold uppercase text-xs tracking-wider inline-flex items-center gap-2 disabled:opacity-50"
+                      >
+                        <ArrowDown size={14} />
+                        Down
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setPressArticles((current) =>
+                            current.filter((entry) => entry.id !== article.id)
+                          )
+                        }
+                        className="px-4 py-2 border border-border bg-white text-foreground font-heading font-bold uppercase text-xs tracking-wider"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <p className={labelClass}>Publication / Outlet</p>
+                      <input
+                        className={inputClass}
+                        value={article.outlet}
+                        onChange={(event) =>
+                          updatePressArticle(
+                            article.id,
+                            "outlet",
+                            event.target.value
+                          )
+                        }
+                        placeholder="The Riverdale Press"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <p className={labelClass}>Date</p>
+                      <input
+                        className={inputClass}
+                        value={article.date}
+                        onChange={(event) =>
+                          updatePressArticle(
+                            article.id,
+                            "date",
+                            event.target.value
+                          )
+                        }
+                        placeholder="July 2026"
+                      />
+                    </div>
+                    <div className="space-y-2 md:col-span-2">
+                      <p className={labelClass}>Article Title</p>
+                      <input
+                        className={inputClass}
+                        value={article.title}
+                        onChange={(event) =>
+                          updatePressArticle(
+                            article.id,
+                            "title",
+                            event.target.value
+                          )
+                        }
+                      />
+                    </div>
+                    <div className="space-y-2 md:col-span-2">
+                      <p className={labelClass}>Link to Article</p>
+                      <input
+                        className={inputClass}
+                        value={article.href}
+                        onChange={(event) =>
+                          updatePressArticle(
+                            article.id,
+                            "href",
+                            event.target.value
+                          )
+                        }
+                      />
+                    </div>
+                    <div className="space-y-2 md:col-span-2">
+                      <p className={labelClass}>
+                        Excerpt / Pull Quote (Optional)
+                      </p>
+                      <textarea
+                        className={textareaClass}
+                        value={article.excerpt ?? ""}
+                        onChange={(event) =>
+                          updatePressArticle(
+                            article.id,
+                            "excerpt",
+                            event.target.value
+                          )
+                        }
+                        placeholder="A short line from the article, shown on the card."
+                      />
+                    </div>
+                    <div className="md:col-span-2">
+                      <ImageField
+                        label="Photo / Clipping (Optional)"
+                        value={article.image ?? ""}
+                        onChange={(value) =>
+                          updatePressArticle(article.id, "image", value)
+                        }
+                        onUpload={uploadImage}
+                      />
                     </div>
                   </div>
                 </EditorCard>

@@ -22,6 +22,7 @@ const defaultNavItems = [
   { label: "Experiences", path: "/experiences" },
   { label: "Gallery", path: "/moments" },
   { label: "Blog", path: "/blog" },
+  { label: "Press", path: "/press" },
   { label: "Contact", path: "/contact" },
   { label: "Partners", path: "/partners" }
 ];
@@ -34,13 +35,20 @@ const Navbar = () => {
   const storedNavItems = siteText?.navItems?.length
     ? siteText.navItems
     : defaultNavItems;
-  // Saved nav menus from before the Gallery page existed won't include it —
-  // slot it in after Experiences so the new page is reachable either way.
-  const navItems = storedNavItems.some((item) => item.path === "/moments")
+  // Saved nav menus from before newer pages existed won't include them —
+  // slot each one in next to its neighbor so the page is reachable either way.
+  const withGallery = storedNavItems.some((item) => item.path === "/moments")
     ? storedNavItems
     : storedNavItems.flatMap((item) =>
         item.path === "/experiences"
           ? [item, { label: "Gallery", path: "/moments" }]
+          : [item]
+      );
+  const navItems = withGallery.some((item) => item.path === "/press")
+    ? withGallery
+    : withGallery.flatMap((item) =>
+        item.path === "/blog"
+          ? [item, { label: "Press", path: "/press" }]
           : [item]
       );
 
@@ -63,7 +71,9 @@ const Navbar = () => {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-primary border-b border-primary/80">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Slightly wider than the page's max-w-7xl: the link row grew when
+          Press was added and would otherwise collide with the wordmark. */}
+      <div className="max-w-[86rem] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between gap-3 md:h-20 md:gap-6">
           <Link to="/" className="flex shrink-0 items-center gap-2 sm:gap-3">
             <img

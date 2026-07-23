@@ -79,6 +79,14 @@ export const getMetaForPath = (
     };
   }
 
+  if (pathname === "/press") {
+    return {
+      title: `Press | ${SITE_NAME}`,
+      description:
+        "Read news coverage and press articles about Together Sports and its mission to expand youth access to inclusive sports.",
+    };
+  }
+
   if (pathname === "/blog") {
     return {
       title: `The Blog | ${SITE_NAME}`,
@@ -188,6 +196,7 @@ export const buildStructuredData = (
       `${origin}/experiences`,
       `${origin}/moments`,
       `${origin}/blog`,
+      `${origin}/press`,
       `${origin}/partners`,
       `${origin}/contact`,
     ].map((url) => ({

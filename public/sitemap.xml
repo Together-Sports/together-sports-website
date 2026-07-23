@@ -2,97 +2,103 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://togethersports.org/</loc>
-    <lastmod>2026-07-22T18:34:45.915Z</lastmod>
+    <lastmod>2026-07-23T22:39:26.220Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://togethersports.org/sports</loc>
-    <lastmod>2026-07-22T18:34:45.915Z</lastmod>
+    <lastmod>2026-07-23T22:39:26.220Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://togethersports.org/sports/tennis</loc>
-    <lastmod>2026-07-22T18:34:45.915Z</lastmod>
+    <lastmod>2026-07-23T22:39:26.220Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://togethersports.org/sports/basketball</loc>
-    <lastmod>2026-07-22T18:34:45.915Z</lastmod>
+    <lastmod>2026-07-23T22:39:26.220Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://togethersports.org/sports/football</loc>
-    <lastmod>2026-07-22T18:34:45.915Z</lastmod>
+    <lastmod>2026-07-23T22:39:26.220Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://togethersports.org/sports/soccer</loc>
-    <lastmod>2026-07-22T18:34:45.915Z</lastmod>
+    <lastmod>2026-07-23T22:39:26.220Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://togethersports.org/sports/golf</loc>
-    <lastmod>2026-07-22T18:34:45.915Z</lastmod>
+    <lastmod>2026-07-23T22:39:26.220Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://togethersports.org/team</loc>
-    <lastmod>2026-07-22T18:34:45.915Z</lastmod>
+    <lastmod>2026-07-23T22:39:26.220Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://togethersports.org/experiences</loc>
-    <lastmod>2026-07-22T18:34:45.915Z</lastmod>
+    <lastmod>2026-07-23T22:39:26.220Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://togethersports.org/moments</loc>
-    <lastmod>2026-07-22T18:34:45.915Z</lastmod>
+    <lastmod>2026-07-23T22:39:26.220Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://togethersports.org/blog</loc>
-    <lastmod>2026-07-22T18:34:45.915Z</lastmod>
+    <lastmod>2026-07-23T22:39:26.220Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://togethersports.org/press</loc>
+    <lastmod>2026-07-23T22:39:26.220Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://togethersports.org/partners</loc>
-    <lastmod>2026-07-22T18:34:45.915Z</lastmod>
+    <lastmod>2026-07-23T22:39:26.220Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://togethersports.org/contact</loc>
-    <lastmod>2026-07-22T18:34:45.915Z</lastmod>
+    <lastmod>2026-07-23T22:39:26.220Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://togethersports.org/get-involved</loc>
-    <lastmod>2026-07-22T18:34:45.915Z</lastmod>
+    <lastmod>2026-07-23T22:39:26.220Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://togethersports.org/blog/basketball-football-tenis-this-is</loc>
-    <lastmod>2026-07-22T18:34:45.915Z</lastmod>
+    <lastmod>2026-07-23T22:39:26.220Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://togethersports.org/blog/test</loc>
-    <lastmod>2026-07-22T18:34:45.915Z</lastmod>
+    <lastmod>2026-07-23T22:39:26.220Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>

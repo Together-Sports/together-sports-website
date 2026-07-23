@@ -2,6 +2,7 @@ import { blogPosts as defaultBlogPosts, type BlogPost } from "@/data/blogPosts";
 import type { Experience } from "@/data/experiences";
 import { mediaLibrary } from "@/data/mediaLibrary";
 import type { Partner } from "@/data/partners";
+import type { PressArticle } from "@/data/press";
 import type { TeamSection } from "@/data/team";
 
 export type TennisLessonVideo = {
@@ -92,6 +93,9 @@ export type EditableContentState = {
   blogPosts: BlogPost[];
   experiences: Experience[];
   partners: Partner[];
+  // Optional so content saved before the Press page existed still parses;
+  // hydration fills in an empty list.
+  pressArticles?: PressArticle[];
   teamSections: TeamSection[];
   tennisLessonVideos: TennisLessonVideo[];
   impactMetricsSection: ImpactMetricsSection;
@@ -176,6 +180,12 @@ export const serializeEditableContentState = (
     ...item,
     logo: toPortableMediaValue(item.logo),
   })),
+  pressArticles: Array.isArray(content.pressArticles)
+    ? content.pressArticles.map((item) => ({
+        ...item,
+        image: item.image ? toPortableMediaValue(item.image) : item.image,
+      }))
+    : [],
   teamSections: content.teamSections.map((section) => ({
     ...section,
     people: section.people.map((person) => ({
@@ -248,6 +258,12 @@ export const hydrateEditableContentState = (
     ...item,
     logo: fromPortableMediaValue(item.logo),
   })),
+  pressArticles: Array.isArray(content.pressArticles)
+    ? content.pressArticles.map((item) => ({
+        ...item,
+        image: item.image ? fromPortableMediaValue(item.image) : item.image,
+      }))
+    : [],
   teamSections: content.teamSections.map((section) => ({
     ...section,
     people: section.people.map((person) => ({

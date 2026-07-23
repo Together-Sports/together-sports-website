@@ -42,6 +42,7 @@ const staticRoutes = [
   "/experiences",
   "/moments",
   "/blog",
+  "/press",
   "/partners",
   "/contact",
   "/get-involved",
