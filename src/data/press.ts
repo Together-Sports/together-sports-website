@@ -11,6 +11,8 @@ export type PressArticle = {
   excerpt?: string;
   // Optional photo or clipping image.
   image?: string;
+  // Optional publication logo, shown in place of the outlet name tag.
+  logo?: string;
 };
 
 const pressArticles: PressArticle[] = [];

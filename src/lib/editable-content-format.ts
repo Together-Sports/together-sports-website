@@ -184,6 +184,7 @@ export const serializeEditableContentState = (
     ? content.pressArticles.map((item) => ({
         ...item,
         image: item.image ? toPortableMediaValue(item.image) : item.image,
+        logo: item.logo ? toPortableMediaValue(item.logo) : item.logo,
       }))
     : [],
   teamSections: content.teamSections.map((section) => ({
@@ -262,6 +263,7 @@ export const hydrateEditableContentState = (
     ? content.pressArticles.map((item) => ({
         ...item,
         image: item.image ? fromPortableMediaValue(item.image) : item.image,
+        logo: item.logo ? fromPortableMediaValue(item.logo) : item.logo,
       }))
     : [],
   teamSections: content.teamSections.map((section) => ({

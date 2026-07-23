@@ -6,173 +6,341 @@ import { useEditableContent } from "@/lib/editable-content";
 import { IS_SERVER } from "@/lib/ssr";
 import { useSiteText } from "@/lib/use-site-text";
 
-const outletColors = ["#87cb4a", "#84a6ff", "#ab9bfa", "#f6a15c"];
+// Newsprint palette for the newspaper treatment.
+const INK = "#1b1a17";
+const FADED = "#8a8578";
+const HAIRLINE = "#cfc9ba";
+const BODY_INK = "#3a362f";
 
-const ArticleCard = ({
+// Outlet name, or the publication's logo when one is uploaded.
+const OutletTag = ({
   article,
-  index,
-  featured
+  variant
 }: {
   article: PressArticle;
-  index: number;
-  featured?: boolean;
+  variant: "lead" | "column";
 }) => {
-  const color = outletColors[index % outletColors.length];
+  if (article.logo?.trim()) {
+    return (
+      <img
+        src={article.logo}
+        alt={article.outlet || "Publication logo"}
+        loading="lazy"
+        decoding="async"
+        className={
+          variant === "lead"
+            ? "h-8 w-auto max-w-[190px] object-contain"
+            : "h-6 w-auto max-w-[150px] object-contain"
+        }
+      />
+    );
+  }
+
+  if (variant === "lead") {
+    return (
+      <span className="bg-[#87cb4a] px-3 py-1.5 font-['Oswald',sans-serif] text-[13px] font-semibold uppercase tracking-[0.12em] text-[#12240a]">
+        {article.outlet || "Press"}
+      </span>
+    );
+  }
+
+  return (
+    <span className="font-['Oswald',sans-serif] text-xs font-semibold uppercase tracking-[0.12em] text-[#4a63d6]">
+      {article.outlet || "Press"}
+    </span>
+  );
+};
+
+const ReadLink = ({ href, lead }: { href: string; lead?: boolean }) =>
+  href ? (
+    <a
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+      className={`inline-block border-b-2 border-[#87cb4a] pb-0.5 font-['Oswald',sans-serif] font-semibold uppercase text-[#1b1a17] transition-colors hover:text-[#2f6d2f] ${
+        lead ? "text-sm tracking-[0.1em]" : "text-[13px] tracking-[0.08em]"
+      }`}
+    >
+      {lead ? "Read the full article →" : "Read →"}
+    </a>
+  ) : null;
+
+// The first article runs as the lead story: photo on the left, headline and
+// pull quote on the right, like a front page.
+const LeadStory = ({ article }: { article: PressArticle }) => {
   const hasImage = Boolean(article.image?.trim());
 
   return (
-    <ScrollReveal
-      delay={(index % 3) * 0.12}
-      direction="up"
-      className={featured ? "md:col-span-2" : ""}
-    >
-      <a
-        href={article.href || undefined}
-        target={article.href ? "_blank" : undefined}
-        rel={article.href ? "noreferrer" : undefined}
-        className={`group flex h-full flex-col overflow-hidden border-2 border-border bg-white transition-all duration-300 hover:-translate-y-1 hover:border-accent hover:shadow-[8px_8px_0_0_hsl(var(--accent))] ${
-          featured && hasImage ? "md:flex-row" : ""
+    <ScrollReveal>
+      <div className="mb-4 flex flex-wrap items-baseline gap-x-4 gap-y-2">
+        <OutletTag article={article} variant="lead" />
+        <span
+          className="font-['Oswald',sans-serif] text-[13px] uppercase tracking-[0.14em]"
+          style={{ color: FADED }}
+        >
+          {[article.date?.trim(), "Lead Story"].filter(Boolean).join(" · ")}
+        </span>
+        <span
+          aria-hidden
+          className="hidden flex-1 -translate-y-1 border-t sm:block"
+          style={{ borderColor: HAIRLINE }}
+        />
+      </div>
+
+      <div
+        className={`grid grid-cols-1 items-start gap-8 md:gap-11 ${
+          hasImage ? "md:grid-cols-[1.15fr_1fr]" : ""
         }`}
       >
         {hasImage ? (
-          <div
-            className={`overflow-hidden bg-muted ${
-              featured
-                ? "aspect-[16/9] md:aspect-auto md:w-1/2 md:shrink-0"
-                : "aspect-[16/9]"
-            }`}
-          >
+          <div className="border" style={{ borderColor: INK }}>
             <img
               src={article.image}
               alt={article.title}
-              loading={index === 0 ? "eager" : "lazy"}
+              loading="eager"
               decoding="async"
-              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+              fetchpriority="high"
+              className="block w-full object-cover"
             />
           </div>
         ) : null}
 
-        <div className="flex flex-1 flex-col p-6 md:p-8">
-          <div className="mb-3 flex flex-wrap items-center gap-3">
-            <span
-              className="px-3 py-1 font-heading text-xs font-black uppercase tracking-[0.2em] text-white"
-              style={{ backgroundColor: color }}
-            >
-              {article.outlet || "Press"}
-            </span>
-            {article.date?.trim() ? (
-              <span className="font-body text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground">
-                {article.date}
-              </span>
-            ) : null}
-          </div>
-
-          <h3
-            className={`mb-3 font-heading font-black uppercase leading-tight text-foreground ${
-              featured ? "text-3xl md:text-4xl" : "text-2xl"
-            }`}
+        <div className={hasImage ? "" : "max-w-3xl"}>
+          <h2
+            className="mb-2 font-['Playfair_Display',serif] text-3xl font-extrabold leading-[1.04] sm:text-4xl md:text-[2.6rem]"
+            style={{ color: INK }}
           >
             {article.title}
-          </h3>
+          </h2>
+          {article.outlet?.trim() ? (
+            <p
+              className="mb-5 font-['Oswald',sans-serif] text-[13px] uppercase tracking-[0.1em]"
+              style={{ color: FADED }}
+            >
+              From {article.outlet}
+            </p>
+          ) : null}
 
           {article.excerpt?.trim() ? (
-            <p className="mb-5 font-body leading-relaxed text-muted-foreground">
+            <p
+              className="mb-5 font-['PT_Serif',serif] text-lg leading-relaxed"
+              style={{ color: INK }}
+            >
+              <span
+                aria-hidden
+                className="float-left pr-2.5 pt-2 font-['Playfair_Display',serif] text-[3.4rem] font-extrabold leading-[0.7]"
+              >
+                “
+              </span>
               {article.excerpt}
             </p>
           ) : null}
 
-          <span className="mt-auto inline-flex items-center gap-2 font-heading text-sm font-black uppercase tracking-wider text-accent">
-            Read the article
-            <span
-              aria-hidden
-              className="transition-transform duration-200 group-hover:translate-x-1"
-            >
-              →
-            </span>
-          </span>
+          <ReadLink href={article.href} lead />
         </div>
-      </a>
+      </div>
     </ScrollReveal>
   );
 };
 
+const ColumnStory = ({
+  article,
+  columnIndex
+}: {
+  article: PressArticle;
+  columnIndex: number;
+}) => (
+  <div
+    className={`py-8 first:pt-0 md:px-7 md:py-0 ${
+      columnIndex % 3 === 0 ? "" : "md:border-l"
+    } border-t md:border-t-0 first:border-t-0`}
+    style={{ borderColor: HAIRLINE }}
+  >
+    <div className="mb-2.5 flex flex-wrap items-center gap-x-2 gap-y-1.5">
+      <OutletTag article={article} variant="column" />
+      {article.date?.trim() ? (
+        <span
+          className="font-['Oswald',sans-serif] text-xs font-medium uppercase tracking-[0.12em]"
+          style={{ color: FADED }}
+        >
+          · {article.date}
+        </span>
+      ) : null}
+    </div>
+
+    {article.image?.trim() ? (
+      <div className="mb-3.5 border" style={{ borderColor: INK }}>
+        <img
+          src={article.image}
+          alt={article.title}
+          loading="lazy"
+          decoding="async"
+          className="block aspect-[16/10] w-full object-cover"
+        />
+      </div>
+    ) : null}
+
+    <h3
+      className="mb-2.5 font-['Playfair_Display',serif] text-2xl font-bold leading-[1.1]"
+      style={{ color: INK }}
+    >
+      {article.title}
+    </h3>
+
+    {article.excerpt?.trim() ? (
+      <p
+        className="mb-3.5 font-['PT_Serif',serif] text-[15px] leading-relaxed"
+        style={{ color: BODY_INK }}
+      >
+        {article.excerpt}
+      </p>
+    ) : null}
+
+    <ReadLink href={article.href} />
+  </div>
+);
+
 const PressPage = () => {
   const t = useSiteText();
   const { pressArticles } = useEditableContent();
+  const [lead, ...rest] = pressArticles;
 
   return (
-    <div className="overflow-hidden">
-      {/* Navy hero */}
-      <section className="relative overflow-hidden bg-[#1e2b4f]">
-        <div className="absolute left-4 top-10 h-12 w-12 rounded-full bg-white/10 sm:left-8 sm:top-12 sm:h-[4.5rem] sm:w-[4.5rem] md:h-24 md:w-24" />
-        <div className="absolute left-[20%] top-8 hidden h-14 w-14 bg-white/10 scrapbook-rotate-2 sm:block" />
-        <div className="absolute right-6 top-10 h-12 w-12 rotate-45 bg-white/10 sm:right-10 sm:h-20 sm:w-20 md:h-24 md:w-24" />
-        <div className="absolute right-[22%] top-28 hidden h-12 w-12 rounded-full bg-white/10 sm:block" />
-        <div className="absolute right-12 bottom-8 hidden h-0 w-0 border-l-[22px] border-r-[22px] border-b-[38px] border-l-transparent border-r-transparent border-b-white/10 md:block" />
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-14 md:pt-28 md:pb-24">
-          <motion.div
-            initial={IS_SERVER ? false : { opacity: 0, y: 28 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-            className="max-w-3xl mx-auto text-center"
+    <div className="overflow-hidden bg-[#f4f1e9] pb-20 md:pb-28">
+      {/* Masthead / nameplate */}
+      <div className="mx-auto max-w-6xl px-4 pt-12 sm:px-6 md:pt-20 lg:px-8">
+        <motion.div
+          initial={IS_SERVER ? false : { opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+        >
+          <div
+            className="flex items-end justify-between border-b pb-2 font-['Oswald',sans-serif] text-xs uppercase tracking-[0.14em]"
+            style={{ borderColor: INK, color: FADED }}
           >
-            <h1 className="font-heading text-5xl sm:text-6xl md:text-[5.25rem] font-black uppercase leading-[0.95] mb-4 text-white">
-              <span className="text-balance">{t("press.heroTitle")}</span>
+            <span>{t("press.mastheadLeft")}</span>
+            <span>{t("press.mastheadRight")}</span>
+          </div>
+
+          <div
+            className="border-b-4 border-double px-2 pb-4 pt-6 text-center md:pb-5 md:pt-8"
+            style={{ borderColor: INK }}
+          >
+            <p
+              className="mb-3 font-['Oswald',sans-serif] text-[13px] uppercase tracking-[0.5em]"
+              style={{ color: FADED }}
+            >
+              {t("press.heroTitle")}
+            </p>
+            <h1
+              className="font-['Playfair_Display',serif] text-5xl font-black leading-[0.92] tracking-[-0.01em] sm:text-7xl md:text-[5.5rem]"
+              style={{ color: INK }}
+            >
+              {t("press.mastheadTitle")}
             </h1>
-            <p className="text-white font-bold text-lg md:text-xl max-w-2xl mx-auto font-body">
+            <p
+              className="mt-3.5 font-['PT_Serif',serif] text-base italic sm:text-lg md:text-[19px]"
+              style={{ color: "#54504a" }}
+            >
               {t("press.heroSubtitle")}
             </p>
-          </motion.div>
-        </div>
-      </section>
+          </div>
+          <div
+            className="mt-[3px] border-t"
+            style={{ borderColor: INK }}
+          />
+        </motion.div>
+      </div>
 
-      {/* Articles */}
-      <section className="py-14 md:py-24 bg-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          {pressArticles.length > 0 ? (
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8">
-              {pressArticles.map((article, index) => (
-                <ArticleCard
-                  key={article.id}
-                  article={article}
-                  index={index}
-                  featured={index === 0}
+      {lead ? (
+        <>
+          {/* Lead story */}
+          <div className="mx-auto max-w-6xl px-4 pt-10 sm:px-6 lg:px-8">
+            <LeadStory article={lead} />
+          </div>
+
+          {rest.length > 0 ? (
+            <>
+              {/* Column rule */}
+              <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+                <div
+                  className="mt-11 border-t-4 border-double"
+                  style={{ borderColor: INK }}
                 />
-              ))}
-            </div>
-          ) : (
-            <div className="mx-auto max-w-xl border-2 border-dashed border-border bg-white p-10 text-center">
-              <p className="mb-2 font-heading text-2xl font-black uppercase text-foreground">
-                Press features coming soon
-              </p>
-              <p className="font-body text-muted-foreground">
-                We're just getting started — check back for news stories about
-                Together Sports.
-              </p>
-            </div>
-          )}
-        </div>
-      </section>
+              </div>
 
-      {/* CTA */}
-      <section className="bg-card py-14 md:py-20 scratchy-overlay">
-        <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
-          <ScrollReveal direction="scale">
-            <h2 className="mb-4 font-heading text-4xl md:text-5xl font-black uppercase">
+              {/* Secondary stories in ruled columns */}
+              <div className="mx-auto max-w-6xl px-4 pt-9 sm:px-6 lg:px-8">
+                <ScrollReveal>
+                  <p
+                    className="mb-6 font-['Oswald',sans-serif] text-[13px] uppercase tracking-[0.14em]"
+                    style={{ color: FADED }}
+                  >
+                    More Coverage
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-3">
+                    {rest.map((article, index) => (
+                      <ColumnStory
+                        key={article.id}
+                        article={article}
+                        columnIndex={index}
+                      />
+                    ))}
+                  </div>
+                </ScrollReveal>
+              </div>
+            </>
+          ) : null}
+        </>
+      ) : (
+        // Empty state, in the same newsprint voice.
+        <div className="mx-auto max-w-2xl px-4 pt-14 text-center sm:px-6">
+          <p
+            className="mb-2 font-['Playfair_Display',serif] text-3xl font-extrabold"
+            style={{ color: INK }}
+          >
+            Press features coming soon
+          </p>
+          <p
+            className="font-['PT_Serif',serif] italic"
+            style={{ color: BODY_INK }}
+          >
+            We're just getting started — check back for news stories about
+            Together Sports.
+          </p>
+        </div>
+      )}
+
+      {/* CTA, kept in the newspaper voice */}
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <div
+          className="mt-14 border-t-4 border-double md:mt-20"
+          style={{ borderColor: INK }}
+        />
+        <ScrollReveal>
+          <div className="mx-auto max-w-xl pt-10 text-center md:pt-12">
+            <h2
+              className="mb-3 font-['Playfair_Display',serif] text-3xl font-extrabold md:text-4xl"
+              style={{ color: INK }}
+            >
               {t("press.ctaHeading")}
             </h2>
-            <p className="mx-auto mb-8 max-w-md text-lg text-muted-foreground">
+            <p
+              className="mb-6 font-['PT_Serif',serif] italic leading-relaxed"
+              style={{ color: BODY_INK }}
+            >
               {t("press.ctaBody")}
             </p>
             <Link
               to="/contact"
-              className="inline-block bg-primary px-8 py-4 font-heading font-bold uppercase tracking-wider text-white transition-all duration-200 hover:scale-105"
+              className="inline-block border-b-2 border-[#87cb4a] pb-0.5 font-['Oswald',sans-serif] text-sm font-semibold uppercase tracking-[0.1em] transition-colors hover:text-[#2f6d2f]"
+              style={{ color: INK }}
             >
               {t("press.ctaButton")}
             </Link>
-          </ScrollReveal>
-        </div>
-      </section>
+          </div>
+        </ScrollReveal>
+      </div>
     </div>
   );
 };

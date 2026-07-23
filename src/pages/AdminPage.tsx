@@ -3101,7 +3101,8 @@ const AdminPage = () => {
                         date: "",
                         href: "",
                         excerpt: "",
-                        image: ""
+                        image: "",
+                        logo: ""
                       },
                       ...current
                     ])
@@ -3234,16 +3235,22 @@ const AdminPage = () => {
                         placeholder="A short line from the article, shown on the card."
                       />
                     </div>
-                    <div className="md:col-span-2">
-                      <ImageField
-                        label="Photo / Clipping (Optional)"
-                        value={article.image ?? ""}
-                        onChange={(value) =>
-                          updatePressArticle(article.id, "image", value)
-                        }
-                        onUpload={uploadImage}
-                      />
-                    </div>
+                    <ImageField
+                      label="Photo / Clipping (Optional)"
+                      value={article.image ?? ""}
+                      onChange={(value) =>
+                        updatePressArticle(article.id, "image", value)
+                      }
+                      onUpload={uploadImage}
+                    />
+                    <ImageField
+                      label="Outlet Logo (Optional)"
+                      value={article.logo ?? ""}
+                      onChange={(value) =>
+                        updatePressArticle(article.id, "logo", value)
+                      }
+                      onUpload={uploadImage}
+                    />
                   </div>
                 </EditorCard>
               ))}
