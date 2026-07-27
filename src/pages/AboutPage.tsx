@@ -51,6 +51,42 @@ const socialIconMap: Record<
   tiktok: TikTokIcon
 };
 
+const US_STATE_NAMES: Record<string, string> = {
+  AL: "Alabama", AK: "Alaska", AZ: "Arizona", AR: "Arkansas", CA: "California",
+  CO: "Colorado", CT: "Connecticut", DE: "Delaware", FL: "Florida", GA: "Georgia",
+  HI: "Hawaii", ID: "Idaho", IL: "Illinois", IN: "Indiana", IA: "Iowa",
+  KS: "Kansas", KY: "Kentucky", LA: "Louisiana", ME: "Maine", MD: "Maryland",
+  MA: "Massachusetts", MI: "Michigan", MN: "Minnesota", MS: "Mississippi", MO: "Missouri",
+  MT: "Montana", NE: "Nebraska", NV: "Nevada", NH: "New Hampshire", NJ: "New Jersey",
+  NM: "New Mexico", NY: "New York", NC: "North Carolina", ND: "North Dakota", OH: "Ohio",
+  OK: "Oklahoma", OR: "Oregon", PA: "Pennsylvania", RI: "Rhode Island", SC: "South Carolina",
+  SD: "South Dakota", TN: "Tennessee", TX: "Texas", UT: "Utah", VT: "Vermont",
+  VA: "Virginia", WA: "Washington", WV: "West Virginia", WI: "Wisconsin", WY: "Wyoming",
+  DC: "Washington, DC"
+};
+
+// Mobile cards are narrow, so "Morganville, NJ" becomes just "New Jersey"
+// there — with "New York City" special-cased to "NYC".
+const shortLocation = (location: string) => {
+  const trimmed = location.trim();
+
+  if (/new york city/i.test(trimmed)) {
+    return "NYC";
+  }
+
+  const abbreviation = trimmed.match(/,\s*([A-Za-z]{2})\.?$/);
+  const fullState = abbreviation
+    ? US_STATE_NAMES[abbreviation[1].toUpperCase()]
+    : undefined;
+  if (fullState) {
+    return fullState;
+  }
+
+  // "Morganville, New Jersey" -> "New Jersey"
+  const parts = trimmed.split(",");
+  return parts.length > 1 ? parts[parts.length - 1].trim() : trimmed;
+};
+
 const TeamCard = ({
   person,
   color,
@@ -121,7 +157,8 @@ const TeamCard = ({
         </p>
         {person.location ? (
           <p className="font-body text-xs sm:text-sm uppercase tracking-[0.18em] text-muted-foreground mb-4 break-words [overflow-wrap:anywhere]">
-            {person.location}
+            <span className="sm:hidden">{shortLocation(person.location)}</span>
+            <span className="hidden sm:inline">{person.location}</span>
           </p>
         ) : null}
         <div
@@ -145,7 +182,7 @@ const TeamCard = ({
             }`}
           >
             <h4
-              className={`font-heading font-black uppercase ${
+              className={`font-heading font-black uppercase break-words ${
                 isFounder ? "text-4xl md:text-5xl" : "text-xl sm:text-3xl md:text-4xl"
               }`}
             >
@@ -286,7 +323,12 @@ const AboutPage = () => {
                         className={
                           section.title === "Founder"
                             ? undefined
-                            : "basis-[calc((100%_-_0.75rem)_/_2)] sm:basis-[calc((100%_-_1.5rem)_/_2)] md:basis-[calc((100%_-_1.75rem)_/_2)] xl:basis-[calc((100%_-_3.5rem)_/_3)]"
+                            : // min-w-0 lets a card shrink below its content's
+                              // min width — without it, one wide word (a long
+                              // name or role) inflates the flex item past the
+                              // 2-up basis and every pair wraps to single-card
+                              // rows on phones.
+                              "min-w-0 max-w-full basis-[calc((100%_-_0.75rem)_/_2)] sm:basis-[calc((100%_-_1.5rem)_/_2)] md:basis-[calc((100%_-_1.75rem)_/_2)] xl:basis-[calc((100%_-_3.5rem)_/_3)]"
                         }
                       >
                         <TeamCard
