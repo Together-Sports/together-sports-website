@@ -168,9 +168,6 @@ const StripeDonateSection = () => {
             }}
             className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none transition-colors focus:border-primary"
           />
-          <p className="mt-2 text-sm text-muted-foreground">
-            Minimum {formatDonationAmount(DONATION_MIN_AMOUNT_CENTS)}.
-          </p>
         </div>
 
         {error ? (
