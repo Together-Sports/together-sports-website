@@ -68,22 +68,25 @@ const createReceiptHtml = ({ donorName, amountCents, dateLabel, reference }: Rec
 
         <div style="padding:20px;border:1px solid #d8def0;border-radius:20px;background:#f8faff;margin-bottom:20px;">
           <div style="font-size:12px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#4f74d6;margin-bottom:12px;">🧾 Donation Receipt</div>
-          <table style="width:100%;border-collapse:collapse;font-size:15px;color:#0a0d28;">
+          <!-- table-layout:fixed + wrapping on every value keeps this from
+               overflowing narrow phone screens (the pi_... reference is one
+               long unbreakable token otherwise). -->
+          <table style="width:100%;max-width:100%;table-layout:fixed;border-collapse:collapse;font-size:15px;color:#0a0d28;">
             <tr>
-              <td style="padding:6px 0;color:#6b7194;">Amount</td>
-              <td style="padding:6px 0;text-align:right;font-weight:700;font-size:18px;">${formatUsd(amountCents)}</td>
+              <td style="width:34%;padding:6px 8px 6px 0;color:#6b7194;vertical-align:top;">Amount</td>
+              <td style="padding:6px 0;text-align:right;font-weight:700;font-size:18px;word-break:break-word;">${formatUsd(amountCents)}</td>
             </tr>
             <tr>
-              <td style="padding:6px 0;color:#6b7194;">Date</td>
-              <td style="padding:6px 0;text-align:right;font-weight:600;">${escapeHtml(dateLabel)}</td>
+              <td style="width:34%;padding:6px 8px 6px 0;color:#6b7194;vertical-align:top;">Date</td>
+              <td style="padding:6px 0;text-align:right;font-weight:600;word-break:break-word;">${escapeHtml(dateLabel)}</td>
             </tr>
             <tr>
-              <td style="padding:6px 0;color:#6b7194;">Reference</td>
-              <td style="padding:6px 0;text-align:right;font-weight:600;font-family:monospace;font-size:13px;">${escapeHtml(reference)}</td>
+              <td style="width:34%;padding:6px 8px 6px 0;color:#6b7194;vertical-align:top;">Reference</td>
+              <td style="padding:6px 0;text-align:right;font-weight:600;font-family:monospace;font-size:12px;word-break:break-all;overflow-wrap:anywhere;">${escapeHtml(reference)}</td>
             </tr>
             <tr>
-              <td style="padding:6px 0;color:#6b7194;">Organization</td>
-              <td style="padding:6px 0;text-align:right;font-weight:600;">Together Sports${orgEin ? ` · EIN ${escapeHtml(orgEin)}` : ""}</td>
+              <td style="width:34%;padding:6px 8px 6px 0;color:#6b7194;vertical-align:top;">Organization</td>
+              <td style="padding:6px 0;text-align:right;font-weight:600;word-break:break-word;">Together Sports${orgEin ? ` · EIN ${escapeHtml(orgEin)}` : ""}</td>
             </tr>
           </table>
         </div>
