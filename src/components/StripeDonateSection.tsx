@@ -64,27 +64,36 @@ const StripeDonateSection = () => {
     setCheckoutAmountCents(selectedAmountCents);
   };
 
-  const fetchClientSecret = async () => {
+  // Stripe requires fetchClientSecret to keep the same identity for the
+  // life of the provider — a new function per render makes it throw
+  // "You cannot change fetchClientSecret after setting it" and never call
+  // the API. Recreate the options only when the committed amount changes;
+  // the provider is also keyed by amount so each one gets a fresh instance.
+  const checkoutOptions = useMemo(() => {
     if (!checkoutAmountCents) {
-      throw new Error("Donation amount is missing.");
+      return null;
     }
 
-    const response = await fetch("/api/create-donation-session", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ amountCents: checkoutAmountCents })
-    });
+    return {
+      fetchClientSecret: async () => {
+        const response = await fetch("/api/create-donation-session", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ amountCents: checkoutAmountCents })
+        });
 
-    const data = await response.json().catch(() => null);
+        const data = await response.json().catch(() => null);
 
-    if (!response.ok || !data?.clientSecret) {
-      throw new Error(data?.error ?? "Unable to start checkout.");
-    }
+        if (!response.ok || !data?.clientSecret) {
+          throw new Error(data?.error ?? "Unable to start checkout.");
+        }
 
-    return data.clientSecret as string;
-  };
+        return data.clientSecret as string;
+      }
+    };
+  }, [checkoutAmountCents]);
 
   if (!stripePromise) {
     return (
@@ -185,14 +194,12 @@ const StripeDonateSection = () => {
         </div>
       </div>
 
-      {checkoutAmountCents ? (
+      {checkoutAmountCents && checkoutOptions ? (
         <div className="rounded-2xl bg-white p-2 shadow-sm md:p-4">
           <EmbeddedCheckoutProvider
             key={checkoutAmountCents}
             stripe={stripePromise}
-            options={{
-              fetchClientSecret
-            }}
+            options={checkoutOptions}
           >
             <EmbeddedCheckout />
           </EmbeddedCheckoutProvider>
