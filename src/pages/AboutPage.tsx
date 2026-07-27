@@ -6,6 +6,7 @@ import { IS_SERVER } from "@/lib/ssr";
 import { useEditableContent } from "@/lib/editable-content";
 import { imgProps } from "@/lib/image-position";
 import type { TeamPerson, TeamSocialPlatform } from "@/data/team";
+import { mobileLocation } from "@/lib/location-format";
 import { useSiteText } from "@/lib/use-site-text";
 
 const InstagramIcon = ({ className }: { className?: string }) => (
@@ -49,42 +50,6 @@ const socialIconMap: Record<
   instagram: InstagramIcon,
   linkedin: LinkedInIcon,
   tiktok: TikTokIcon
-};
-
-const US_STATE_NAMES: Record<string, string> = {
-  AL: "Alabama", AK: "Alaska", AZ: "Arizona", AR: "Arkansas", CA: "California",
-  CO: "Colorado", CT: "Connecticut", DE: "Delaware", FL: "Florida", GA: "Georgia",
-  HI: "Hawaii", ID: "Idaho", IL: "Illinois", IN: "Indiana", IA: "Iowa",
-  KS: "Kansas", KY: "Kentucky", LA: "Louisiana", ME: "Maine", MD: "Maryland",
-  MA: "Massachusetts", MI: "Michigan", MN: "Minnesota", MS: "Mississippi", MO: "Missouri",
-  MT: "Montana", NE: "Nebraska", NV: "Nevada", NH: "New Hampshire", NJ: "New Jersey",
-  NM: "New Mexico", NY: "New York", NC: "North Carolina", ND: "North Dakota", OH: "Ohio",
-  OK: "Oklahoma", OR: "Oregon", PA: "Pennsylvania", RI: "Rhode Island", SC: "South Carolina",
-  SD: "South Dakota", TN: "Tennessee", TX: "Texas", UT: "Utah", VT: "Vermont",
-  VA: "Virginia", WA: "Washington", WV: "West Virginia", WI: "Wisconsin", WY: "Wyoming",
-  DC: "Washington, DC"
-};
-
-// Mobile cards are narrow, so "Morganville, NJ" becomes just "New Jersey"
-// there — with "New York City" special-cased to "NYC".
-const shortLocation = (location: string) => {
-  const trimmed = location.trim();
-
-  if (/new york city/i.test(trimmed)) {
-    return "NYC";
-  }
-
-  const abbreviation = trimmed.match(/,\s*([A-Za-z]{2})\.?$/);
-  const fullState = abbreviation
-    ? US_STATE_NAMES[abbreviation[1].toUpperCase()]
-    : undefined;
-  if (fullState) {
-    return fullState;
-  }
-
-  // "Morganville, New Jersey" -> "New Jersey"
-  const parts = trimmed.split(",");
-  return parts.length > 1 ? parts[parts.length - 1].trim() : trimmed;
 };
 
 const TeamCard = ({
@@ -157,7 +122,9 @@ const TeamCard = ({
         </p>
         {person.location ? (
           <p className="font-body text-xs sm:text-sm uppercase tracking-[0.18em] text-muted-foreground mb-4 break-words [overflow-wrap:anywhere]">
-            <span className="sm:hidden">{shortLocation(person.location)}</span>
+            <span className="sm:hidden">
+              {mobileLocation(person.location, person.locationMobile)}
+            </span>
             <span className="hidden sm:inline">{person.location}</span>
           </p>
         ) : null}

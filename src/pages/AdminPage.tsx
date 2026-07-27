@@ -30,6 +30,7 @@ import type {
   SportSession
 } from "@/lib/editable-content-format";
 import { useEditableContent } from "@/lib/editable-content";
+import { autoShortLocation } from "@/lib/location-format";
 import { TEXT_FIELDS, TEXT_PAGES } from "@/lib/text-registry";
 import {
   imageObjectPosition,
@@ -3624,6 +3625,34 @@ const AdminPage = () => {
                               }
                               placeholder="Brooklyn, NY"
                             />
+                          </div>
+                          <div className="space-y-2">
+                            <p className={labelClass}>Location On Mobile</p>
+                            <input
+                              className={inputClass}
+                              value={person.locationMobile || ""}
+                              onChange={(event) =>
+                                updatePerson(section.id, person.id, {
+                                  ...person,
+                                  locationMobile: event.target.value
+                                })
+                              }
+                              placeholder={
+                                person.location
+                                  ? autoShortLocation(person.location)
+                                  : "New York"
+                              }
+                            />
+                            <p className="text-xs text-muted-foreground">
+                              Shown on phones, where cards are narrow. Leave
+                              empty to use{" "}
+                              <span className="font-semibold">
+                                {person.location
+                                  ? autoShortLocation(person.location)
+                                  : "the state name"}
+                              </span>{" "}
+                              automatically.
+                            </p>
                           </div>
                           <div className="space-y-2 md:col-span-2">
                             <p className={labelClass}>Description</p>

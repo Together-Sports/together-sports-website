@@ -8,6 +8,9 @@ export type TeamPerson = {
   name: string;
   role: string;
   location?: string;
+  // Shorter location shown on phones. When empty, the site shortens the
+  // location automatically (e.g. "Morganville, NJ" -> "New Jersey").
+  locationMobile?: string;
   image: string;
   alt: string;
   description?: string;
