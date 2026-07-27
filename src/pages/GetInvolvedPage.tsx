@@ -62,13 +62,15 @@ const GetInvolvedPage = () => {
     new URLSearchParams(window.location.search).get("donation") === "success";
 
   useEffect(() => {
-    if (location.hash !== "#donate") {
+    // Bring the donate section into view both for #donate links and when
+    // Stripe sends the donor back with ?donation=success.
+    if (location.hash !== "#donate" && !showDonationSuccess) {
       return;
     }
 
     const donateSection = document.getElementById("donate");
     donateSection?.scrollIntoView({ behavior: "smooth", block: "start" });
-  }, [location.hash]);
+  }, [location.hash, showDonationSuccess]);
 
   return (
     <div className="overflow-hidden">
@@ -125,10 +127,32 @@ const GetInvolvedPage = () => {
       <section id="donate" className="scroll-mt-24 bg-[#f4f8ff] py-14 md:py-20">
         <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
           {showDonationSuccess ? (
-            <div className="mb-6 rounded-2xl border border-emerald-300 bg-emerald-50 px-5 py-4 text-emerald-900">
-              <p className="font-semibold">Thank you for your donation.</p>
-              <p className="mt-1 text-sm">
-                Your support helps expand youth access to sports opportunities.
+            <div className="relative mb-8 overflow-hidden rounded-2xl border-2 border-[#87cb4a] bg-white p-8 text-center shadow-[8px_8px_0_0_#87cb4a] md:p-12">
+              <div className="absolute -left-4 -top-4 h-16 w-16 rounded-full bg-[#84a6ff]/15" />
+              <div className="absolute -right-3 top-8 h-10 w-10 rotate-45 bg-[#f6a15c]/20" />
+              <div className="absolute bottom-4 left-8 h-8 w-8 rounded-full bg-[#ab9bfa]/20" />
+              <p className="mb-2 text-4xl" aria-hidden>
+                🎉💚🎉
+              </p>
+              <h2 className="mb-3 font-heading text-4xl font-black uppercase leading-none text-foreground md:text-5xl">
+                Thank{" "}
+                <span className="relative inline-block">
+                  <span className="relative z-10">You!</span>
+                  <span
+                    aria-hidden
+                    className="absolute inset-x-0 -bottom-1 h-3 -skew-x-12 rounded-sm bg-[#87cb4a]/60"
+                  />
+                </span>
+              </h2>
+              <p className="mx-auto mb-4 max-w-xl text-lg leading-relaxed text-muted-foreground">
+                Your donation just put another kid in the game. Equipment,
+                coaching, and free programs — that's what your generosity
+                funds, and it starts right away.
+              </p>
+              <p className="mx-auto max-w-xl text-sm leading-relaxed text-muted-foreground">
+                A receipt for your records is on its way to your email.
+                Together Sports is a 501(c)(3) nonprofit, so your charitable
+                donation is tax-deductible to the extent allowed by law.
               </p>
             </div>
           ) : null}

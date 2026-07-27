@@ -119,6 +119,11 @@ const StripeDonateSection = () => {
           Your gift funds equipment, travel, and coaching so more youth can
           access sports.
         </p>
+        <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted-foreground">
+          Together Sports is a 501(c)(3) nonprofit organization. Your donation
+          is a charitable contribution and is tax-deductible to the extent
+          allowed by law — a receipt for tax purposes will be emailed to you.
+        </p>
 
         <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
           {donationPresetAmounts.map((amount) => {
@@ -168,9 +173,6 @@ const StripeDonateSection = () => {
             }}
             className="w-full rounded-xl border border-slate-300 px-4 py-3 text-base outline-none transition-colors focus:border-primary"
           />
-          <p className="mt-2 text-sm text-muted-foreground">
-            Minimum {formatDonationAmount(DONATION_MIN_AMOUNT_CENTS)}.
-          </p>
         </div>
 
         {error ? (
