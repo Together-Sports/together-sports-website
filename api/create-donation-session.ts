@@ -110,7 +110,8 @@ export async function POST(request: Request) {
             currency: "usd",
             product_data: {
               name: "Together Sports Donation",
-              description: "Support youth sports access programs.",
+              description:
+                "Tax-deductible charitable contribution to Together Sports, a 501(c)(3) nonprofit.",
             },
             unit_amount: parsed.data.amountCents,
           },
@@ -119,7 +120,8 @@ export async function POST(request: Request) {
       submit_type: "donate",
       custom_text: {
         submit: {
-          message: "Thank you for helping expand access to youth sports.",
+          message:
+            "Together Sports is a 501(c)(3) nonprofit — your donation is tax-deductible and a receipt will be emailed to you.",
         },
       },
       metadata: {
