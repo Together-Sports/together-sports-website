@@ -419,7 +419,7 @@ const Index = () => {
               initial={IS_SERVER ? false : { opacity: 0, y: 50, rotate: -2 }}
               animate={{ opacity: 1, y: 0, rotate: 0 }}
               transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
-              className="relative h-[420px] sm:h-[600px] md:h-[680px] w-full max-w-[680px] mx-auto -translate-y-4 sm:-translate-y-8 md:-translate-y-12 lg:mx-0 lg:ml-20 lg:-translate-y-20"
+              className="relative h-[420px] sm:h-[600px] md:h-[680px] lg:h-[780px] w-full max-w-[680px] lg:max-w-[820px] mx-auto -translate-y-4 sm:-translate-y-8 md:-translate-y-12 lg:mx-0 lg:ml-8 lg:-translate-y-20"
             >
               <div className="absolute left-10 -top-6 w-[68%] h-[40%] overflow-hidden border-[10px] border-white bg-white scrapbook-rotate-2 z-10">
                 <img
@@ -547,6 +547,36 @@ const Index = () => {
         </div>
       </section>
 
+      {/* IMPACT STATS */}
+      {impactMetricsSection.isVisible &&
+      impactMetricsSection.items.length > 0 ? (
+        <section className="py-10 md:py-12 bg-white relative">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
+              {impactMetricsSection.items.map((item, index) => (
+                <ScrollReveal key={item.id} delay={index * 0.08}>
+                  <div
+                    className="flex h-full min-h-[150px] md:min-h-[190px] w-full flex-col justify-center items-center gap-3 bg-white border-4 px-3 py-6 text-center md:gap-5 md:px-7 md:py-10"
+                    style={{ borderColor: item.color }}
+                  >
+                    <p
+                      className="font-heading text-base sm:text-xl md:text-2xl font-black uppercase leading-tight"
+                      style={{ color: item.color }}
+                    >
+                      {item.title}
+                    </p>
+                    <CountUpValue
+                      value={item.value}
+                      className="font-heading text-4xl sm:text-5xl md:text-6xl font-black uppercase text-foreground leading-none"
+                    />
+                  </div>
+                </ScrollReveal>
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
+
       {/* SPORTS CTA */}
       <section id="sports" className="py-14 md:py-24 bg-white relative">
         {sportsCtaSpins.map((item) => (
@@ -653,35 +683,6 @@ const Index = () => {
           </div>
         </div>
       </section>
-
-      {impactMetricsSection.isVisible &&
-      impactMetricsSection.items.length > 0 ? (
-        <section className="py-10 md:py-12 bg-white relative">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
-              {impactMetricsSection.items.map((item, index) => (
-                <ScrollReveal key={item.id} delay={index * 0.08}>
-                  <div
-                    className="flex h-full min-h-[150px] md:min-h-[190px] w-full flex-col justify-center items-center gap-3 bg-white border-4 px-3 py-6 text-center md:gap-5 md:px-7 md:py-10"
-                    style={{ borderColor: item.color }}
-                  >
-                    <p
-                      className="font-heading text-base sm:text-xl md:text-2xl font-black uppercase leading-tight"
-                      style={{ color: item.color }}
-                    >
-                      {item.title}
-                    </p>
-                    <CountUpValue
-                      value={item.value}
-                      className="font-heading text-4xl sm:text-5xl md:text-6xl font-black uppercase text-foreground leading-none"
-                    />
-                  </div>
-                </ScrollReveal>
-              ))}
-            </div>
-          </div>
-        </section>
-      ) : null}
 
       {/* SECOND SERVE */}
       <section className="pt-14 pb-12 md:pt-20 md:pb-20 relative overflow-hidden">
