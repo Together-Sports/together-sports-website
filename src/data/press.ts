@@ -11,6 +11,9 @@ export type PressArticle = {
   excerpt?: string;
   // Optional photo or clipping image.
   image?: string;
+  // Optional video clip (uploaded MP4 or a YouTube link). When set, it plays
+  // in place of the photo, with the photo used as the video's cover image.
+  video?: string;
   // Optional publication logo, shown in place of the outlet name tag.
   logo?: string;
 };

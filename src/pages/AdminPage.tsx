@@ -357,15 +357,21 @@ const VideoField = ({
   description,
   value,
   onChange,
-  onUpload
+  onUpload,
+  allowYouTube = false
 }: {
   label: string;
   description?: string;
   value: string;
   onChange: (value: string) => void;
   onUpload: (file: File) => Promise<string>;
+  // Only for fields whose page renderer supports YouTube embeds. The mission
+  // and intro videos play through a native <video> tag, so YouTube links
+  // would break there — keep the preview honest for those.
+  allowYouTube?: boolean;
 }) => {
   const [isUploading, setIsUploading] = useState(false);
+  const youtubeEmbed = allowYouTube ? normalizeYouTubeEmbedUrl(value) : null;
 
   const handleFileSelect = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -398,14 +404,24 @@ const VideoField = ({
       ) : null}
       <div className="w-full h-40 border border-border bg-white overflow-hidden flex items-center justify-center">
         {value ? (
-          <video
-            src={value}
-            controls
-            muted
-            playsInline
-            preload="metadata"
-            className="w-full h-full object-cover"
-          />
+          youtubeEmbed ? (
+            <iframe
+              src={youtubeEmbed}
+              title="Video preview"
+              allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              className="w-full h-full"
+            />
+          ) : (
+            <video
+              src={value}
+              controls
+              muted
+              playsInline
+              preload="metadata"
+              className="w-full h-full object-cover"
+            />
+          )
         ) : (
           <span className="text-muted-foreground text-sm">
             No video selected
@@ -416,7 +432,11 @@ const VideoField = ({
         type="url"
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        placeholder="Paste an MP4 video URL"
+        placeholder={
+          allowYouTube
+            ? "Paste an MP4 or YouTube video URL"
+            : "Paste an MP4 video URL"
+        }
         className={inputClass}
       />
       <label className="block">
@@ -3103,6 +3123,7 @@ const AdminPage = () => {
                         href: "",
                         excerpt: "",
                         image: "",
+                        video: "",
                         logo: ""
                       },
                       ...current
@@ -3252,6 +3273,18 @@ const AdminPage = () => {
                       }
                       onUpload={uploadImage}
                     />
+                    <div className="md:col-span-2">
+                      <VideoField
+                        label="Video Clip (Optional)"
+                        description="When a video is set, it plays on the Press page in place of the article photo — the photo becomes the video's cover image. Upload the clip, or paste an MP4 or YouTube link."
+                        value={article.video ?? ""}
+                        onChange={(value) =>
+                          updatePressArticle(article.id, "video", value)
+                        }
+                        onUpload={uploadImage}
+                        allowYouTube
+                      />
+                    </div>
                   </div>
                 </EditorCard>
               ))}
