@@ -70,6 +70,7 @@ const createEmailHtml = (payload: {
   firstName: string;
   lastName: string;
   email: string;
+  phone: string;
   topic: string;
   message: string;
 }) => `
@@ -89,6 +90,10 @@ const createEmailHtml = (payload: {
             <div style="font-size:12px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#4f74d6;margin-bottom:4px;">📧 Email</div>
             <div style="font-size:18px;font-weight:600;color:#0a0d28;">${escapeHtml(payload.email)}</div>
           </div>
+          ${payload.phone ? `<div style="padding:14px 16px;border:1px solid #d8def0;border-radius:16px;background:#ffffff;">
+            <div style="font-size:12px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#4f74d6;margin-bottom:4px;">📞 Phone</div>
+            <div style="font-size:18px;font-weight:600;color:#0a0d28;">${escapeHtml(payload.phone)}</div>
+          </div>` : ''}
           <div style="padding:14px 16px;border:1px solid #d8def0;border-radius:16px;background:#ffffff;">
             <div style="font-size:12px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#4f74d6;margin-bottom:4px;">🏷️ Topic</div>
             <div style="font-size:18px;font-weight:600;color:#0a0d28;">${escapeHtml(payload.topic)}</div>
@@ -109,12 +114,13 @@ const createEmailText = (payload: {
   firstName: string;
   lastName: string;
   email: string;
+  phone: string;
   topic: string;
   message: string;
 }) => `Together Sports - New Contact Message
 
 👤 Name: ${payload.firstName} ${payload.lastName}
-📧 Email: ${payload.email}
+📧 Email: ${payload.email}${payload.phone ? `\n📞 Phone: ${payload.phone}` : ''}
 🏷️ Topic: ${payload.topic}
 
 📝 Message:
