@@ -799,6 +799,7 @@ const TestimonialFields = ({
 
 const AdminPage = () => {
   const {
+    asSeenOnOutlets,
     blogPosts,
     experiences,
     partners,
@@ -808,6 +809,7 @@ const AdminPage = () => {
     impactMetricsSection,
     otherLocationsSection,
     sportDescriptions,
+    setAsSeenOnOutlets,
     setBlogPosts,
     setExperiences,
     setPartners,
@@ -1131,6 +1133,34 @@ const AdminPage = () => {
 
   const movePressArticle = (id: string, direction: -1 | 1) => {
     setPressArticles((current) => {
+      const index = current.findIndex((item) => item.id === id);
+      const nextIndex = index + direction;
+
+      if (index < 0 || nextIndex < 0 || nextIndex >= current.length) {
+        return current;
+      }
+
+      const next = [...current];
+      const [moved] = next.splice(index, 1);
+      next.splice(nextIndex, 0, moved);
+      return next;
+    });
+  };
+
+  const updateAsSeenOnOutlet = (
+    id: string,
+    field: "name" | "logo",
+    value: string
+  ) => {
+    setAsSeenOnOutlets((current) =>
+      current.map((item) =>
+        item.id === id ? { ...item, [field]: value } : item
+      )
+    );
+  };
+
+  const moveAsSeenOnOutlet = (id: string, direction: -1 | 1) => {
+    setAsSeenOnOutlets((current) => {
       const index = current.findIndex((item) => item.id === id);
       const nextIndex = index + direction;
 
@@ -2070,6 +2100,114 @@ const AdminPage = () => {
           </TabsContent>
           <TabsContent value="home">
             <div className="space-y-6">
+              <EditorCard>
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div>
+                    <p className="font-heading text-2xl font-black uppercase">
+                      As Seen On
+                    </p>
+                    <p className="text-muted-foreground text-sm">
+                      The outlet strip right under the home page hero (Fox,
+                      Spectrum NY1, Bronx Times, ...). Upload a logo to show it
+                      in place of the outlet name. When this list is empty, the
+                      strip fills itself from the Press page articles instead —
+                      and it stays hidden if there are none of those either.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setAsSeenOnOutlets((current) => [
+                        ...current,
+                        {
+                          id: createId("seen-on"),
+                          name: "Outlet Name",
+                          logo: ""
+                        }
+                      ])
+                    }
+                    className="px-4 py-3 bg-primary text-white font-heading font-bold uppercase text-sm tracking-wider"
+                  >
+                    + Add Outlet
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  {asSeenOnOutlets.map((outlet, outletIndex) => (
+                    <div
+                      key={outlet.id}
+                      className="border border-border bg-white p-5 space-y-4"
+                    >
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <p className="font-heading text-sm font-black uppercase text-muted-foreground">
+                          Outlet {outletIndex + 1}
+                        </p>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => moveAsSeenOnOutlet(outlet.id, -1)}
+                            disabled={outletIndex === 0}
+                            className="px-3 py-2 border border-border bg-white text-foreground font-heading font-bold uppercase text-xs tracking-wider inline-flex items-center gap-2 disabled:opacity-50"
+                          >
+                            <ArrowUp size={14} />
+                            Up
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => moveAsSeenOnOutlet(outlet.id, 1)}
+                            disabled={
+                              outletIndex === asSeenOnOutlets.length - 1
+                            }
+                            className="px-3 py-2 border border-border bg-white text-foreground font-heading font-bold uppercase text-xs tracking-wider inline-flex items-center gap-2 disabled:opacity-50"
+                          >
+                            <ArrowDown size={14} />
+                            Down
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setAsSeenOnOutlets((current) =>
+                                current.filter(
+                                  (entry) => entry.id !== outlet.id
+                                )
+                              )
+                            }
+                            className="px-3 py-2 border border-border bg-white text-foreground font-heading font-bold uppercase text-xs tracking-wider"
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <p className={labelClass}>Outlet Name</p>
+                        <input
+                          className={inputClass}
+                          value={outlet.name}
+                          onChange={(event) =>
+                            updateAsSeenOnOutlet(
+                              outlet.id,
+                              "name",
+                              event.target.value
+                            )
+                          }
+                          placeholder="Spectrum News NY1"
+                        />
+                      </div>
+
+                      <ImageField
+                        label="Logo (Optional)"
+                        value={outlet.logo ?? ""}
+                        onChange={(value) =>
+                          updateAsSeenOnOutlet(outlet.id, "logo", value)
+                        }
+                        onUpload={uploadImage}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </EditorCard>
+
               <EditorCard>
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div>

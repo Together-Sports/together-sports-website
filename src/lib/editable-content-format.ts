@@ -11,6 +11,14 @@ export type TennisLessonVideo = {
   youtubeUrl: string;
 };
 
+// An outlet in the home page "As Seen On" strip (e.g. Fox, Spectrum NY1).
+// The logo is shown in place of the name when set.
+export type AsSeenOnOutlet = {
+  id: string;
+  name: string;
+  logo?: string;
+};
+
 export type ImpactMetric = {
   id: string;
   title: string;
@@ -96,6 +104,9 @@ export type EditableContentState = {
   // Optional so content saved before the Press page existed still parses;
   // hydration fills in an empty list.
   pressArticles?: PressArticle[];
+  // Optional for the same reason. When empty, the home page derives the
+  // "As Seen On" strip from the press articles instead.
+  asSeenOnOutlets?: AsSeenOnOutlet[];
   teamSections: TeamSection[];
   tennisLessonVideos: TennisLessonVideo[];
   impactMetricsSection: ImpactMetricsSection;
@@ -187,6 +198,12 @@ export const serializeEditableContentState = (
         logo: item.logo ? toPortableMediaValue(item.logo) : item.logo,
       }))
     : [],
+  asSeenOnOutlets: Array.isArray(content.asSeenOnOutlets)
+    ? content.asSeenOnOutlets.map((item) => ({
+        ...item,
+        logo: item.logo ? toPortableMediaValue(item.logo) : item.logo,
+      }))
+    : [],
   teamSections: content.teamSections.map((section) => ({
     ...section,
     people: section.people.map((person) => ({
@@ -263,6 +280,12 @@ export const hydrateEditableContentState = (
     ? content.pressArticles.map((item) => ({
         ...item,
         image: item.image ? fromPortableMediaValue(item.image) : item.image,
+        logo: item.logo ? fromPortableMediaValue(item.logo) : item.logo,
+      }))
+    : [],
+  asSeenOnOutlets: Array.isArray(content.asSeenOnOutlets)
+    ? content.asSeenOnOutlets.map((item) => ({
+        ...item,
         logo: item.logo ? fromPortableMediaValue(item.logo) : item.logo,
       }))
     : [],

@@ -276,6 +276,7 @@ const MapEmbedCard = ({
 
 const Index = () => {
   const {
+    asSeenOnOutlets,
     experiences,
     impactMetricsSection,
     otherLocationsSection,
@@ -342,23 +343,35 @@ const Index = () => {
     item.embedUrl.trim()
   );
 
-  // Unique outlets from the Press page articles, for the "As Seen On" strip
-  // under the hero. Prefers an entry's logo when the same outlet appears more
-  // than once, so managing press coverage keeps this strip current for free.
+  // Outlets for the "As Seen On" strip under the hero. The curated list from
+  // the admin's Home tab wins when it has entries; otherwise the strip derives
+  // itself from the Press page articles (unique outlets, logo preferred when
+  // the same outlet appears more than once).
+  const curatedOutlets = asSeenOnOutlets
+    .map((outlet) => ({
+      name: outlet.name.trim(),
+      logo: outlet.logo?.trim() || undefined
+    }))
+    .filter((outlet) => outlet.name || outlet.logo);
+
   const pressOutlets: { name: string; logo?: string }[] = [];
-  for (const article of pressArticles) {
-    const name = article.outlet?.trim();
-    if (!name) continue;
-    const logo = article.logo?.trim() || undefined;
-    const existing = pressOutlets.find(
-      (outlet) => outlet.name.toLowerCase() === name.toLowerCase()
-    );
-    if (existing) {
-      existing.logo = existing.logo ?? logo;
-    } else {
-      pressOutlets.push({ name, logo });
+  if (curatedOutlets.length === 0) {
+    for (const article of pressArticles) {
+      const name = article.outlet?.trim();
+      if (!name) continue;
+      const logo = article.logo?.trim() || undefined;
+      const existing = pressOutlets.find(
+        (outlet) => outlet.name.toLowerCase() === name.toLowerCase()
+      );
+      if (existing) {
+        existing.logo = existing.logo ?? logo;
+      } else {
+        pressOutlets.push({ name, logo });
+      }
     }
   }
+
+  const seenOnOutlets = curatedOutlets.length > 0 ? curatedOutlets : pressOutlets;
 
   return (
     <div className="overflow-hidden">
@@ -479,17 +492,17 @@ const Index = () => {
         </div>
       </section>
 
-      {/* AS SEEN ON — outlets that have covered us, fed by the Press page */}
-      {pressOutlets.length > 0 ? (
+      {/* AS SEEN ON — curated in the admin's Home tab, else fed by the Press page */}
+      {seenOnOutlets.length > 0 ? (
         <section className="border-y border-border/60 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 md:py-6">
             <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 sm:gap-x-10">
               <span className="font-heading text-xs font-black uppercase tracking-[0.22em] text-foreground/50">
                 {t("home.asSeenOnLabel")}
               </span>
-              {pressOutlets.map((outlet) => (
+              {seenOnOutlets.map((outlet, outletIndex) => (
                 <Link
-                  key={outlet.name}
+                  key={`${outlet.name}-${outletIndex}`}
                   to="/press"
                   title={`${outlet.name} coverage of Together Sports`}
                   className="inline-flex items-center"
