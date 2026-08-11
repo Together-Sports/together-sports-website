@@ -20,7 +20,8 @@ import {
   serializeEditableContentState,
   hydrateEditableContentState,
   parseEditableContentImport,
-  type AsSeenOnOutlet,
+  type AsSeenOnSection,
+  createDefaultAsSeenOnSection,
   type EditableContentExportFile,
   type EditableContentState,
   type ImpactMetricsSection,
@@ -43,8 +44,8 @@ type EditableContentContextValue = EditableContentState & {
   setPartners: Dispatch<SetStateAction<Partner[]>>;
   pressArticles: PressArticle[];
   setPressArticles: Dispatch<SetStateAction<PressArticle[]>>;
-  asSeenOnOutlets: AsSeenOnOutlet[];
-  setAsSeenOnOutlets: Dispatch<SetStateAction<AsSeenOnOutlet[]>>;
+  asSeenOnSection: AsSeenOnSection;
+  setAsSeenOnSection: Dispatch<SetStateAction<AsSeenOnSection>>;
   setTeamSections: Dispatch<SetStateAction<TeamSection[]>>;
   setTennisLessonVideos: Dispatch<SetStateAction<TennisLessonVideo[]>>;
   setImpactMetricsSection: Dispatch<SetStateAction<ImpactMetricsSection>>;
@@ -296,8 +297,8 @@ export const EditableContentProvider = ({
   const [pressArticles, setPressArticles] = useState<PressArticle[]>(
     () => bootContent.pressArticles ?? []
   );
-  const [asSeenOnOutlets, setAsSeenOnOutlets] = useState<AsSeenOnOutlet[]>(
-    () => bootContent.asSeenOnOutlets ?? []
+  const [asSeenOnSection, setAsSeenOnSection] = useState<AsSeenOnSection>(
+    () => bootContent.asSeenOnSection ?? createDefaultAsSeenOnSection()
   );
   const [teamSections, setTeamSections] = useState<TeamSection[]>(
     () => bootContent.teamSections
@@ -332,7 +333,7 @@ export const EditableContentProvider = ({
     setExperiences(next.experiences);
     setPartners(next.partners);
     setPressArticles(next.pressArticles ?? []);
-    setAsSeenOnOutlets(next.asSeenOnOutlets ?? []);
+    setAsSeenOnSection(next.asSeenOnSection ?? createDefaultAsSeenOnSection());
     setTeamSections(next.teamSections);
     setTennisLessonVideos(next.tennisLessonVideos);
     setImpactMetricsSection(next.impactMetricsSection);
@@ -351,7 +352,7 @@ export const EditableContentProvider = ({
       experiences,
       partners,
       pressArticles,
-      asSeenOnOutlets,
+      asSeenOnSection,
       teamSections,
       tennisLessonVideos,
       impactMetricsSection,
@@ -491,7 +492,7 @@ export const EditableContentProvider = ({
         experiences,
         partners,
         pressArticles,
-        asSeenOnOutlets,
+        asSeenOnSection,
         teamSections,
         tennisLessonVideos,
         impactMetricsSection,
@@ -504,7 +505,7 @@ export const EditableContentProvider = ({
       experiences,
       partners,
       pressArticles,
-      asSeenOnOutlets,
+      asSeenOnSection,
       teamSections,
       tennisLessonVideos,
       impactMetricsSection,
@@ -524,7 +525,7 @@ export const EditableContentProvider = ({
       setSiteText,
       partners,
       pressArticles,
-      asSeenOnOutlets,
+      asSeenOnSection,
       teamSections,
       tennisLessonVideos,
       impactMetricsSection,
@@ -533,7 +534,7 @@ export const EditableContentProvider = ({
       setExperiences,
       setPartners,
       setPressArticles,
-      setAsSeenOnOutlets,
+      setAsSeenOnSection,
       setTeamSections,
       setTennisLessonVideos,
       setImpactMetricsSection,
@@ -561,7 +562,7 @@ export const EditableContentProvider = ({
             experiences,
             partners,
             pressArticles,
-            asSeenOnOutlets,
+            asSeenOnSection,
             teamSections,
             tennisLessonVideos,
             impactMetricsSection,
@@ -633,7 +634,7 @@ export const EditableContentProvider = ({
           experiences,
           partners,
           pressArticles,
-          asSeenOnOutlets,
+          asSeenOnSection,
           teamSections,
           tennisLessonVideos,
           impactMetricsSection,
@@ -691,7 +692,7 @@ export const EditableContentProvider = ({
       experiences,
       partners,
       pressArticles,
-      asSeenOnOutlets,
+      asSeenOnSection,
       teamSections,
       tennisLessonVideos,
       impactMetricsSection,
