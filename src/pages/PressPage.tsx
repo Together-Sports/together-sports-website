@@ -5,6 +5,7 @@ import type { PressArticle } from "@/data/press";
 import { useEditableContent } from "@/lib/editable-content";
 import { IS_SERVER } from "@/lib/ssr";
 import { useSiteText } from "@/lib/use-site-text";
+import { normalizeYouTubeEmbedUrl } from "@/lib/youtube";
 
 // Newsprint palette for the newspaper treatment.
 const INK = "#1b1a17";
@@ -51,6 +52,72 @@ const OutletTag = ({
   );
 };
 
+// Photo, or a playable video when the article has a clip attached (e.g. a
+// news segment). YouTube links get an embed; uploaded/direct files get the
+// native player with the article photo as the cover frame.
+const StoryMedia = ({
+  article,
+  lead
+}: {
+  article: PressArticle;
+  lead?: boolean;
+}) => {
+  const video = article.video?.trim();
+  const youtubeEmbed = video ? normalizeYouTubeEmbedUrl(video) : null;
+  const frameClass = lead ? "border" : "mb-3.5 border";
+
+  if (youtubeEmbed) {
+    return (
+      <div className={frameClass} style={{ borderColor: INK }}>
+        <iframe
+          src={youtubeEmbed}
+          title={article.title}
+          loading={lead ? "eager" : "lazy"}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+          className="block aspect-video w-full"
+        />
+      </div>
+    );
+  }
+
+  if (video) {
+    return (
+      <div className={frameClass} style={{ borderColor: INK }}>
+        <video
+          src={video}
+          poster={article.image?.trim() || undefined}
+          controls
+          playsInline
+          preload="metadata"
+          className="block aspect-video w-full bg-black object-contain"
+        />
+      </div>
+    );
+  }
+
+  if (!article.image?.trim()) {
+    return null;
+  }
+
+  return (
+    <div className={frameClass} style={{ borderColor: INK }}>
+      <img
+        src={article.image}
+        alt={article.title}
+        loading={lead ? "eager" : "lazy"}
+        decoding="async"
+        fetchpriority={lead ? "high" : undefined}
+        className={
+          lead
+            ? "block w-full object-cover"
+            : "block aspect-[16/10] w-full object-cover"
+        }
+      />
+    </div>
+  );
+};
+
 const ReadLink = ({ href, lead }: { href: string; lead?: boolean }) =>
   href ? (
     <a
@@ -68,7 +135,7 @@ const ReadLink = ({ href, lead }: { href: string; lead?: boolean }) =>
 // The first article runs as the lead story: photo on the left, headline and
 // pull quote on the right, like a front page.
 const LeadStory = ({ article }: { article: PressArticle }) => {
-  const hasImage = Boolean(article.image?.trim());
+  const hasMedia = Boolean(article.image?.trim() || article.video?.trim());
 
   return (
     <ScrollReveal>
@@ -89,23 +156,12 @@ const LeadStory = ({ article }: { article: PressArticle }) => {
 
       <div
         className={`grid grid-cols-1 items-start gap-8 md:gap-11 ${
-          hasImage ? "md:grid-cols-[1.15fr_1fr]" : ""
+          hasMedia ? "md:grid-cols-[1.15fr_1fr]" : ""
         }`}
       >
-        {hasImage ? (
-          <div className="border" style={{ borderColor: INK }}>
-            <img
-              src={article.image}
-              alt={article.title}
-              loading="eager"
-              decoding="async"
-              fetchpriority="high"
-              className="block w-full object-cover"
-            />
-          </div>
-        ) : null}
+        {hasMedia ? <StoryMedia article={article} lead /> : null}
 
-        <div className={hasImage ? "" : "max-w-3xl"}>
+        <div className={hasMedia ? "" : "max-w-3xl"}>
           <h2
             className="mb-2 font-['Playfair_Display',serif] text-3xl font-extrabold leading-[1.04] sm:text-4xl md:text-[2.6rem]"
             style={{ color: INK }}
@@ -168,17 +224,7 @@ const ColumnStory = ({
       ) : null}
     </div>
 
-    {article.image?.trim() ? (
-      <div className="mb-3.5 border" style={{ borderColor: INK }}>
-        <img
-          src={article.image}
-          alt={article.title}
-          loading="lazy"
-          decoding="async"
-          className="block aspect-[16/10] w-full object-cover"
-        />
-      </div>
-    ) : null}
+    <StoryMedia article={article} />
 
     <h3
       className="mb-2.5 font-['Playfair_Display',serif] text-2xl font-bold leading-[1.1]"

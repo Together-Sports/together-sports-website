@@ -275,8 +275,14 @@ const MapEmbedCard = ({
 );
 
 const Index = () => {
-  const { experiences, impactMetricsSection, otherLocationsSection, siteText } =
-    useEditableContent();
+  const {
+    asSeenOnOutlets,
+    experiences,
+    impactMetricsSection,
+    otherLocationsSection,
+    pressArticles,
+    siteText
+  } = useEditableContent();
   const t = useSiteText();
   const missionWords = t("home.missionHeading").split(" ");
   const missionLast = missionWords.pop() ?? "";
@@ -336,6 +342,36 @@ const Index = () => {
   const otherLocations = otherLocationsSection.items.filter((item) =>
     item.embedUrl.trim()
   );
+
+  // Outlets for the "As Seen On" strip under the hero. The curated list from
+  // the admin's Home tab wins when it has entries; otherwise the strip derives
+  // itself from the Press page articles (unique outlets, logo preferred when
+  // the same outlet appears more than once).
+  const curatedOutlets = asSeenOnOutlets
+    .map((outlet) => ({
+      name: outlet.name.trim(),
+      logo: outlet.logo?.trim() || undefined
+    }))
+    .filter((outlet) => outlet.name || outlet.logo);
+
+  const pressOutlets: { name: string; logo?: string }[] = [];
+  if (curatedOutlets.length === 0) {
+    for (const article of pressArticles) {
+      const name = article.outlet?.trim();
+      if (!name) continue;
+      const logo = article.logo?.trim() || undefined;
+      const existing = pressOutlets.find(
+        (outlet) => outlet.name.toLowerCase() === name.toLowerCase()
+      );
+      if (existing) {
+        existing.logo = existing.logo ?? logo;
+      } else {
+        pressOutlets.push({ name, logo });
+      }
+    }
+  }
+
+  const seenOnOutlets = curatedOutlets.length > 0 ? curatedOutlets : pressOutlets;
 
   return (
     <div className="overflow-hidden">
@@ -455,6 +491,43 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      {/* AS SEEN ON — curated in the admin's Home tab, else fed by the Press page */}
+      {seenOnOutlets.length > 0 ? (
+        <section className="bg-white">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+            <ScrollReveal>
+              <p className="mb-8 text-center font-heading text-sm font-black uppercase tracking-[0.32em] text-foreground/40 md:mb-10 md:text-base">
+                {t("home.asSeenOnLabel")}
+              </p>
+              <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-8 sm:gap-x-16 md:gap-x-20">
+                {seenOnOutlets.map((outlet, outletIndex) => (
+                  <Link
+                    key={`${outlet.name}-${outletIndex}`}
+                    to="/press"
+                    title={`${outlet.name} coverage of Together Sports`}
+                    className="inline-flex items-center transition-transform duration-200 hover:scale-105"
+                  >
+                    {outlet.logo ? (
+                      <img
+                        src={outlet.logo}
+                        alt={outlet.name}
+                        loading="lazy"
+                        decoding="async"
+                        className="h-12 w-auto max-w-[200px] object-contain sm:h-14 sm:max-w-[240px] md:h-16 md:max-w-[280px]"
+                      />
+                    ) : (
+                      <span className="font-heading text-2xl font-black uppercase tracking-wide text-foreground/60 transition-colors duration-200 hover:text-foreground sm:text-3xl">
+                        {outlet.name}
+                      </span>
+                    )}
+                  </Link>
+                ))}
+              </div>
+            </ScrollReveal>
+          </div>
+        </section>
+      ) : null}
 
       {/* ABOUT MISSION */}
       <section className="py-14 md:py-28 relative overflow-hidden">
