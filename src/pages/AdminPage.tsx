@@ -23,11 +23,14 @@ import type { Experience, ExperienceType } from "@/data/experiences";
 import type { Partner } from "@/data/partners";
 import type { PressArticle } from "@/data/press";
 import type { TeamPerson, TeamSection, TeamSocialPlatform } from "@/data/team";
-import type {
-  OtherLocation,
-  TennisLessonVideo,
-  SportDescription,
-  SportSession
+import {
+  AS_SEEN_ON_DEFAULT_LOGO_SIZE,
+  AS_SEEN_ON_MAX_LOGO_SIZE,
+  AS_SEEN_ON_MIN_LOGO_SIZE,
+  type OtherLocation,
+  type TennisLessonVideo,
+  type SportDescription,
+  type SportSession
 } from "@/lib/editable-content-format";
 import { useEditableContent } from "@/lib/editable-content";
 import { autoShortLocation } from "@/lib/location-format";
@@ -799,7 +802,7 @@ const TestimonialFields = ({
 
 const AdminPage = () => {
   const {
-    asSeenOnOutlets,
+    asSeenOnSection,
     blogPosts,
     experiences,
     partners,
@@ -809,7 +812,7 @@ const AdminPage = () => {
     impactMetricsSection,
     otherLocationsSection,
     sportDescriptions,
-    setAsSeenOnOutlets,
+    setAsSeenOnSection,
     setBlogPosts,
     setExperiences,
     setPartners,
@@ -1152,26 +1155,27 @@ const AdminPage = () => {
     field: "name" | "logo",
     value: string
   ) => {
-    setAsSeenOnOutlets((current) =>
-      current.map((item) =>
+    setAsSeenOnSection((current) => ({
+      ...current,
+      items: current.items.map((item) =>
         item.id === id ? { ...item, [field]: value } : item
       )
-    );
+    }));
   };
 
   const moveAsSeenOnOutlet = (id: string, direction: -1 | 1) => {
-    setAsSeenOnOutlets((current) => {
-      const index = current.findIndex((item) => item.id === id);
+    setAsSeenOnSection((current) => {
+      const index = current.items.findIndex((item) => item.id === id);
       const nextIndex = index + direction;
 
-      if (index < 0 || nextIndex < 0 || nextIndex >= current.length) {
+      if (index < 0 || nextIndex < 0 || nextIndex >= current.items.length) {
         return current;
       }
 
-      const next = [...current];
+      const next = [...current.items];
       const [moved] = next.splice(index, 1);
       next.splice(nextIndex, 0, moved);
-      return next;
+      return { ...current, items: next };
     });
   };
 
@@ -2108,32 +2112,93 @@ const AdminPage = () => {
                     </p>
                     <p className="text-muted-foreground text-sm">
                       The outlet strip right under the home page hero (Fox,
-                      Spectrum NY1, Bronx Times, ...). Upload a logo to show it
-                      in place of the outlet name. When this list is empty, the
-                      strip fills itself from the Press page articles instead —
-                      and it stays hidden if there are none of those either.
+                      Spectrum NY1, Bronx Times, ...). Only outlets added here
+                      appear. Upload a logo to show it in place of the outlet
+                      name. Uncheck the box to remove the whole section from
+                      the site without losing your list.
                     </p>
                   </div>
+                  <label className="flex min-h-[54px] items-center gap-3 border border-border bg-white px-4 py-3">
+                    <input
+                      type="checkbox"
+                      checked={asSeenOnSection.isVisible}
+                      onChange={(event) =>
+                        setAsSeenOnSection((current) => ({
+                          ...current,
+                          isVisible: event.target.checked
+                        }))
+                      }
+                      className="h-4 w-4 accent-[hsl(var(--primary))]"
+                    />
+                    <span className="text-sm text-foreground">
+                      {asSeenOnSection.isVisible
+                        ? "Section is visible on the live site."
+                        : "Section is hidden on the live site."}
+                    </span>
+                  </label>
+                </div>
+
+                <div className="flex flex-wrap items-end gap-4">
                   <button
                     type="button"
                     onClick={() =>
-                      setAsSeenOnOutlets((current) => [
+                      setAsSeenOnSection((current) => ({
                         ...current,
-                        {
-                          id: createId("seen-on"),
-                          name: "Outlet Name",
-                          logo: ""
-                        }
-                      ])
+                        items: [
+                          ...current.items,
+                          {
+                            id: createId("seen-on"),
+                            name: "Outlet Name",
+                            logo: ""
+                          }
+                        ]
+                      }))
                     }
                     className="px-4 py-3 bg-primary text-white font-heading font-bold uppercase text-sm tracking-wider"
                   >
                     + Add Outlet
                   </button>
+                  <div className="space-y-2">
+                    <p className={labelClass}>Logo Size (px)</p>
+                    <input
+                      type="number"
+                      min={AS_SEEN_ON_MIN_LOGO_SIZE}
+                      max={AS_SEEN_ON_MAX_LOGO_SIZE}
+                      value={asSeenOnSection.logoSize}
+                      onChange={(event) => {
+                        const parsed = Number(event.target.value);
+                        if (Number.isFinite(parsed)) {
+                          setAsSeenOnSection((current) => ({
+                            ...current,
+                            logoSize: parsed
+                          }));
+                        }
+                      }}
+                      onBlur={() =>
+                        setAsSeenOnSection((current) => ({
+                          ...current,
+                          logoSize: Math.min(
+                            AS_SEEN_ON_MAX_LOGO_SIZE,
+                            Math.max(
+                              AS_SEEN_ON_MIN_LOGO_SIZE,
+                              Math.round(current.logoSize) ||
+                                AS_SEEN_ON_DEFAULT_LOGO_SIZE
+                            )
+                          )
+                        }))
+                      }
+                      className={`${inputClass} w-32`}
+                    />
+                    <p className="text-xs text-muted-foreground font-body">
+                      Height of the logos on desktop ({AS_SEEN_ON_MIN_LOGO_SIZE}
+                      –{AS_SEEN_ON_MAX_LOGO_SIZE}). Phones scale down
+                      automatically.
+                    </p>
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                  {asSeenOnOutlets.map((outlet, outletIndex) => (
+                  {asSeenOnSection.items.map((outlet, outletIndex) => (
                     <div
                       key={outlet.id}
                       className="border border-border bg-white p-5 space-y-4"
@@ -2156,7 +2221,7 @@ const AdminPage = () => {
                             type="button"
                             onClick={() => moveAsSeenOnOutlet(outlet.id, 1)}
                             disabled={
-                              outletIndex === asSeenOnOutlets.length - 1
+                              outletIndex === asSeenOnSection.items.length - 1
                             }
                             className="px-3 py-2 border border-border bg-white text-foreground font-heading font-bold uppercase text-xs tracking-wider inline-flex items-center gap-2 disabled:opacity-50"
                           >
@@ -2166,11 +2231,12 @@ const AdminPage = () => {
                           <button
                             type="button"
                             onClick={() =>
-                              setAsSeenOnOutlets((current) =>
-                                current.filter(
+                              setAsSeenOnSection((current) => ({
+                                ...current,
+                                items: current.items.filter(
                                   (entry) => entry.id !== outlet.id
                                 )
-                              )
+                              }))
                             }
                             className="px-3 py-2 border border-border bg-white text-foreground font-heading font-bold uppercase text-xs tracking-wider"
                           >

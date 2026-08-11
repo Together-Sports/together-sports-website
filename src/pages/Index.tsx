@@ -276,11 +276,10 @@ const MapEmbedCard = ({
 
 const Index = () => {
   const {
-    asSeenOnOutlets,
+    asSeenOnSection,
     experiences,
     impactMetricsSection,
     otherLocationsSection,
-    pressArticles,
     siteText
   } = useEditableContent();
   const t = useSiteText();
@@ -343,35 +342,18 @@ const Index = () => {
     item.embedUrl.trim()
   );
 
-  // Outlets for the "As Seen On" strip under the hero. The curated list from
-  // the admin's Home tab wins when it has entries; otherwise the strip derives
-  // itself from the Press page articles (unique outlets, logo preferred when
-  // the same outlet appears more than once).
-  const curatedOutlets = asSeenOnOutlets
-    .map((outlet) => ({
-      name: outlet.name.trim(),
-      logo: outlet.logo?.trim() || undefined
-    }))
-    .filter((outlet) => outlet.name || outlet.logo);
-
-  const pressOutlets: { name: string; logo?: string }[] = [];
-  if (curatedOutlets.length === 0) {
-    for (const article of pressArticles) {
-      const name = article.outlet?.trim();
-      if (!name) continue;
-      const logo = article.logo?.trim() || undefined;
-      const existing = pressOutlets.find(
-        (outlet) => outlet.name.toLowerCase() === name.toLowerCase()
-      );
-      if (existing) {
-        existing.logo = existing.logo ?? logo;
-      } else {
-        pressOutlets.push({ name, logo });
-      }
-    }
-  }
-
-  const seenOnOutlets = curatedOutlets.length > 0 ? curatedOutlets : pressOutlets;
+  // Outlets for the "As Seen On" strip under the hero, fully controlled from
+  // the admin's Home tab: the section can be hidden, outlets are whatever the
+  // admin added, and the logo size is adjustable.
+  const seenOnOutlets = asSeenOnSection.isVisible
+    ? asSeenOnSection.items
+        .map((outlet) => ({
+          name: outlet.name.trim(),
+          logo: outlet.logo?.trim() || undefined
+        }))
+        .filter((outlet) => outlet.name || outlet.logo)
+    : [];
+  const seenOnLogoSize = asSeenOnSection.logoSize;
 
   return (
     <div className="overflow-hidden">
@@ -492,7 +474,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* AS SEEN ON — curated in the admin's Home tab, else fed by the Press page */}
+      {/* AS SEEN ON — fully managed in the admin's Home tab */}
       {seenOnOutlets.length > 0 ? (
         <section className="bg-white">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
@@ -514,10 +496,19 @@ const Index = () => {
                         alt={outlet.name}
                         loading="lazy"
                         decoding="async"
-                        className="h-12 w-auto max-w-[200px] object-contain sm:h-14 sm:max-w-[240px] md:h-16 md:max-w-[280px]"
+                        className="w-auto object-contain"
+                        style={{
+                          height: `min(${seenOnLogoSize}px, 15vw)`,
+                          maxWidth: `min(${seenOnLogoSize * 4}px, 60vw)`
+                        }}
                       />
                     ) : (
-                      <span className="font-heading text-2xl font-black uppercase tracking-wide text-foreground/60 transition-colors duration-200 hover:text-foreground sm:text-3xl">
+                      <span
+                        className="font-heading font-black uppercase tracking-wide text-foreground/60 transition-colors duration-200 hover:text-foreground"
+                        style={{
+                          fontSize: `min(${Math.round(seenOnLogoSize * 0.5)}px, 7.5vw)`
+                        }}
+                      >
                         {outlet.name}
                       </span>
                     )}

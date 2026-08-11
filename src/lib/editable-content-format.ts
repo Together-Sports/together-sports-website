@@ -19,6 +19,32 @@ export type AsSeenOnOutlet = {
   logo?: string;
 };
 
+export const AS_SEEN_ON_DEFAULT_LOGO_SIZE = 64;
+export const AS_SEEN_ON_MIN_LOGO_SIZE = 24;
+export const AS_SEEN_ON_MAX_LOGO_SIZE = 160;
+
+export type AsSeenOnSection = {
+  // Hides the whole strip on the live site without losing the outlets.
+  isVisible: boolean;
+  // Logo height in pixels on desktop; phones scale down automatically.
+  logoSize: number;
+  items: AsSeenOnOutlet[];
+};
+
+export const createDefaultAsSeenOnSection = (): AsSeenOnSection => ({
+  isVisible: true,
+  logoSize: AS_SEEN_ON_DEFAULT_LOGO_SIZE,
+  items: []
+});
+
+const toAsSeenOnLogoSize = (value: unknown) =>
+  typeof value === "number" && Number.isFinite(value)
+    ? Math.min(
+        AS_SEEN_ON_MAX_LOGO_SIZE,
+        Math.max(AS_SEEN_ON_MIN_LOGO_SIZE, Math.round(value))
+      )
+    : AS_SEEN_ON_DEFAULT_LOGO_SIZE;
+
 export type ImpactMetric = {
   id: string;
   title: string;
@@ -104,8 +130,10 @@ export type EditableContentState = {
   // Optional so content saved before the Press page existed still parses;
   // hydration fills in an empty list.
   pressArticles?: PressArticle[];
-  // Optional for the same reason. When empty, the home page derives the
-  // "As Seen On" strip from the press articles instead.
+  // Optional for the same reason; hydration fills in the defaults.
+  asSeenOnSection?: AsSeenOnSection;
+  // Legacy shape from before the strip had visibility/size settings; only
+  // read during hydration to migrate old saved content.
   asSeenOnOutlets?: AsSeenOnOutlet[];
   teamSections: TeamSection[];
   tennisLessonVideos: TennisLessonVideo[];
@@ -198,12 +226,16 @@ export const serializeEditableContentState = (
         logo: item.logo ? toPortableMediaValue(item.logo) : item.logo,
       }))
     : [],
-  asSeenOnOutlets: Array.isArray(content.asSeenOnOutlets)
-    ? content.asSeenOnOutlets.map((item) => ({
-        ...item,
-        logo: item.logo ? toPortableMediaValue(item.logo) : item.logo,
-      }))
-    : [],
+  asSeenOnSection: {
+    isVisible: content.asSeenOnSection ? content.asSeenOnSection.isVisible !== false : true,
+    logoSize: toAsSeenOnLogoSize(content.asSeenOnSection?.logoSize),
+    items: Array.isArray(content.asSeenOnSection?.items)
+      ? content.asSeenOnSection.items.map((item) => ({
+          ...item,
+          logo: item.logo ? toPortableMediaValue(item.logo) : item.logo,
+        }))
+      : [],
+  },
   teamSections: content.teamSections.map((section) => ({
     ...section,
     people: section.people.map((person) => ({
@@ -283,12 +315,21 @@ export const hydrateEditableContentState = (
         logo: item.logo ? fromPortableMediaValue(item.logo) : item.logo,
       }))
     : [],
-  asSeenOnOutlets: Array.isArray(content.asSeenOnOutlets)
-    ? content.asSeenOnOutlets.map((item) => ({
-        ...item,
-        logo: item.logo ? fromPortableMediaValue(item.logo) : item.logo,
-      }))
-    : [],
+  asSeenOnSection: {
+    isVisible: content.asSeenOnSection ? content.asSeenOnSection.isVisible !== false : true,
+    logoSize: toAsSeenOnLogoSize(content.asSeenOnSection?.logoSize),
+    // Falls back to the legacy flat outlet list for content saved before the
+    // strip had visibility/size settings.
+    items: (Array.isArray(content.asSeenOnSection?.items)
+      ? content.asSeenOnSection.items
+      : Array.isArray(content.asSeenOnOutlets)
+        ? content.asSeenOnOutlets
+        : []
+    ).map((item) => ({
+      ...item,
+      logo: item.logo ? fromPortableMediaValue(item.logo) : item.logo,
+    })),
+  },
   teamSections: content.teamSections.map((section) => ({
     ...section,
     people: section.people.map((person) => ({
