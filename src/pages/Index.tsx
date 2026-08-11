@@ -275,8 +275,13 @@ const MapEmbedCard = ({
 );
 
 const Index = () => {
-  const { experiences, impactMetricsSection, otherLocationsSection, siteText } =
-    useEditableContent();
+  const {
+    experiences,
+    impactMetricsSection,
+    otherLocationsSection,
+    pressArticles,
+    siteText
+  } = useEditableContent();
   const t = useSiteText();
   const missionWords = t("home.missionHeading").split(" ");
   const missionLast = missionWords.pop() ?? "";
@@ -336,6 +341,24 @@ const Index = () => {
   const otherLocations = otherLocationsSection.items.filter((item) =>
     item.embedUrl.trim()
   );
+
+  // Unique outlets from the Press page articles, for the "As Seen On" strip
+  // under the hero. Prefers an entry's logo when the same outlet appears more
+  // than once, so managing press coverage keeps this strip current for free.
+  const pressOutlets: { name: string; logo?: string }[] = [];
+  for (const article of pressArticles) {
+    const name = article.outlet?.trim();
+    if (!name) continue;
+    const logo = article.logo?.trim() || undefined;
+    const existing = pressOutlets.find(
+      (outlet) => outlet.name.toLowerCase() === name.toLowerCase()
+    );
+    if (existing) {
+      existing.logo = existing.logo ?? logo;
+    } else {
+      pressOutlets.push({ name, logo });
+    }
+  }
 
   return (
     <div className="overflow-hidden">
@@ -455,6 +478,41 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      {/* AS SEEN ON — outlets that have covered us, fed by the Press page */}
+      {pressOutlets.length > 0 ? (
+        <section className="border-y border-border/60 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 md:py-6">
+            <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 sm:gap-x-10">
+              <span className="font-heading text-xs font-black uppercase tracking-[0.22em] text-foreground/50">
+                {t("home.asSeenOnLabel")}
+              </span>
+              {pressOutlets.map((outlet) => (
+                <Link
+                  key={outlet.name}
+                  to="/press"
+                  title={`${outlet.name} coverage of Together Sports`}
+                  className="inline-flex items-center"
+                >
+                  {outlet.logo ? (
+                    <img
+                      src={outlet.logo}
+                      alt={outlet.name}
+                      loading="lazy"
+                      decoding="async"
+                      className="h-6 w-auto max-w-[130px] object-contain opacity-75 grayscale transition-all duration-200 hover:opacity-100 hover:grayscale-0 sm:h-7 sm:max-w-[150px]"
+                    />
+                  ) : (
+                    <span className="font-heading text-base font-black uppercase tracking-wide text-foreground/55 transition-colors duration-200 hover:text-foreground sm:text-lg">
+                      {outlet.name}
+                    </span>
+                  )}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
 
       {/* ABOUT MISSION */}
       <section className="py-14 md:py-28 relative overflow-hidden">
