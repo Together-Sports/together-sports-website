@@ -494,35 +494,37 @@ const Index = () => {
 
       {/* AS SEEN ON — curated in the admin's Home tab, else fed by the Press page */}
       {seenOnOutlets.length > 0 ? (
-        <section className="border-y border-border/60 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 md:py-6">
-            <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 sm:gap-x-10">
-              <span className="font-heading text-xs font-black uppercase tracking-[0.22em] text-foreground/50">
+        <section className="bg-white">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+            <ScrollReveal>
+              <p className="mb-8 text-center font-heading text-sm font-black uppercase tracking-[0.32em] text-foreground/40 md:mb-10 md:text-base">
                 {t("home.asSeenOnLabel")}
-              </span>
-              {seenOnOutlets.map((outlet, outletIndex) => (
-                <Link
-                  key={`${outlet.name}-${outletIndex}`}
-                  to="/press"
-                  title={`${outlet.name} coverage of Together Sports`}
-                  className="inline-flex items-center"
-                >
-                  {outlet.logo ? (
-                    <img
-                      src={outlet.logo}
-                      alt={outlet.name}
-                      loading="lazy"
-                      decoding="async"
-                      className="h-6 w-auto max-w-[130px] object-contain opacity-75 grayscale transition-all duration-200 hover:opacity-100 hover:grayscale-0 sm:h-7 sm:max-w-[150px]"
-                    />
-                  ) : (
-                    <span className="font-heading text-base font-black uppercase tracking-wide text-foreground/55 transition-colors duration-200 hover:text-foreground sm:text-lg">
-                      {outlet.name}
-                    </span>
-                  )}
-                </Link>
-              ))}
-            </div>
+              </p>
+              <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-8 sm:gap-x-16 md:gap-x-20">
+                {seenOnOutlets.map((outlet, outletIndex) => (
+                  <Link
+                    key={`${outlet.name}-${outletIndex}`}
+                    to="/press"
+                    title={`${outlet.name} coverage of Together Sports`}
+                    className="inline-flex items-center transition-transform duration-200 hover:scale-105"
+                  >
+                    {outlet.logo ? (
+                      <img
+                        src={outlet.logo}
+                        alt={outlet.name}
+                        loading="lazy"
+                        decoding="async"
+                        className="h-12 w-auto max-w-[200px] object-contain sm:h-14 sm:max-w-[240px] md:h-16 md:max-w-[280px]"
+                      />
+                    ) : (
+                      <span className="font-heading text-2xl font-black uppercase tracking-wide text-foreground/60 transition-colors duration-200 hover:text-foreground sm:text-3xl">
+                        {outlet.name}
+                      </span>
+                    )}
+                  </Link>
+                ))}
+              </div>
+            </ScrollReveal>
           </div>
         </section>
       ) : null}
