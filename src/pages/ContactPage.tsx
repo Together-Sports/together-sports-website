@@ -32,7 +32,6 @@ const ContactPage = () => {
       firstName: "",
       lastName: "",
       email: "",
-      phone: "",
       topic: "General Inquiry",
       message: "",
       website: "",
@@ -123,16 +122,6 @@ const ContactPage = () => {
                   <div className="space-y-2">
                     <input type="email" placeholder="Email" className={fieldClass} {...register("email")} />
                     {errors.email ? <p className="text-sm text-[#8d5120]">{errors.email.message}</p> : null}
-                  </div>
-
-                  <div className="space-y-2">
-                    <input
-                      type="tel"
-                      placeholder="Phone (optional but preferred)"
-                      className={fieldClass}
-                      {...register("phone")}
-                    />
-                    {errors.phone ? <p className="text-sm text-[#8d5120]">{errors.phone.message}</p> : null}
                   </div>
 
                   <div className="space-y-2">
