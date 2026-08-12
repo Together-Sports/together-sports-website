@@ -12,12 +12,6 @@ export const contactFormSchema = z.object({
   firstName: z.string().trim().min(2, "First name is too short.").max(60, "First name is too long."),
   lastName: z.string().trim().min(2, "Last name is too short.").max(60, "Last name is too long."),
   email: z.string().trim().email("Enter a valid email address.").max(254, "Email is too long."),
-  phone: z
-    .string()
-    .trim()
-    .regex(/^(\+?1[-.\s]?)?\(?[0-9]{3}\)?[-.\s]?[0-9]{3}[-.\s]?[0-9]{4}$/, "Enter a valid phone number.")
-    .optional()
-    .default(""),
   topic: z.enum(contactTopicOptions),
   message: z
     .string()
