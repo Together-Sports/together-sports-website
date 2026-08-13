@@ -11,6 +11,7 @@ export type TextField = {
 
 export const TEXT_FIELDS: TextField[] = [
   // Home
+  { key: "home.heroCtaTeam", label: "Hero Team Button", page: "Home", fallback: "View Our Team" },
   { key: "home.asSeenOnLabel", label: "As Seen On Label", page: "Home", fallback: "As Seen On" },
   { key: "home.missionHeading", label: "Mission Heading", page: "Home", fallback: "Our Mission" },
   { key: "home.valuesHeading", label: "Values Heading", page: "Home", fallback: "What We Stand For" },
