@@ -432,7 +432,7 @@ const Index = () => {
                 </Link>
                 <Link
                   to="/team"
-                  className="inline-block px-8 py-4 bg-[#87cb4a] text-white font-heading font-bold text-lg uppercase tracking-wider hover:scale-105 hover:-rotate-1 transition-all duration-200"
+                  className="inline-block px-8 py-4 bg-[#9b6dd6] text-white font-heading font-bold text-lg uppercase tracking-wider hover:scale-105 hover:-rotate-1 transition-all duration-200"
                 >
                   {t("home.heroCtaTeam")}
                 </Link>
