@@ -420,19 +420,19 @@ const Index = () => {
               <div className="flex flex-wrap gap-4">
                 <Link
                   to="/sports"
-                  className="inline-block px-8 py-4 bg-primary text-white font-heading font-bold text-lg uppercase tracking-wider hover:scale-105 hover:-rotate-1 transition-all duration-200"
+                  className="inline-block px-8 py-4 bg-[#f6a15c] text-white font-heading font-bold text-lg uppercase tracking-wider hover:scale-105 hover:-rotate-1 transition-all duration-200"
                 >
                   {heroCtaPrimary}
                 </Link>
                 <Link
                   to="/get-involved#donate"
-                  className="inline-block px-8 py-4 bg-accent text-white font-heading font-bold text-lg uppercase tracking-wider hover:scale-105 hover:rotate-1 transition-all duration-200"
+                  className="inline-block px-8 py-4 bg-[#4f74d6] text-white font-heading font-bold text-lg uppercase tracking-wider hover:scale-105 hover:rotate-1 transition-all duration-200"
                 >
                   {heroCtaSecondary}
                 </Link>
                 <Link
                   to="/team"
-                  className="inline-block px-8 py-4 bg-[#9b6dd6] text-white font-heading font-bold text-lg uppercase tracking-wider hover:scale-105 hover:-rotate-1 transition-all duration-200"
+                  className="inline-block px-8 py-4 bg-[#87cb4a] text-white font-heading font-bold text-lg uppercase tracking-wider hover:scale-105 hover:-rotate-1 transition-all duration-200"
                 >
                   {t("home.heroCtaTeam")}
                 </Link>
