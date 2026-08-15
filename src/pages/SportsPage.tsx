@@ -2,27 +2,52 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { IS_SERVER } from "@/lib/ssr";
 import ScrollReveal from "@/components/ScrollReveal";
-import togetherTennis from "@/assets/TogetherTennis.webp";
-import togetherBasketball from "@/assets/TogetherBB.webp";
-import togetherFootball from "@/assets/TogetherFB.webp";
-import togetherGolf from "@/assets/TogetherGolf.webp";
-import togetherSoccer from "@/assets/TogetherSoccer.webp";
+import tennisBall from "@/assets/TennisBall.webp";
+import basketballBall from "@/assets/BasketballBall.webp";
+import footballBall from "@/assets/FootballBall.webp";
+import golfBall from "@/assets/GolfBall.webp";
+import soccerBall from "@/assets/SoccerBall.webp";
 import { useSiteText } from "@/lib/use-site-text";
 
+// The site header already carries the Together Sports brand, so the cards
+// show just the ball marks with the sport name (in each wordmark's color)
+// instead of the full "TOGETHER <sport>" lockups.
 const sports = [
-  { name: "Together Tennis", image: togetherTennis, path: "/sports/tennis" },
+  {
+    name: "Together Tennis",
+    label: "Tennis",
+    color: "#87cb4a",
+    image: tennisBall,
+    path: "/sports/tennis"
+  },
   {
     name: "Together Basketball",
-    image: togetherBasketball,
+    label: "Basketball",
+    color: "#f6a15c",
+    image: basketballBall,
     path: "/sports/basketball"
   },
   {
     name: "Together Football",
-    image: togetherFootball,
+    label: "Football",
+    color: "#a87878",
+    image: footballBall,
     path: "/sports/football"
   },
-  { name: "Together Golf", image: togetherGolf, path: "/sports/golf" },
-  { name: "Together Soccer", image: togetherSoccer, path: "/sports/soccer" }
+  {
+    name: "Together Golf",
+    label: "Golf",
+    color: "#a898f8",
+    image: golfBall,
+    path: "/sports/golf"
+  },
+  {
+    name: "Together Soccer",
+    label: "Soccer",
+    color: "#78a8e8",
+    image: soccerBall,
+    path: "/sports/soccer"
+  }
 ];
 
 const SportsPage = () => {
@@ -64,15 +89,21 @@ const SportsPage = () => {
               >
                 <Link
                   to={sport.path}
-                  className="group flex items-center justify-center py-4 md:py-6"
+                  className="group flex flex-col items-center justify-center gap-4 py-4 md:gap-5 md:py-6"
                 >
                   <img
                     src={sport.image}
                     alt={sport.name}
                     loading="eager"
                     decoding="async"
-                    className="w-full max-w-[13rem] sm:max-w-[18rem] md:max-w-[22rem] h-auto object-contain transition-transform duration-300 group-hover:scale-[1.04]"
+                    className="h-40 w-auto object-contain transition-transform duration-300 group-hover:scale-[1.04] sm:h-56 md:h-64"
                   />
+                  <span
+                    className="font-heading text-3xl font-black uppercase tracking-wide md:text-4xl"
+                    style={{ color: sport.color }}
+                  >
+                    {sport.label}
+                  </span>
                 </Link>
               </ScrollReveal>
             ))}
