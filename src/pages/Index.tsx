@@ -14,7 +14,9 @@ import basketSpin from "@/assets/BASKETSPIN.svg";
 import footballSpin from "@/assets/FOOTBALLSPIN.svg";
 import golfSpin from "@/assets/GOLFSPIN.svg";
 import soccerSpin from "@/assets/SOCCERSPIN.svg";
+import LocationsMap, { type MapPin } from "@/components/LocationsMap";
 import { useEditableContent } from "@/lib/editable-content";
+import { extractLatLngFromEmbedUrl } from "@/lib/geo";
 import { imgProps } from "@/lib/image-position";
 import { useSiteText } from "@/lib/use-site-text";
 
@@ -230,49 +232,15 @@ const CountUpValue = ({
   );
 };
 
-const MapEmbedCard = ({
-  embedUrl,
-  title,
-  className
-}: {
-  embedUrl: string;
-  title: string;
-  className?: string;
-}) => (
-  <div
-    className={`relative overflow-hidden border-2 border-border bg-white ${className ?? ""}`}
-    onWheel={(event) => event.preventDefault()}
-  >
-    <iframe
-      src={embedUrl}
-      width="100%"
-      height="100%"
-      style={{ border: 0 }}
-      allowFullScreen={false}
-      loading="lazy"
-      referrerPolicy="no-referrer-when-downgrade"
-      title={title}
-    />
-    <div
-      className="absolute inset-0"
-      style={{ background: "transparent", cursor: "default" }}
-      onClick={(event) => {
-        const rect = (
-          event.currentTarget as HTMLDivElement
-        ).getBoundingClientRect();
-        const y = event.clientY - rect.top;
-        const x = event.clientX - rect.left;
-        if (y > rect.height - 80 && x > rect.width - 80) {
-          event.currentTarget.style.pointerEvents = "none";
-          setTimeout(() => {
-            (event.currentTarget as HTMLDivElement).style.pointerEvents =
-              "auto";
-          }, 100);
-        }
-      }}
-    />
-  </div>
-);
+// The main New York City pin always shown on the locations map; other pins
+// come from the admin's Other Locations list.
+const MAIN_LOCATION_PIN: MapPin = {
+  id: "main-nyc",
+  name: "New York City",
+  subtitle: "Main Location",
+  lat: 40.7128,
+  lng: -74.006
+};
 
 const Index = () => {
   const {
@@ -338,9 +306,24 @@ const Index = () => {
     subtitle:
       "The little stories that show the big picture: connection, encouragement, and growth."
   };
-  const otherLocations = otherLocationsSection.items.filter((item) =>
-    item.embedUrl.trim()
-  );
+  // Every location becomes a pin on one shared map: manual coordinates win
+  // when set, otherwise the pin position is read out of the location's Google
+  // Maps embed URL. Locations with neither are skipped.
+  const locationPins: MapPin[] = [MAIN_LOCATION_PIN];
+  for (const item of otherLocationsSection.items) {
+    const manual =
+      typeof item.lat === "number" && typeof item.lng === "number"
+        ? { lat: item.lat, lng: item.lng }
+        : null;
+    const coords = manual ?? extractLatLngFromEmbedUrl(item.embedUrl ?? "");
+    if (coords) {
+      locationPins.push({
+        id: item.id,
+        name: item.name || "Together Sports location",
+        ...coords
+      });
+    }
+  }
 
   // Outlets for the "As Seen On" strip under the hero, fully controlled from
   // the admin's Home tab: the section can be hidden, outlets are whatever the
@@ -823,60 +806,21 @@ const Index = () => {
           </ScrollReveal>
 
           <ScrollReveal>
-            <MapEmbedCard
-              embedUrl="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d193595.25280949658!2d-74.11976389828046!3d40.69766374859258!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY!5e0!3m2!1sen!2sus!4v1700000000000!5m2!1e0!2e0"
-              title="Together Sports main location"
-              className="h-[300px] w-full sm:h-[400px] md:h-[500px]"
+            <LocationsMap
+              pins={locationPins}
+              className="h-[340px] w-full sm:h-[440px] md:h-[560px]"
             />
-          </ScrollReveal>
-
-          {otherLocations.length > 0 ? (
-            <div className="mt-16 md:mt-20">
-              <ScrollReveal>
-                <h3 className="font-heading text-[clamp(2rem,9.4vw,3rem)] sm:text-5xl md:text-7xl font-black uppercase mb-4 text-center">
-                  {otherLocationsSection.title?.trim().toLowerCase() ===
-                  "other locations" ? (
-                    <>
-                      <span className="mr-2 hidden text-[0.9em] normal-case align-[0.02em] sm:inline-block md:mr-3">
-                        🌍
-                      </span>
-                      <span className="brush-underline inline-block">
-                        Other
-                      </span>{" "}
-                      Locations
-                    </>
-                  ) : (
-                    <span className="inline-block">
-                      <span className="mr-2 hidden text-[0.9em] normal-case align-[0.02em] sm:inline-block md:mr-3">
-                        🌍
-                      </span>
-                      {otherLocationsSection.title || "Other Locations"}
-                    </span>
-                  )}
-                  <span className="ml-2 hidden text-[0.9em] normal-case align-[0.02em] sm:inline-block md:ml-3">
-                    🌎
-                  </span>
-                </h3>
-              </ScrollReveal>
-
-              <div className="mx-auto mt-12 flex max-w-[1016px] flex-wrap justify-center gap-8">
-                {otherLocations.map((location, index) => (
-                  <ScrollReveal key={location.id} delay={index * 0.08}>
-                    <div className="w-[320px] shrink-0">
-                      <MapEmbedCard
-                        embedUrl={location.embedUrl}
-                        title={location.name || "Together Sports location"}
-                        className="h-[220px] w-[320px]"
-                      />
-                      <p className="mt-4 text-center font-heading text-2xl font-black uppercase text-foreground">
-                        {location.name}
-                      </p>
-                    </div>
-                  </ScrollReveal>
-                ))}
-              </div>
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-2.5 md:mt-8 md:gap-3">
+              {locationPins.map((pin) => (
+                <span
+                  key={pin.id}
+                  className="border-2 border-border bg-white px-4 py-2 font-heading text-sm font-black uppercase tracking-wide text-foreground"
+                >
+                  📍 {pin.name}
+                </span>
+              ))}
             </div>
-          ) : null}
+          </ScrollReveal>
         </div>
       </section>
 

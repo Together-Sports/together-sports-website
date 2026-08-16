@@ -61,6 +61,10 @@ export type OtherLocation = {
   id: string;
   name: string;
   embedUrl: string;
+  // Optional manual pin position for the home page map. When absent, the pin
+  // is placed from the coordinates inside the Google Maps embed URL.
+  lat?: number;
+  lng?: number;
 };
 
 export type OtherLocationsSection = {

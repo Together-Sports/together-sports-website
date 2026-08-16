@@ -33,6 +33,7 @@ import {
   type SportSession
 } from "@/lib/editable-content-format";
 import { useEditableContent } from "@/lib/editable-content";
+import { extractLatLngFromEmbedUrl } from "@/lib/geo";
 import { autoShortLocation } from "@/lib/location-format";
 import { TEXT_FIELDS, TEXT_PAGES } from "@/lib/text-registry";
 import {
@@ -2412,8 +2413,11 @@ const AdminPage = () => {
                       Other Locations
                     </p>
                     <p className="text-muted-foreground text-sm">
-                      Controls the small location maps shown under the main
-                      location on the home page.
+                      Pins on the home page locations map. New York City is
+                      always pinned as the main location; every location added
+                      here becomes another pin. Pins place themselves
+                      automatically from the Google Maps embed link — or enter
+                      exact coordinates to override.
                     </p>
                   </div>
                   <button
@@ -2435,21 +2439,6 @@ const AdminPage = () => {
                   >
                     + Add Location
                   </button>
-                </div>
-
-                <div className="space-y-2">
-                  <p className={labelClass}>Section Title</p>
-                  <input
-                    className={inputClass}
-                    value={otherLocationsSection.title}
-                    onChange={(event) =>
-                      setOtherLocationsSection((current) => ({
-                        ...current,
-                        title: event.target.value
-                      }))
-                    }
-                    placeholder="Other Locations"
-                  />
                 </div>
 
                 <div className="space-y-4">
@@ -2516,7 +2505,72 @@ const AdminPage = () => {
                             placeholder="https://www.google.com/maps/embed?pb=..."
                           />
                         </div>
+                        <div className="space-y-2">
+                          <p className={labelClass}>Latitude (Optional)</p>
+                          <input
+                            type="number"
+                            step="any"
+                            className={inputClass}
+                            value={item.lat ?? ""}
+                            onChange={(event) => {
+                              const parsed = Number(event.target.value);
+                              setOtherLocationsSection((current) => ({
+                                ...current,
+                                items: current.items.map((entry) =>
+                                  entry.id === item.id
+                                    ? {
+                                        ...entry,
+                                        lat:
+                                          event.target.value.trim() === "" ||
+                                          !Number.isFinite(parsed)
+                                            ? undefined
+                                            : parsed
+                                      }
+                                    : entry
+                                )
+                              }));
+                            }}
+                            placeholder="40.7128"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <p className={labelClass}>Longitude (Optional)</p>
+                          <input
+                            type="number"
+                            step="any"
+                            className={inputClass}
+                            value={item.lng ?? ""}
+                            onChange={(event) => {
+                              const parsed = Number(event.target.value);
+                              setOtherLocationsSection((current) => ({
+                                ...current,
+                                items: current.items.map((entry) =>
+                                  entry.id === item.id
+                                    ? {
+                                        ...entry,
+                                        lng:
+                                          event.target.value.trim() === "" ||
+                                          !Number.isFinite(parsed)
+                                            ? undefined
+                                            : parsed
+                                      }
+                                    : entry
+                                )
+                              }));
+                            }}
+                            placeholder="-74.0060"
+                          />
+                        </div>
                       </div>
+
+                      <p className="text-xs text-muted-foreground font-body">
+                        {typeof item.lat === "number" &&
+                        typeof item.lng === "number"
+                          ? "Pin placed from the coordinates above."
+                          : extractLatLngFromEmbedUrl(item.embedUrl ?? "")
+                            ? "Pin placed automatically from the embed link."
+                            : "No pin yet — paste a Google Maps embed link or enter coordinates."}
+                      </p>
                     </div>
                   ))}
                 </div>

@@ -16,7 +16,7 @@ export const TEXT_FIELDS: TextField[] = [
   { key: "home.missionHeading", label: "Mission Heading", page: "Home", fallback: "Our Mission" },
   { key: "home.valuesHeading", label: "Values Heading", page: "Home", fallback: "What We Stand For" },
   { key: "home.sportsCtaButton", label: "Sports Section Button", page: "Home", fallback: "View All Sports" },
-  { key: "home.locationHeading", label: "Location Heading", page: "Home", fallback: "Main Location" },
+  { key: "home.locationHeading", label: "Location Heading", page: "Home", fallback: "Our Locations" },
   { key: "home.locationSubtitle", label: "Location Subtitle", page: "Home", fallback: "Based in New York City, serving communities across the five boroughs.", multiline: true },
   { key: "home.secondServeEyebrow", label: "Second Serve Eyebrow", page: "Home", fallback: "Featured Service" },
   { key: "home.secondServeHeading", label: "Second Serve Heading", page: "Home", fallback: "Every Kid Deserves a Second Serve" },
