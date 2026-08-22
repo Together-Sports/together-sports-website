@@ -16,8 +16,8 @@ import golfSpin from "@/assets/GOLFSPIN.svg";
 import soccerSpin from "@/assets/SOCCERSPIN.svg";
 import LocationsMap, { type MapPin } from "@/components/LocationsMap";
 import { useEditableContent } from "@/lib/editable-content";
-import { extractLatLngFromEmbedUrl } from "@/lib/geo";
 import { imgProps } from "@/lib/image-position";
+import { resolveLocationPin } from "@/lib/resolve-location-pin";
 import { useSiteText } from "@/lib/use-site-text";
 
 const heroSpins = [
@@ -306,16 +306,12 @@ const Index = () => {
     subtitle:
       "The little stories that show the big picture: connection, encouragement, and growth."
   };
-  // Every location becomes a pin on one shared map: manual coordinates win
-  // when set, otherwise the pin position is read out of the location's Google
-  // Maps embed URL. Locations with neither are skipped.
+  // Every location becomes a pin on one shared map. Positions come from the
+  // admin's coordinates, the Google Maps link, or the place name — see
+  // resolveLocationPin. Locations that resolve to nothing are skipped.
   const locationPins: MapPin[] = [MAIN_LOCATION_PIN];
   for (const item of otherLocationsSection.items) {
-    const manual =
-      typeof item.lat === "number" && typeof item.lng === "number"
-        ? { lat: item.lat, lng: item.lng }
-        : null;
-    const coords = manual ?? extractLatLngFromEmbedUrl(item.embedUrl ?? "");
+    const { coords } = resolveLocationPin(item);
     if (coords) {
       locationPins.push({
         id: item.id,

@@ -33,8 +33,8 @@ import {
   type SportSession
 } from "@/lib/editable-content-format";
 import { useEditableContent } from "@/lib/editable-content";
-import { extractLatLngFromEmbedUrl } from "@/lib/geo";
 import { autoShortLocation } from "@/lib/location-format";
+import { resolveLocationPin } from "@/lib/resolve-location-pin";
 import { TEXT_FIELDS, TEXT_PAGES } from "@/lib/text-registry";
 import {
   imageObjectPosition,
@@ -353,6 +353,35 @@ const ImageField = ({
         className={inputClass}
       />
     </div>
+  );
+};
+
+// Tells the admin where a location's map pin comes from — or that it still
+// needs a link or coordinates.
+const LocationPinHint = ({ location }: { location: OtherLocation }) => {
+  const { coords, source } = resolveLocationPin(location);
+
+  if (!coords) {
+    return (
+      <p className="text-xs font-body text-[#8d5120]">
+        No pin yet — paste a Google Maps link, or enter coordinates above.
+      </p>
+    );
+  }
+
+  const position = `${coords.lat.toFixed(4)}, ${coords.lng.toFixed(4)}`;
+  const explanation =
+    source === "manual"
+      ? "from the coordinates above"
+      : source === "embed-coords"
+        ? "from the map link"
+        : "from the location name";
+
+  return (
+    <p className="text-xs font-body text-muted-foreground">
+      Pinned at {position} ({explanation}). Enter coordinates above to place it
+      more precisely.
+    </p>
   );
 };
 
@@ -2563,14 +2592,7 @@ const AdminPage = () => {
                         </div>
                       </div>
 
-                      <p className="text-xs text-muted-foreground font-body">
-                        {typeof item.lat === "number" &&
-                        typeof item.lng === "number"
-                          ? "Pin placed from the coordinates above."
-                          : extractLatLngFromEmbedUrl(item.embedUrl ?? "")
-                            ? "Pin placed automatically from the embed link."
-                            : "No pin yet — paste a Google Maps embed link or enter coordinates."}
-                      </p>
+                      <LocationPinHint location={item} />
                     </div>
                   ))}
                 </div>
