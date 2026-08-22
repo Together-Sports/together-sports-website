@@ -1,4 +1,11 @@
-import { useRef, useState, type ChangeEvent, type ReactNode } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type ChangeEvent,
+  type ReactNode
+} from "react";
 import { Link } from "react-router-dom";
 import {
   ArrowDown,
@@ -33,6 +40,8 @@ import {
   type SportSession
 } from "@/lib/editable-content-format";
 import { useEditableContent } from "@/lib/editable-content";
+import { extractPlaceNameFromEmbedUrl } from "@/lib/geo";
+import { geocodePlace, isShortMapsLink } from "@/lib/geocode";
 import { autoShortLocation } from "@/lib/location-format";
 import { resolveLocationPin } from "@/lib/resolve-location-pin";
 import { TEXT_FIELDS, TEXT_PAGES } from "@/lib/text-registry";
@@ -356,32 +365,177 @@ const ImageField = ({
   );
 };
 
-// Tells the admin where a location's map pin comes from — or that it still
-// needs a link or coordinates.
-const LocationPinHint = ({ location }: { location: OtherLocation }) => {
+type PinCoords = { lat?: number; lng?: number };
+
+// Shows where a location's map pin comes from, and looks the pin up
+// automatically when the map link alone doesn't carry one — so pasting a
+// Google Maps link is all that's needed. The looked-up position is written
+// back onto the location, so the public site never has to geocode.
+const LocationPinField = ({
+  location,
+  onCoordsChange
+}: {
+  location: OtherLocation;
+  onCoordsChange: (coords: PinCoords | null) => void;
+}) => {
+  const [isLocating, setIsLocating] = useState(false);
+  const [didFail, setDidFail] = useState(false);
+  // Remembers what was already looked up, so a lookup runs once per place
+  // rather than on every keystroke or re-render.
+  const attemptedQuery = useRef<string | null>(null);
+
   const { coords, source } = resolveLocationPin(location);
+  const embedUrl = location.embedUrl ?? "";
+  const searchQuery = (
+    extractPlaceNameFromEmbedUrl(embedUrl) ||
+    location.name ||
+    ""
+  ).trim();
+  const needsLookup = !coords && searchQuery.length > 0;
 
-  if (!coords) {
-    return (
-      <p className="text-xs font-body text-[#8d5120]">
-        No pin yet — paste a Google Maps link, or enter coordinates above.
-      </p>
-    );
-  }
+  const runLookup = useCallback(
+    async (query: string) => {
+      attemptedQuery.current = query;
+      setIsLocating(true);
+      setDidFail(false);
 
-  const position = `${coords.lat.toFixed(4)}, ${coords.lng.toFixed(4)}`;
+      const found = await geocodePlace(query);
+
+      setIsLocating(false);
+      if (found) {
+        onCoordsChange(found);
+      } else {
+        setDidFail(true);
+      }
+    },
+    [onCoordsChange]
+  );
+
+  useEffect(() => {
+    if (!needsLookup || attemptedQuery.current === searchQuery) {
+      return;
+    }
+
+    // Wait for typing to settle before spending a lookup on it.
+    const timer = setTimeout(() => {
+      void runLookup(searchQuery);
+    }, 700);
+
+    return () => clearTimeout(timer);
+  }, [needsLookup, searchQuery, runLookup]);
+
+  const position = coords
+    ? `${coords.lat.toFixed(4)}, ${coords.lng.toFixed(4)}`
+    : "";
   const explanation =
     source === "manual"
-      ? "from the coordinates above"
+      ? "found from the map link"
       : source === "embed-coords"
-        ? "from the map link"
-        : "from the location name";
+        ? "read from the map link"
+        : "matched from the location name";
 
   return (
-    <p className="text-xs font-body text-muted-foreground">
-      Pinned at {position} ({explanation}). Enter coordinates above to place it
-      more precisely.
-    </p>
+    <div className="space-y-3">
+      {coords ? (
+        <p className="text-xs font-body text-muted-foreground">
+          📍 Pinned at {position} ({explanation}).
+        </p>
+      ) : isLocating ? (
+        <p className="text-xs font-body text-muted-foreground">
+          Finding this location on the map...
+        </p>
+      ) : isShortMapsLink(embedUrl) ? (
+        <p className="text-xs font-body text-[#8d5120]">
+          Shortened Google links (maps.app.goo.gl) can&apos;t be read. Open the
+          link and paste the full address bar URL instead.
+        </p>
+      ) : didFail ? (
+        <p className="text-xs font-body text-[#8d5120]">
+          Couldn&apos;t find &quot;{searchQuery}&quot; on the map. Try a more
+          specific name, or set the position by hand below.
+        </p>
+      ) : (
+        <p className="text-xs font-body text-[#8d5120]">
+          No pin yet — add the location name or a Google Maps link.
+        </p>
+      )}
+
+      <div className="flex flex-wrap items-center gap-2">
+        <button
+          type="button"
+          onClick={() => void runLookup(searchQuery)}
+          disabled={isLocating || !searchQuery}
+          className="px-3 py-2 border border-border bg-white text-foreground font-heading font-bold uppercase text-xs tracking-wider disabled:opacity-50"
+        >
+          {isLocating ? "Finding..." : coords ? "Re-find Pin" : "Find Pin"}
+        </button>
+        {coords ? (
+          <button
+            type="button"
+            onClick={() => {
+              attemptedQuery.current = null;
+              setDidFail(false);
+              onCoordsChange(null);
+            }}
+            className="px-3 py-2 border border-border bg-white text-foreground font-heading font-bold uppercase text-xs tracking-wider"
+          >
+            Clear Position
+          </button>
+        ) : null}
+      </div>
+
+      <details className="border border-border bg-white/60 px-4 py-3">
+        <summary className="cursor-pointer font-heading text-xs font-bold uppercase tracking-wider text-muted-foreground">
+          Set position by hand
+        </summary>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
+          <div className="space-y-2">
+            <p className={labelClass}>Latitude</p>
+            <input
+              type="number"
+              step="any"
+              className={inputClass}
+              value={location.lat ?? ""}
+              onChange={(event) => {
+                const parsed = Number(event.target.value);
+                const nextLat =
+                  event.target.value.trim() === "" || !Number.isFinite(parsed)
+                    ? undefined
+                    : parsed;
+                onCoordsChange(
+                  nextLat === undefined && location.lng === undefined
+                    ? null
+                    : { lat: nextLat, lng: location.lng }
+                );
+              }}
+              placeholder="40.7128"
+            />
+          </div>
+          <div className="space-y-2">
+            <p className={labelClass}>Longitude</p>
+            <input
+              type="number"
+              step="any"
+              className={inputClass}
+              value={location.lng ?? ""}
+              onChange={(event) => {
+                const parsed = Number(event.target.value);
+                const nextLng =
+                  event.target.value.trim() === "" || !Number.isFinite(parsed)
+                    ? undefined
+                    : parsed;
+                onCoordsChange(
+                  nextLng === undefined && location.lat === undefined
+                    ? null
+                    : { lat: location.lat, lng: nextLng }
+                );
+              }}
+              placeholder="-74.0060"
+            />
+          </div>
+        </div>
+      </details>
+    </div>
   );
 };
 
@@ -2444,9 +2598,9 @@ const AdminPage = () => {
                     <p className="text-muted-foreground text-sm">
                       Pins on the home page locations map. New York City is
                       always pinned as the main location; every location added
-                      here becomes another pin. Pins place themselves
-                      automatically from the Google Maps embed link — or enter
-                      exact coordinates to override.
+                      here becomes another pin. A name or a Google Maps link is
+                      all you need — the pin is found for you and saved with
+                      the location.
                     </p>
                   </div>
                   <button
@@ -2519,7 +2673,7 @@ const AdminPage = () => {
                           />
                         </div>
                         <div className="space-y-2">
-                          <p className={labelClass}>Google Maps Embed URL</p>
+                          <p className={labelClass}>Google Maps Link</p>
                           <input
                             type="url"
                             className={inputClass}
@@ -2534,65 +2688,21 @@ const AdminPage = () => {
                             placeholder="https://www.google.com/maps/embed?pb=..."
                           />
                         </div>
-                        <div className="space-y-2">
-                          <p className={labelClass}>Latitude (Optional)</p>
-                          <input
-                            type="number"
-                            step="any"
-                            className={inputClass}
-                            value={item.lat ?? ""}
-                            onChange={(event) => {
-                              const parsed = Number(event.target.value);
-                              setOtherLocationsSection((current) => ({
-                                ...current,
-                                items: current.items.map((entry) =>
-                                  entry.id === item.id
-                                    ? {
-                                        ...entry,
-                                        lat:
-                                          event.target.value.trim() === "" ||
-                                          !Number.isFinite(parsed)
-                                            ? undefined
-                                            : parsed
-                                      }
-                                    : entry
-                                )
-                              }));
-                            }}
-                            placeholder="40.7128"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <p className={labelClass}>Longitude (Optional)</p>
-                          <input
-                            type="number"
-                            step="any"
-                            className={inputClass}
-                            value={item.lng ?? ""}
-                            onChange={(event) => {
-                              const parsed = Number(event.target.value);
-                              setOtherLocationsSection((current) => ({
-                                ...current,
-                                items: current.items.map((entry) =>
-                                  entry.id === item.id
-                                    ? {
-                                        ...entry,
-                                        lng:
-                                          event.target.value.trim() === "" ||
-                                          !Number.isFinite(parsed)
-                                            ? undefined
-                                            : parsed
-                                      }
-                                    : entry
-                                )
-                              }));
-                            }}
-                            placeholder="-74.0060"
-                          />
-                        </div>
                       </div>
 
-                      <LocationPinHint location={item} />
+                      <LocationPinField
+                        location={item}
+                        onCoordsChange={(coords) =>
+                          setOtherLocationsSection((current) => ({
+                            ...current,
+                            items: current.items.map((entry) =>
+                              entry.id === item.id
+                                ? { ...entry, lat: coords?.lat, lng: coords?.lng }
+                                : entry
+                            )
+                          }))
+                        }
+                      />
                     </div>
                   ))}
                 </div>
