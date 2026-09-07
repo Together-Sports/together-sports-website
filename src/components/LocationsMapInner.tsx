@@ -26,9 +26,13 @@ const LocationsMapInner = ({ pins }: { pins: MapPin[] }) => {
       scrollWheelZoom={false}
       className="h-full w-full"
     >
+      {/* OpenStreetMap's standard tiles: free to use and, unlike Carto's
+          basemaps, they need no API key — Carto now stamps "API KEY REQUIRED"
+          across unkeyed tiles. */}
       <TileLayer
-        url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+        url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        maxZoom={19}
       />
       {pins.map((pin) => (
         <Marker key={pin.id} position={[pin.lat, pin.lng]} icon={pinIcon}>
